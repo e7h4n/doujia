@@ -50,6 +50,7 @@ Other examples:
 __copyright__ = "Copyright (C) 2014-2017  Martin Blais"
 __license__ = "GNU GPLv2"
 
+import argparse
 from dataclasses import dataclass
 import datetime
 import os
@@ -59,7 +60,6 @@ from beancount.core import data
 from beancount.parser.printer import print_entries
 from dateutil import rrule
 from beancount.loader import load_file
-from logzero import logger
 from typing import TypeVar
 
 Directive = TypeVar("Directive", bound=data.Directive)  # type: ignore
@@ -105,6 +105,7 @@ def forecast_plugin(entries, options_map):  # noqa: C901
             r"?(\s+UNTIL\s+([0-9\-]+))?\]",
             entry.narration,
         )
+
         if not match:
             continue
 
@@ -155,7 +156,7 @@ def forecast_plugin(entries, options_map):  # noqa: C901
 
         for forecast_date in forecast_dates:
             forecast_entry = entry._replace(
-                date=forecast_date, narration=forecast_narration
+                date=forecast_date, narration=forecast_narration, flag="*"
             )
             forecast.generated_entries.append(forecast_entry)
 
@@ -201,7 +202,6 @@ def update_related_entries(forecasts: list[Forecast], forecast_root: str):
             end_index = line_number
             while end_index < len(lines) and lines[end_index][0] == " ":
                 end_index += 1
-            print(lines[begin_index:end_index])
             lines[begin_index:end_index] = [f'include "{target_file}"\n']
         with open(filename, "w") as f:
             f.writelines(lines)
@@ -215,4 +215,12 @@ def replace_forecast(ledger_path: str, forecast_root: str):
 
 
 if __name__ == "__main__":
-    replace_forecast("main.bean", "ledgers/forecast")
+    parser = argparse.ArgumentParser(description="Replace forecast entries")
+    parser.add_argument("--ledger-path", help="Ledger path", required=True)
+    parser.add_argument(
+        "--forecast-root",
+        help="Forecast directory relative to ledger path",
+        required=True,
+    )
+    args = parser.parse_args()
+    replace_forecast(args.ledger_path, args.forecast_root)
