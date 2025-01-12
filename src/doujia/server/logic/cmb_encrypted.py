@@ -35,7 +35,7 @@ def convert_cmb_item_to_postings(item):
     amount = D(item["amount"])
 
     out_posting = data.Posting(
-        account="Liabilities:CreditCard:CMB",
+        account="Liabilities:Short:CreditCard:CMB",
         units=data.Amount(-amount, currency),
         cost=None,
         price=None,
@@ -58,9 +58,11 @@ def convert_cmb_item_to_postings(item):
 
 
 def load_missing_transactions_from_cmb_items(filename, items):
-    last_balance_date = get_last_balance_date(filename, "Liabilities:CreditCard:CMB")
+    last_balance_date = get_last_balance_date(
+        filename, "Liabilities:Short:CreditCard:CMB"
+    )
     existed_unique_no_set = get_existed_unique_no_set(
-        filename, "Liabilities:CreditCard:CMB"
+        filename, "Liabilities:Short:CreditCard:CMB"
     )
 
     txns = []

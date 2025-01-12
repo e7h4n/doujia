@@ -8,13 +8,13 @@ def test__find_first_unbalanced_entry():
         """
         2023-01-01 open Liability:CreditCard:CMB CNY
         2023-03-22 ! "尾号1089 消费 财付通-Creeper+Coffee" ""
-  Liabilities:CreditCard:CMB  -20.00 CNY
+  Liabilities:Short:CreditCard:CMB  -20.00 CNY
   Equity:UFO
   """
     )
 
     _, errors = balance_checker(
-        entries, options_map, "{'Liabilities:CreditCard:CMB': 'UNRESOLVED'}"
+        entries, options_map, "{'Liabilities:Short:CreditCard:CMB': 'UNRESOLVED'}"
     )
 
     assert len(errors) == 1
@@ -26,22 +26,22 @@ def test__find_first_unbalanced_entry_2():
         """
         2023-01-01 open Liability:CreditCard:CMB CNY
         2023-03-22 ! "尾号1089 消费 财付通-Creeper+Coffee" "" #UNRESOLVED
-  Liabilities:CreditCard:CMB  -20.00 CNY
+  Liabilities:Short:CreditCard:CMB  -20.00 CNY
   Equity:UFO
 
         2023-03-22 ! "尾号1089 消费 财付通-Creeper+Coffee" ""
-  Liabilities:CreditCard:CMB  -21.00 CNY
+  Liabilities:Short:CreditCard:CMB  -21.00 CNY
   Equity:UFO
 
         2023-03-22 ! "尾号1089 消费 财付通-Creeper+Coffee" "" #UNRESOLVED
-  Liabilities:CreditCard:CMB  -23.00 CNY
+  Liabilities:Short:CreditCard:CMB  -23.00 CNY
   Equity:UFO
 
   """
     )
 
     _, errors = balance_checker(
-        entries, options_map, "{'Liabilities:CreditCard:CMB': 'UNRESOLVED'}"
+        entries, options_map, "{'Liabilities:Short:CreditCard:CMB': 'UNRESOLVED'}"
     )
 
     assert errors[0].source["lineno"] == 7
@@ -53,22 +53,22 @@ def test__find_first_unbalanced_entry_3():
         """
         2023-01-01 open Liability:CreditCard:CMB CNY
         2023-03-22 ! "尾号1089 消费 财付通-Creeper+Coffee" "" #UNRESOLVED
-  Liabilities:CreditCard:CMB  -20.00 CNY
+  Liabilities:Short:CreditCard:CMB  -20.00 CNY
   Equity:UFO
 
         2023-03-22 ! "尾号1089 消费 财付通-Creeper+Coffee" ""
-  Liabilities:CreditCard:CMB  -21.00 CNY
+  Liabilities:Short:CreditCard:CMB  -21.00 CNY
   Equity:UFO
 
         2023-03-20 ! "尾号1089 消费 财付通-Creeper+Coffee" ""
-  Liabilities:CreditCard:CMB  -23.00 CNY
+  Liabilities:Short:CreditCard:CMB  -23.00 CNY
   Equity:UFO
 
   """
     )
 
     _, errors = balance_checker(
-        entries, options_map, "{'Liabilities:CreditCard:CMB': 'UNRESOLVED'}"
+        entries, options_map, "{'Liabilities:Short:CreditCard:CMB': 'UNRESOLVED'}"
     )
 
     assert errors[0].source["lineno"] == 11

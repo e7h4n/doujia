@@ -8,10 +8,10 @@ def test_posting_filler(entries: list[Directive]):  # type: ignore
     """
     @@@/main.bean
 
-    2024-11-11 open Liabilities:CreditCard:CMB
+    2024-11-11 open Liabilities:Short:CreditCard:CMB
     2024-11-11 open Expenses:Health
     2024-11-11 * "好大夫在线" "挂号"
-      Liabilities:CreditCard:CMB -512.00 CNY
+      Liabilities:Short:CreditCard:CMB -512.00 CNY
       Expenses:Health
     """
 
@@ -23,10 +23,10 @@ def test_posting_filler(entries: list[Directive]):  # type: ignore
     assert (
         actual
         == """
-2024-11-11 open Liabilities:CreditCard:CMB
+2024-11-11 open Liabilities:Short:CreditCard:CMB
 2024-11-11 open Expenses:Health
 2024-11-11 * "好大夫在线" "挂号"
-  Liabilities:CreditCard:CMB -512.00 CNY
+  Liabilities:Short:CreditCard:CMB -512.00 CNY
   Expenses:Health 512.00 CNY
 """
     )
@@ -37,14 +37,14 @@ def test_posting_filler_multiple_entries(entries: list[Directive]):  # type: ign
     """
     @@@/main.bean
 
-    2024-11-11 open Liabilities:CreditCard:CMB
+    2024-11-11 open Liabilities:Short:CreditCard:CMB
     2024-11-11 open Expenses:Health
     2024-11-11 * "好大夫在线" "挂号"
-      Liabilities:CreditCard:CMB -512.00 CNY
+      Liabilities:Short:CreditCard:CMB -512.00 CNY
       Expenses:Health
 
     2024-11-11 * "京东" "买菜"
-      Liabilities:CreditCard:CMB -100 CNY
+      Liabilities:Short:CreditCard:CMB -100 CNY
       Expenses:Food
     """
 
@@ -56,14 +56,14 @@ def test_posting_filler_multiple_entries(entries: list[Directive]):  # type: ign
     assert (
         actual
         == """
-2024-11-11 open Liabilities:CreditCard:CMB
+2024-11-11 open Liabilities:Short:CreditCard:CMB
 2024-11-11 open Expenses:Health
 2024-11-11 * "好大夫在线" "挂号"
-  Liabilities:CreditCard:CMB -512.00 CNY
+  Liabilities:Short:CreditCard:CMB -512.00 CNY
   Expenses:Health 512.00 CNY
 
 2024-11-11 * "京东" "买菜"
-  Liabilities:CreditCard:CMB -100 CNY
+  Liabilities:Short:CreditCard:CMB -100 CNY
   Expenses:Food 100 CNY
 """
     )
@@ -74,15 +74,15 @@ def test_posting_filler_multiple_entries_multiline(entries: list[Directive]):  #
     """
     @@@/main.bean
 
-    2024-11-11 open Liabilities:CreditCard:CMB
+    2024-11-11 open Liabilities:Short:CreditCard:CMB
     2024-11-11 open Expenses:Health
     2024-11-11 * "好大夫在线" "挂号"
-      Liabilities:CreditCard:CMB -512.00 CNY
-      Liabilities:CreditCard:CMB -100.00 CNY
+      Liabilities:Short:CreditCard:CMB -512.00 CNY
+      Liabilities:Short:CreditCard:CMB -100.00 CNY
       Expenses:Health
 
     2024-11-11 * "京东" "买菜"
-      Liabilities:CreditCard:CMB -100 CNY
+      Liabilities:Short:CreditCard:CMB -100 CNY
       Expenses:Food
     """
 
@@ -94,15 +94,15 @@ def test_posting_filler_multiple_entries_multiline(entries: list[Directive]):  #
     assert (
         actual
         == """
-2024-11-11 open Liabilities:CreditCard:CMB
+2024-11-11 open Liabilities:Short:CreditCard:CMB
 2024-11-11 open Expenses:Health
 2024-11-11 * "好大夫在线" "挂号"
-  Liabilities:CreditCard:CMB -512.00 CNY
-  Liabilities:CreditCard:CMB -100.00 CNY
+  Liabilities:Short:CreditCard:CMB -512.00 CNY
+  Liabilities:Short:CreditCard:CMB -100.00 CNY
   Expenses:Health 612.00 CNY
 
 2024-11-11 * "京东" "买菜"
-  Liabilities:CreditCard:CMB -100 CNY
+  Liabilities:Short:CreditCard:CMB -100 CNY
   Expenses:Food 100 CNY
 """
     )
@@ -113,16 +113,16 @@ def test_posting_filler_multiple_entries_multiline_2(entries: list[Directive]): 
     """
     @@@/main.bean
 
-    2024-11-11 open Liabilities:CreditCard:CMB
+    2024-11-11 open Liabilities:Short:CreditCard:CMB
     2024-11-11 open Expenses:Health
     2024-11-11 * "好大夫在线" "挂号"
-      Liabilities:CreditCard:CMB -512.00 CNY
+      Liabilities:Short:CreditCard:CMB -512.00 CNY
       Expenses:Health 512.00 CNY
-      Liabilities:CreditCard:CMB -100.00 CNY
+      Liabilities:Short:CreditCard:CMB -100.00 CNY
       Expenses:Health
 
     2024-11-11 * "京东" "买菜"
-      Liabilities:CreditCard:CMB -100 CNY
+      Liabilities:Short:CreditCard:CMB -100 CNY
       Expenses:Food
     """
 
@@ -134,16 +134,16 @@ def test_posting_filler_multiple_entries_multiline_2(entries: list[Directive]): 
     assert (
         actual
         == """
-2024-11-11 open Liabilities:CreditCard:CMB
+2024-11-11 open Liabilities:Short:CreditCard:CMB
 2024-11-11 open Expenses:Health
 2024-11-11 * "好大夫在线" "挂号"
-  Liabilities:CreditCard:CMB -512.00 CNY
+  Liabilities:Short:CreditCard:CMB -512.00 CNY
   Expenses:Health 512.00 CNY
-  Liabilities:CreditCard:CMB -100.00 CNY
+  Liabilities:Short:CreditCard:CMB -100.00 CNY
   Expenses:Health 100.00 CNY
 
 2024-11-11 * "京东" "买菜"
-  Liabilities:CreditCard:CMB -100 CNY
+  Liabilities:Short:CreditCard:CMB -100 CNY
   Expenses:Food 100 CNY
 """
     )

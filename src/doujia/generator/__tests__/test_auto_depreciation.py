@@ -15,9 +15,9 @@ def test_auto_depreciation(entries: list[Directive]):  # type: ignore
     """
     @@@/main.bean
     2024-03-05 open Assets:Long:Fixed:Digital
-    2024-03-05 open Liabilities:CreditCard:CMB
+    2024-03-05 open Liabilities:Short:CreditCard:CMB
     2024-03-05 * "Sony A7C2"
-      Liabilities:CreditCard:CMB -13,993.00 CNY
+      Liabilities:Short:CreditCard:CMB -13,993.00 CNY
       Assets:Long:Fixed:Digital 1.00 SONY.A7C2 { 13,993.00 CNY }
         useful_life: "36m"
         residual_value: 8395.8

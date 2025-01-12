@@ -7,15 +7,15 @@ from doujia.post_processor.truncate_meta import truncate_meta
 def test_truncate_meta(entries: list[Directive]):  # type: ignore
     """
     @@@/main.bean
-    2024-11-12 open Liabilities:CreditCard:CMB
+    2024-11-12 open Liabilities:Short:CreditCard:CMB
     2024-11-12 open Expenses:Living:Transportation
     2024-11-12 * "嘀嘀" "打车"
         time: "08:09:45"
         card: "5384"
         uniqueNo: "CMB_WLXTAN11050X7090000CAAIZ"
-        Liabilities:CreditCard:CMB                                                  -1.50 CNY
+        Liabilities:Short:CreditCard:CMB                                                  -1.50 CNY
         Expenses:Living:Transportation                                                     1.50 CNY
-    2024-11-13 balance Liabilities:CreditCard:CMB -1.50 CNY
+    2024-11-13 balance Liabilities:Short:CreditCard:CMB -1.50 CNY
     """
 
     truncate_meta(entries)
@@ -25,12 +25,12 @@ def test_truncate_meta(entries: list[Directive]):  # type: ignore
 
     assert (
         actual
-        == """2024-11-12 open Liabilities:CreditCard:CMB
+        == """2024-11-12 open Liabilities:Short:CreditCard:CMB
 2024-11-12 open Expenses:Living:Transportation
 2024-11-12 * "嘀嘀" "打车"
-    Liabilities:CreditCard:CMB                                                  -1.50 CNY
+    Liabilities:Short:CreditCard:CMB                                                  -1.50 CNY
     Expenses:Living:Transportation                                                     1.50 CNY
-2024-11-13 balance Liabilities:CreditCard:CMB -1.50 CNY"""
+2024-11-13 balance Liabilities:Short:CreditCard:CMB -1.50 CNY"""
     )
 
 
@@ -38,20 +38,20 @@ def test_truncate_meta(entries: list[Directive]):  # type: ignore
 def test_truncate_meta_2(entries: list[Directive]):  # type: ignore
     """
     @@@/main.bean
-    2024-11-12 open Liabilities:CreditCard:CMB
+    2024-11-12 open Liabilities:Short:CreditCard:CMB
     2024-11-12 open Expenses:Living:Transportation
     2024-11-12 * "嘀嘀" "打车"
         time: "08:09:45"
         card: "5384"
         uniqueNo: "CMB_WLXTAN11050X7090000CAAIZ"
-        Liabilities:CreditCard:CMB                                                  -1.50 CNY
+        Liabilities:Short:CreditCard:CMB                                                  -1.50 CNY
         Expenses:Living:Transportation                                                     1.50 CNY
-    2024-11-13 balance Liabilities:CreditCard:CMB -1.50 CNY
+    2024-11-13 balance Liabilities:Short:CreditCard:CMB -1.50 CNY
     2024-11-13 * "嘀嘀" "打车"
         time: "08:09:45"
         card: "5384"
         uniqueNo: "CMB_WLXTAN11050X7090000CAAIZ"
-        Liabilities:CreditCard:CMB                                                  -1.50 CNY
+        Liabilities:Short:CreditCard:CMB                                                  -1.50 CNY
         Expenses:Living:Transportation                                                     1.50 CNY
     """
 
@@ -62,16 +62,16 @@ def test_truncate_meta_2(entries: list[Directive]):  # type: ignore
 
     assert (
         actual
-        == """2024-11-12 open Liabilities:CreditCard:CMB
+        == """2024-11-12 open Liabilities:Short:CreditCard:CMB
 2024-11-12 open Expenses:Living:Transportation
 2024-11-12 * "嘀嘀" "打车"
-    Liabilities:CreditCard:CMB                                                  -1.50 CNY
+    Liabilities:Short:CreditCard:CMB                                                  -1.50 CNY
     Expenses:Living:Transportation                                                     1.50 CNY
-2024-11-13 balance Liabilities:CreditCard:CMB -1.50 CNY
+2024-11-13 balance Liabilities:Short:CreditCard:CMB -1.50 CNY
 2024-11-13 * "嘀嘀" "打车"
     time: "08:09:45"
     card: "5384"
     uniqueNo: "CMB_WLXTAN11050X7090000CAAIZ"
-    Liabilities:CreditCard:CMB                                                  -1.50 CNY
+    Liabilities:Short:CreditCard:CMB                                                  -1.50 CNY
     Expenses:Living:Transportation                                                     1.50 CNY"""
     )

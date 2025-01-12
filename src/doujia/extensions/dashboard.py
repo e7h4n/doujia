@@ -103,7 +103,7 @@ class Dashboard(FavaExtensionBase):
             account_prefixes=["Assets:Short", "Liabilities:Short"],
             investment_prefixes=["Assets:Short:Stock", "Assets:Short:Investment"],
             current_prefixes=[
-                "Assets:Current:CMB",
+                "Assets:Short:Current:CMB",
                 "Assets:Receivables",
                 "Assets:Short:Current:Alipay",
             ],
@@ -112,7 +112,7 @@ class Dashboard(FavaExtensionBase):
                 "Income:Positive:Salary",
                 "Assets:Short:Current:HousingAccumulation",
             ],
-            creditcard_prefixes=["Liabilities:CreditCard:CMB"],
+            creditcard_prefixes=["Liabilities:Short:CreditCard:CMB"],
             begin_date=begin,
             end_date=date.today() + timedelta(days=1),
         )
@@ -145,7 +145,7 @@ class Dashboard(FavaExtensionBase):
                     "Assets:Short:Current:HousingAccumulation",
                 ],
                 current_accounts=[
-                    "Assets:Current:CMB",
+                    "Assets:Short:Current:CMB",
                     "Assets:Receivables",
                     "Assets:Short:Current:Alipay",
                 ],

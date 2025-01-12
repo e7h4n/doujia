@@ -12,16 +12,16 @@ from doujia.report.daily import daily_report, DailyReport, report_to_message
 def test_daily_report(doc_ledger: FavaLedger):
     """
     @@@/main.bean
-    1970-01-01 open Assets:Current:CMB
-    1970-01-01 open Liabilities:CreditCard:CMB
+    1970-01-01 open Assets:Short:Current:CMB
+    1970-01-01 open Liabilities:Short:CreditCard:CMB
     1970-01-01 open Equity:Opening-Balance
 
     2022-01-01 *
-        Assets:Current:CMB 100.00 CNY
+        Assets:Short:Current:CMB 100.00 CNY
         Equity:Opening-Balance
 
     2022-01-01 *
-        Liabilities:CreditCard:CMB -10.00 CNY
+        Liabilities:Short:CreditCard:CMB -10.00 CNY
         Equity:Opening-Balance
 
     @@@/beangrow.pbtxt
@@ -30,8 +30,8 @@ def test_daily_report(doc_ledger: FavaLedger):
         doc_ledger.all_entries,
         {"dcontext": None},
         Path("/beangrow.pbtxt"),
-        ["Assets:Current:CMB"],
-        ["Liabilities:CreditCard:CMB"],
+        ["Assets:Short:Current:CMB"],
+        ["Liabilities:Short:CreditCard:CMB"],
     )
     assert report.cash_balance == 100
     assert report.credit_card_balance == -10
@@ -45,20 +45,20 @@ def test_daily_report_exclude_future_transaction(
 ):  # 不计算未来的交易
     """
     @@@/main.bean
-    1970-01-01 open Assets:Current:CMB
-    1970-01-01 open Liabilities:CreditCard:CMB
+    1970-01-01 open Assets:Short:Current:CMB
+    1970-01-01 open Liabilities:Short:CreditCard:CMB
     1970-01-01 open Equity:Opening-Balance
 
     2022-01-01 *
-        Assets:Current:CMB 100.00 CNY
+        Assets:Short:Current:CMB 100.00 CNY
         Equity:Opening-Balance
 
     2022-01-02 *
-        Assets:Current:CMB 100.00 CNY
+        Assets:Short:Current:CMB 100.00 CNY
         Equity:Opening-Balance
 
     2022-01-01 *
-        Liabilities:CreditCard:CMB -10.00 CNY
+        Liabilities:Short:CreditCard:CMB -10.00 CNY
         Equity:Opening-Balance
 
     @@@/beangrow.pbtxt
@@ -67,8 +67,8 @@ def test_daily_report_exclude_future_transaction(
         doc_ledger.all_entries,
         {"dcontext": None},
         Path("/beangrow.pbtxt"),
-        ["Assets:Current:CMB"],
-        ["Liabilities:CreditCard:CMB"],
+        ["Assets:Short:Current:CMB"],
+        ["Liabilities:Short:CreditCard:CMB"],
     )
     assert report.cash_balance == 100
     assert report.credit_card_balance == -10
@@ -95,30 +95,30 @@ def test_daily_report_today_and_yesterday_change(
 ):  # 计算今日和昨日的账户变化
     """
     @@@/main.bean
-    1970-01-01 open Assets:Current:CMB
-    1970-01-01 open Liabilities:CreditCard:CMB
+    1970-01-01 open Assets:Short:Current:CMB
+    1970-01-01 open Liabilities:Short:CreditCard:CMB
     1970-01-01 open Equity:Opening-Balance
 
     2022-01-01 *
-        Assets:Current:CMB 100.00 CNY
+        Assets:Short:Current:CMB 100.00 CNY
         Equity:Opening-Balance
 
     2022-01-01 *
-        Assets:Current:CMB 100.00 CNY
+        Assets:Short:Current:CMB 100.00 CNY
         Equity:Opening-Balance
 
     2022-01-01 *
-        Liabilities:CreditCard:CMB -10.00 CNY
+        Liabilities:Short:CreditCard:CMB -10.00 CNY
         Equity:Opening-Balance
 
     ; Yesterday Change
     2022-01-02 *
-        Assets:Current:CMB -50.00 CNY
+        Assets:Short:Current:CMB -50.00 CNY
         Equity:Opening-Balance
 
     ; Today Change
     2022-01-03 *
-        Liabilities:CreditCard:CMB -30.00 CNY
+        Liabilities:Short:CreditCard:CMB -30.00 CNY
         Equity:Opening-Balance
 
     @@@/beangrow.pbtxt
@@ -127,8 +127,8 @@ def test_daily_report_today_and_yesterday_change(
         doc_ledger.all_entries,
         {"dcontext": None},
         Path("/beangrow.pbtxt"),
-        ["Assets:Current:CMB"],
-        ["Liabilities:CreditCard:CMB"],
+        ["Assets:Short:Current:CMB"],
+        ["Liabilities:Short:CreditCard:CMB"],
     )
     assert report.yesterday_change == -50.00
     assert report.today_change == -30.00

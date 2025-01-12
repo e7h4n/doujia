@@ -3,7 +3,7 @@ from beancount.core.data import Balance, Directive, Transaction
 from beancount.loader import load_file
 
 
-def truncate_meta(entries: list[Directive], account: str = "Liabilities:CreditCard:CMB"):  # type: ignore
+def truncate_meta(entries: list[Directive], account: str = "Liabilities:Short:CreditCard:CMB"):  # type: ignore
     last_balance_date = None
 
     for entry in reversed(entries):

@@ -84,10 +84,10 @@ def get_current():
                 entries=current_app.entries,
                 at_date=today,
                 account_prefixes=[
-                    "Assets:Current:CMB",
+                    "Assets:Short:Current:CMB",
                     "Assets:Receivables",
                     "Assets:Short:Current:Alipay",
-                    "Liabilities:CreditCard:CMB",
+                    "Liabilities:Short:CreditCard:CMB",
                 ],
                 target_currency="CNY",
                 price_map=build_price_map(current_app.entries),

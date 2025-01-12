@@ -87,11 +87,11 @@ def main():
         options_map,
         Path("./beangrow.pbtxt"),
         [
-            "Assets:Current:CMB",
+            "Assets:Short:Current:CMB",
             "Assets:Receivables",
             "Assets:Short:Current:Alipay",
         ],
-        ["Liabilities:CreditCard:CMB"],
+        ["Liabilities:Short:CreditCard:CMB"],
     )
     message = report_to_message(report)
 

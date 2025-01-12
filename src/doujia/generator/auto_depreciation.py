@@ -5,7 +5,7 @@ Fixed assets depreciation plugin for beancount.
 例如：
 ```python
 2024-03-05 * "京东" "Sony A7C2" #FIXED_EXPENSE ^202403-SONY-A7C2
-  Liabilities:CreditCard:CMB                                             -13,993.00 CNY
+  Liabilities:Short:CreditCard:CMB                                             -13,993.00 CNY
   Assets:Long:Fixed:Digital                                                          1.00 SONY.A7C2 { 13,993.00 CNY }
     useful_life: "36m"
     residual_value: 8395.8 ; 三年折旧 60%

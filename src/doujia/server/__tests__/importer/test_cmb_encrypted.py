@@ -139,13 +139,13 @@ def test_load_missing_transactions_balance_date(fs):
     fs.create_file(
         "main.bean",
         contents="""
-1970-01-01 open Liabilities:CreditCard:CMB
+1970-01-01 open Liabilities:Short:CreditCard:CMB
 
-2024-11-05 balance Liabilities:CreditCard:CMB -72935.49 CNY
+2024-11-05 balance Liabilities:Short:CreditCard:CMB -72935.49 CNY
 
 2024-01-25 *
     uniqueNo: "CMB_foo"
-    Liabilities:CreditCard:CMB  -18.00 CNY
+    Liabilities:Short:CreditCard:CMB  -18.00 CNY
     Equity:UFO
 """,
     )

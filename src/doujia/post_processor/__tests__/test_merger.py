@@ -26,28 +26,28 @@ def remove_trailing_whitespace(text: str) -> str:
 def test_merge_beancount_entries(doc_fs_ledger_filename):  # 测试记录导入
     """
     @@@/main.bean
-    2023-03-19 balance Liabilities:CreditCard:CMB 0.00 CNY
-    2023-03-19 balance Assets:Current:CMB 0.00 CNY
+    2023-03-19 balance Liabilities:Short:CreditCard:CMB 0.00 CNY
+    2023-03-19 balance Assets:Short:Current:CMB 0.00 CNY
 
     2023-03-19 * "美团单车" "自行车"
-      Liabilities:CreditCard:CMB -1.50 CNY
+      Liabilities:Short:CreditCard:CMB -1.50 CNY
       Expenses:Living:Transportation
 
-    2023-03-20 balance Liabilities:CreditCard:CMB -0.00 CNY
+    2023-03-20 balance Liabilities:Short:CreditCard:CMB -0.00 CNY
     2023-03-20 balance Assets:Current:CMS 0.00 CNY
 
     @@@/imported_content.bean
     2023-03-19 ! "快捷支付" "张小龙"
-      Assets:Current:CMB -28.40 CNY
+      Assets:Short:Current:CMB -28.40 CNY
       Equity:UFO
 
-    2023-03-20 balance Assets:Current:CMB 0.00 CNY
+    2023-03-20 balance Assets:Short:Current:CMB 0.00 CNY
 
     2023-03-20 * "饿了么" "早餐午餐晚餐"
-      Liabilities:CreditCard:CMB -33.00 CNY
+      Liabilities:Short:CreditCard:CMB -33.00 CNY
       Expenses:Living:Meal:Restaurant
 
-    2023-03-21 balance Liabilities:CreditCard:CMB -0.00 CNY
+    2023-03-21 balance Liabilities:Short:CreditCard:CMB -0.00 CNY
 
     """
 
@@ -61,26 +61,26 @@ def test_merge_beancount_entries(doc_fs_ledger_filename):  # 测试记录导入
     actual = unify_content(output.getvalue())
     expect = unify_content(
         """
-        2023-03-19 balance Liabilities:CreditCard:CMB 0.00 CNY
-        2023-03-19 balance Assets:Current:CMB 0.00 CNY
+        2023-03-19 balance Liabilities:Short:CreditCard:CMB 0.00 CNY
+        2023-03-19 balance Assets:Short:Current:CMB 0.00 CNY
 
         2023-03-19 * "美团单车" "自行车"
-          Liabilities:CreditCard:CMB -1.50 CNY
+          Liabilities:Short:CreditCard:CMB -1.50 CNY
           Expenses:Living:Transportation
 
         2023-03-19 ! "快捷支付" "张小龙"
-          Assets:Current:CMB  -28.40 CNY
+          Assets:Short:Current:CMB  -28.40 CNY
           Equity:UFO
 
-        2023-03-20 balance Liabilities:CreditCard:CMB -0.00 CNY
+        2023-03-20 balance Liabilities:Short:CreditCard:CMB -0.00 CNY
         2023-03-20 balance Assets:Current:CMS 0.00 CNY
-        2023-03-20 balance Assets:Current:CMB                              0.00 CNY
+        2023-03-20 balance Assets:Short:Current:CMB                              0.00 CNY
 
         2023-03-20 * "饿了么" "早餐午餐晚餐"
-          Liabilities:CreditCard:CMB       -33.00 CNY
+          Liabilities:Short:CreditCard:CMB       -33.00 CNY
           Expenses:Living:Meal:Restaurant
 
-        2023-03-21 balance Liabilities:CreditCard:CMB                      0.00 CNY
+        2023-03-21 balance Liabilities:Short:CreditCard:CMB                      0.00 CNY
     """
     )
 
@@ -300,14 +300,14 @@ def test_merge_insert_position_future_date():
     """测试插入位置，插入一个未来的时间"""
 
     lines = [
-        "2023-03-19 balance Liabilities:CreditCard:CMB 0.00 CNY",
-        "2023-03-19 balance Assets:Current:CMB 0.00 CNY",
+        "2023-03-19 balance Liabilities:Short:CreditCard:CMB 0.00 CNY",
+        "2023-03-19 balance Assets:Short:Current:CMB 0.00 CNY",
         "",
         '2023-03-19 * "美团单车" "自行车"',
-        "    Liabilities:CreditCard:CMB -1.50 CNY",
+        "    Liabilities:Short:CreditCard:CMB -1.50 CNY",
         "    Expenses:Living:Transportation",
         "",
-        "2023-03-20 balance Liabilities:CreditCard:CMB -0.00 CNY",
+        "2023-03-20 balance Liabilities:Short:CreditCard:CMB -0.00 CNY",
         "2023-03-20 balance Assets:Current:CMS 0.00 CNY",
     ]
 
@@ -318,14 +318,14 @@ def test_merge_insert_position_prev_date():
     """测试插入位置，插入上一个交易日的记录"""
 
     lines = [
-        "2023-03-19 balance Liabilities:CreditCard:CMB 0.00 CNY",
-        "2023-03-19 balance Assets:Current:CMB 0.00 CNY",
+        "2023-03-19 balance Liabilities:Short:CreditCard:CMB 0.00 CNY",
+        "2023-03-19 balance Assets:Short:Current:CMB 0.00 CNY",
         "",
         '2023-03-19 * "美团单车" "自行车"',
-        "    Liabilities:CreditCard:CMB -1.50 CNY",
+        "    Liabilities:Short:CreditCard:CMB -1.50 CNY",
         "    Expenses:Living:Transportation",
         "",
-        "2023-03-20 balance Liabilities:CreditCard:CMB -0.00 CNY",
+        "2023-03-20 balance Liabilities:Short:CreditCard:CMB -0.00 CNY",
         "2023-03-20 balance Assets:Current:CMS 0.00 CNY",
     ]
 
@@ -336,14 +336,14 @@ def test_merge_insert_position_next_date():
     """测试插入位置，查找后一天的位置"""
 
     lines = [
-        "2023-03-19 balance Liabilities:CreditCard:CMB 0.00 CNY",
-        "2023-03-19 balance Assets:Current:CMB 0.00 CNY",
+        "2023-03-19 balance Liabilities:Short:CreditCard:CMB 0.00 CNY",
+        "2023-03-19 balance Assets:Short:Current:CMB 0.00 CNY",
         "",
         '2023-03-19 * "美团单车" "自行车"',
-        "    Liabilities:CreditCard:CMB -1.50 CNY",
+        "    Liabilities:Short:CreditCard:CMB -1.50 CNY",
         "    Expenses:Living:Transportation",
         "",
-        "2023-03-20 balance Liabilities:CreditCard:CMB -0.00 CNY",
+        "2023-03-20 balance Liabilities:Short:CreditCard:CMB -0.00 CNY",
         "2023-03-20 balance Assets:Current:CMS 0.00 CNY",
     ]
 
@@ -354,11 +354,11 @@ def test_merge_insert_position_unexisted_next_date():
     """测试插入位置，查找后一天的位置"""
 
     lines = [
-        "2023-03-19 balance Liabilities:CreditCard:CMB 0.00 CNY",
-        "2023-03-19 balance Assets:Current:CMB 0.00 CNY",
+        "2023-03-19 balance Liabilities:Short:CreditCard:CMB 0.00 CNY",
+        "2023-03-19 balance Assets:Short:Current:CMB 0.00 CNY",
         "",
         '2023-03-19 * "美团单车" "自行车"',
-        "    Liabilities:CreditCard:CMB -1.50 CNY",
+        "    Liabilities:Short:CreditCard:CMB -1.50 CNY",
         "    Expenses:Living:Transportation",
     ]
 
@@ -369,13 +369,13 @@ def test_merge_insert_position_unexisted_middle_date():
     """测试插入位置，查找其中一天的位置"""
 
     lines = [
-        "2023-03-19 balance Liabilities:CreditCard:CMB 0.00 CNY",
-        "2023-03-19 balance Assets:Current:CMB 0.00 CNY",
+        "2023-03-19 balance Liabilities:Short:CreditCard:CMB 0.00 CNY",
+        "2023-03-19 balance Assets:Short:Current:CMB 0.00 CNY",
         "",
         '2023-03-19 * "美团单车" "自行车"',
-        "    Liabilities:CreditCard:CMB -1.50 CNY",
+        "    Liabilities:Short:CreditCard:CMB -1.50 CNY",
         "    Expenses:Living:Transportation",
-        "2023-03-23 balance Assets:Current:CMB 0.00 CNY",
+        "2023-03-23 balance Assets:Short:Current:CMB 0.00 CNY",
         "",
     ]
 
@@ -386,14 +386,14 @@ def test_merge_insert_position_existed_balance():
     """测试插入位置，查找已经存在 balance 的日期"""
 
     lines = [
-        "2023-03-19 balance Liabilities:CreditCard:CMB 0.00 CNY",
-        "2023-03-19 balance Assets:Current:CMB 0.00 CNY",
+        "2023-03-19 balance Liabilities:Short:CreditCard:CMB 0.00 CNY",
+        "2023-03-19 balance Assets:Short:Current:CMB 0.00 CNY",
         "",
         '2023-03-19 * "美团单车" "自行车"',
-        "    Liabilities:CreditCard:CMB -1.50 CNY",
+        "    Liabilities:Short:CreditCard:CMB -1.50 CNY",
         "    Expenses:Living:Transportation",
         "",
-        "2023-03-20 balance Liabilities:CreditCard:CMB -0.00 CNY",
+        "2023-03-20 balance Liabilities:Short:CreditCard:CMB -0.00 CNY",
         "2023-03-20 balance Assets:Current:CMS 0.00 CNY",
     ]
 
@@ -404,14 +404,14 @@ def test_merge_insert_position_existed_date():
     """测试插入位置，同一天的记录应该追加在最后"""
 
     lines = [
-        "2023-03-19 balance Liabilities:CreditCard:CMB 0.00 CNY",
-        "2023-03-19 balance Assets:Current:CMB 0.00 CNY",
+        "2023-03-19 balance Liabilities:Short:CreditCard:CMB 0.00 CNY",
+        "2023-03-19 balance Assets:Short:Current:CMB 0.00 CNY",
         "",
         '2023-03-19 * "美团单车" "自行车"',
-        "    Liabilities:CreditCard:CMB -1.50 CNY",
+        "    Liabilities:Short:CreditCard:CMB -1.50 CNY",
         "    Expenses:Living:Transportation",
         "",
-        "2023-03-20 balance Liabilities:CreditCard:CMB -0.00 CNY",
+        "2023-03-20 balance Liabilities:Short:CreditCard:CMB -0.00 CNY",
         "2023-03-20 balance Assets:Current:CMS 0.00 CNY",
     ]
 
@@ -420,16 +420,16 @@ def test_merge_insert_position_existed_date():
 
 def test_find_balance_insert_position():
     lines = """
-2023-03-19 balance Liabilities:CreditCard:CMB 0.00 CNY
-2023-03-19 balance Assets:Current:CMB 0.00 CNY
+2023-03-19 balance Liabilities:Short:CreditCard:CMB 0.00 CNY
+2023-03-19 balance Assets:Short:Current:CMB 0.00 CNY
 
 2023-03-19 * "美团单车" "自行车"
-  Liabilities:CreditCard:CMB -1.50 CNY
+  Liabilities:Short:CreditCard:CMB -1.50 CNY
   Expenses:Living:Transportation
 
-2023-03-20 balance Liabilities:CreditCard:CMB -0.00 CNY
+2023-03-20 balance Liabilities:Short:CreditCard:CMB -0.00 CNY
 2023-03-20 balance Assets:Current:CMS 0.00 CNY
-2023-03-21 balance Liabilities:CreditCard:CMB                      0.00 CNY
+2023-03-21 balance Liabilities:Short:CreditCard:CMB                      0.00 CNY
 """.split(
         "\n"
     )
@@ -439,16 +439,16 @@ def test_find_balance_insert_position():
 
 def test_find_transaction_insert_position():
     lines = """
-2023-03-19 balance Liabilities:CreditCard:CMB 0.00 CNY
-2023-03-19 balance Assets:Current:CMB 0.00 CNY
+2023-03-19 balance Liabilities:Short:CreditCard:CMB 0.00 CNY
+2023-03-19 balance Assets:Short:Current:CMB 0.00 CNY
 
 2023-03-19 * "美团单车" "自行车"
-  Liabilities:CreditCard:CMB -1.50 CNY
+  Liabilities:Short:CreditCard:CMB -1.50 CNY
   Expenses:Living:Transportation
 
-2023-03-20 balance Liabilities:CreditCard:CMB -0.00 CNY
+2023-03-20 balance Liabilities:Short:CreditCard:CMB -0.00 CNY
 2023-03-20 balance Assets:Current:CMS 0.00 CNY
-2023-03-21 balance Liabilities:CreditCard:CMB                      0.00 CNY
+2023-03-21 balance Liabilities:Short:CreditCard:CMB                      0.00 CNY
 """.split(
         "\n"
     )
