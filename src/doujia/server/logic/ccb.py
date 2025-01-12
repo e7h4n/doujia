@@ -1,6 +1,5 @@
 import io
 from datetime import datetime
-import os
 
 from beancount.core import data
 from beancount.core.number import D
