@@ -3,11 +3,11 @@ from beancount.core.data import Balance, Directive, Transaction
 from beancount.loader import load_file
 
 
-def truncate_meta(entries: list[Directive]):  # type: ignore
+def truncate_meta(entries: list[Directive], account: str = "Liabilities:CreditCard:CMB"):  # type: ignore
     last_balance_date = None
 
     for entry in reversed(entries):
-        if isinstance(entry, Balance) and entry.account == "Liabilities:CreditCard:CMB":
+        if isinstance(entry, Balance) and entry.account == account:
             last_balance_date = entry.date
             break
 
@@ -37,6 +37,7 @@ def truncate_meta(entries: list[Directive]):  # type: ignore
 
 def main():
     arg_parser = argparse.ArgumentParser(description="Beancount posting filler.")
+
     arg_parser.add_argument(
         "--bean-file",
         dest="main_filename",
@@ -44,12 +45,19 @@ def main():
         required=True,
         help="Path to the main beancount file.",
     )
+    arg_parser.add_argument(
+        "--account",
+        dest="account",
+        type=str,
+        required=True,
+        help="Account to truncate meta.",
+    )
 
     args = arg_parser.parse_args()
 
     entries, _, _ = load_file(args.main_filename)
 
-    truncate_meta(entries)
+    truncate_meta(entries, args.account)
 
 
 if __name__ == "__main__":
