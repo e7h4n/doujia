@@ -50,6 +50,7 @@ Other examples:
 __copyright__ = "Copyright (C) 2014-2017  Martin Blais"
 __license__ = "GNU GPLv2"
 
+from dataclasses import dataclass
 import datetime
 import os
 import re
@@ -57,8 +58,18 @@ import re
 from beancount.core import data
 from beancount.parser.printer import print_entries
 from dateutil import rrule
+from beancount.loader import load_file
+from logzero import logger
+from typing import TypeVar
 
-__plugins__ = ("forecast_plugin",)
+Directive = TypeVar("Directive", bound=data.Directive)  # type: ignore
+
+
+@dataclass
+class Forecast:
+    key: str
+    related_entry: Directive
+    generated_entries: list[Directive]
 
 
 def forecast_plugin(entries, options_map):  # noqa: C901
@@ -84,8 +95,7 @@ def forecast_plugin(entries, options_map):  # noqa: C901
         )
         outlist.append(entry)
 
-    # Generate forecast entries up to the end of the current year.
-    new_entries = {}
+    forecasts = []
     for entry in forecast_entries:
         # Parse the periodicity.
         match = re.search(
@@ -137,28 +147,72 @@ def forecast_plugin(entries, options_map):  # noqa: C901
                 entry_key = (entry.date, posting.account)
                 break
 
+        forecast = Forecast(
+            key=entry_key,
+            related_entry=entry,
+            generated_entries=[],
+        )
+
         for forecast_date in forecast_dates:
             forecast_entry = entry._replace(
                 date=forecast_date, narration=forecast_narration
             )
-            if entry_key not in new_entries:
-                new_entries[entry_key] = []
-            new_entries[entry_key].append(forecast_entry)
+            forecast.generated_entries.append(forecast_entry)
 
-    return new_entries
+        forecasts.append(forecast)
+
+    return forecasts
+
+
+def generate_forecast(forecasts: list[Forecast], forecast_root: str):
+    for forecast in forecasts:
+        forecast_date, account = forecast.key
+        # 把 account 中的 : 换成 /
+        directory = account.replace(":", "/")
+        os.makedirs(f"{forecast_root}/{directory}", exist_ok=True)
+        with open(f"{forecast_root}/{directory}/{forecast_date}.bean", "w") as f:
+            print_entries(forecast.generated_entries, file=f)
+
+
+def update_related_entries(forecasts: list[Forecast], forecast_root: str):
+    replace_directives: dict[str, dict[int, str]] = dict()
+
+    for forecast in forecasts:
+        forecast_date, account = forecast.key
+        directory = account.replace(":", "/")
+        target_file = f"{forecast_root}/{directory}/{forecast_date}.bean"
+        filename = forecast.related_entry.meta["filename"]
+        line_number = forecast.related_entry.meta["lineno"]
+        if filename not in replace_directives:
+            replace_directives[filename] = dict()
+        replace_directives[filename][line_number] = target_file
+
+    for filename, directives in replace_directives.items():
+        lines = []
+        with open(filename) as f:
+            lines = f.readlines()
+        sorted_directives = dict(sorted(directives.items(), reverse=True))
+        for line_number, target_file in sorted_directives.items():
+            # 找到 target_file 相对于 filename 的路径
+            filename_dir = os.path.dirname(filename)
+            if filename_dir:
+                target_file = os.path.relpath(target_file, filename_dir)
+            begin_index = line_number - 1
+            end_index = line_number
+            while end_index < len(lines) and lines[end_index][0] == " ":
+                end_index += 1
+            print(lines[begin_index:end_index])
+            lines[begin_index:end_index] = [f'include "{target_file}"\n']
+        with open(filename, "w") as f:
+            f.writelines(lines)
+
+
+def replace_forecast(ledger_path: str, forecast_root: str):
+    entries, _, options_map = load_file(ledger_path)
+    forecasts = forecast_plugin(entries, options_map)
+    generate_forecast(forecasts, forecast_root)
+    update_related_entries(forecasts, forecast_root)
 
 
 if __name__ == "__main__":
-    from beancount.loader import load_file
-
-    entries, _, options_map = load_file("main.bean")
-    forecast_entries = forecast_plugin(entries, options_map)
-    for forecast_key, entries in forecast_entries.items():
-        print(f"Forecast entries for {forecast_key}:")
-        forecast_date, account = forecast_key
-        # 把 account 中的 : 换成 /
-        directory = account.replace(":", "/")
-        # 在 ledger/forecast 中递归创建出子目录
-        os.makedirs(f"ledgers/forecast/{directory}", exist_ok=True)
-        with open(f"ledgers/forecast/{directory}/{forecast_date}.bean", "w") as f:
-            print_entries(entries, file=f)
+    replace_forecast("main.bean", "ledgers/forecast")
