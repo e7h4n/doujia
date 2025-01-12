@@ -12,7 +12,7 @@ def test_forecast(entries: list[Directive], fs: FakeFilesystem):
     """
     @@@/main.bean
     2024-03-05 # "[MONTHLY REPEAT 6 TIMES]"
-      Liabilities:Short:CreditCard:CMB -100.00 CNY
+      Liabilities:CreditCard:CMB -100.00 CNY
       Assets:Long:Fixed:Digital
     """
 
@@ -34,10 +34,10 @@ def test_forecast_multiple(entries: list[Directive], fs: FakeFilesystem):
     """
     @@@/main.bean
     2024-03-05 # "[MONTHLY REPEAT 6 TIMES]"
-      Liabilities:Short:CreditCard:CMB -100.00 CNY
+      Liabilities:CreditCard:CMB -100.00 CNY
       Assets:Long:Fixed:Digital
     2022-03-05 # "[MONTHLY REPEAT 12 TIMES]"
-      Liabilities:Short:CreditCard:CMB -100.00 CNY
+      Liabilities:CreditCard:CMB -100.00 CNY
       Assets:Long:Fixed:Digital
     """
 
@@ -64,10 +64,10 @@ def test_forecast_relative(entries: list[Directive], fs: FakeFilesystem):
 
     @@@/ledgers/main.bean
     2024-03-05 # "[MONTHLY REPEAT 6 TIMES]"
-      Liabilities:Short:CreditCard:CMB -100.00 CNY
+      Liabilities:CreditCard:CMB -100.00 CNY
       Assets:Long:Fixed:Digital
     2022-03-05 # "[MONTHLY REPEAT 12 TIMES]"
-      Liabilities:Short:CreditCard:CMB -100.00 CNY
+      Liabilities:CreditCard:CMB -100.00 CNY
       Assets:Long:Fixed:Digital
     """
 
