@@ -11,7 +11,6 @@ from fava.beans.abc import Posting, Amount
 from fava.core import FavaLedger, CounterInventory
 from fava.core.conversion import convert_position, conversion_from_str
 from fava.util.date import parse_date
-from flask import current_app
 
 from doujia.report.daily import DailyReport, daily_report
 from doujia.report.summerize import (
