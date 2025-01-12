@@ -20,8 +20,8 @@ class Holdings(FavaExtensionBase):
 
         investment_groups = get_investment_holdings(
             entries,
-            current_app.beangrow_config,
-            current_app.investment_config,
+            current_app.doujia_config.beangrow_config,
+            current_app.doujia_config.investment_config,
             self.ledger.options,
             datetime.date.today() + datetime.timedelta(days=1),
         )

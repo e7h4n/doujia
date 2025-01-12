@@ -19,7 +19,6 @@ from doujia.report.pnl import gen_pnl_data
 from doujia.report.portfolio.portfolio import create_portfolio_report
 from doujia.server.filter.auth import require_auth
 from doujia.server.app import current_app
-from logzero import logger
 
 Directive = TypeVar("Directive", bound=data.Directive)  # type: ignore
 
@@ -36,8 +35,7 @@ def _extract_beangrow_config(
     price_map = prices.build_price_map(entries)
     pricer = returnslib.Pricer(price_map)
 
-    config_path = current_app.beangrow_config
-    logger.debug(f"config path: ${config_path}")
+    config_path = current_app.doujia_config.beangrow_config
     beangrow_config = configlib.read_config(config_path, [], accounts)
 
     account_data_map = investments.extract(
@@ -55,9 +53,6 @@ def _extract_beangrow_config(
 def _extract_beangrow_config_from_fava(
     end_date: datetime.date,
 ) -> Tuple[returnslib.Pricer, Dict, Dict[investments.Account, investments.AccountData]]:
-    ledger_path = os.path.join(current_app.ledger_root, "main.bean")
-    logger.debug(f"ledger path: ${ledger_path}")
-
     dcontext = current_app.options_map["dcontext"]
     return _extract_beangrow_config(current_app.entries, end_date, dcontext)
 
@@ -188,9 +183,9 @@ def get_cumulative_returns():
 def get_holding():
     entries = current_app.entries
 
-    beangrow_path = current_app.beangrow_config
+    beangrow_path = current_app.doujia_config.beangrow_config
     distribution_path = os.path.join(
-        current_app.ledger_root, current_app.investment_config
+        current_app.ledger_root, current_app.doujia_config.investment_config
     )
     investment_groups = get_investment_holdings(
         entries,

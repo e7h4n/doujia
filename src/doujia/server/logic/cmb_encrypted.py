@@ -133,7 +133,7 @@ def import_cmb_transactions(items) -> int:
 
     with io.StringIO() as output:
         _categorize_transactions(
-            current_app.categorize_config, imported_content, output
+            current_app.doujia_config.categorize_config, imported_content, output
         )
 
         imported_content = output.getvalue()
@@ -149,9 +149,7 @@ def import_cmb_transactions(items) -> int:
 
         result = align_beancount(output.getvalue())
 
-        with open(
-            os.path.join(current_app.ledger_root, "main.bean"), "w", encoding="utf-8"
-        ) as file:
+        with open(current_app.doujia_config.import_to, "w", encoding="utf-8") as file:
             file.write(result)
 
     return len(txns)

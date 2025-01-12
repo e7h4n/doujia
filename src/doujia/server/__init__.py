@@ -7,7 +7,6 @@ from doujia.server.app import FlaskApp
 from doujia.server.controller.portfolio import bp as portfolio_bp
 from doujia.server.controller.importer import bp as importer_bp
 from doujia.server.controller.balance import bp as balance_bp
-from beancount.loader import load_file
 from corbado_python_sdk import (
     Config,
     CorbadoSDK,
@@ -16,6 +15,7 @@ from corbado_python_sdk import (
 from logzero import setup_default_logger, INFO, logger
 from beancount.core.getters import get_commodity_directives
 from doujia.price.yahoo import update_price_cache
+from doujia.server.logic.ledger import load_beancount
 
 DEFAULT_CORBADO_PROJECT_ID = "pro-8910668211600497001"
 
@@ -48,14 +48,12 @@ def reload_beancount(app: FlaskApp) -> bool:
     返回是否加载成功
     """
     ledger_path = os.path.join(app.ledger_root, "main.bean")
-
-    entries, errors, options_map = load_file(ledger_path)
-
-    if errors:
-        raise ValueError(f"Beancount load errors: {errors}")
+    entries, doujia_config, options_map = load_beancount(ledger_path)
 
     app.entries = entries
     app.options_map = options_map
+    app.doujia_config = doujia_config
+
     logger.info("Successfully reloaded beancount file")
     return True
 
@@ -90,33 +88,6 @@ def create_app(test_config=None):  # noqa: C901
         app.ledger_root = os.path.abspath(app.config["LEDGER_ROOT"])
     else:
         app.ledger_root = os.path.abspath(os.getcwd())
-
-    if "BEANGROW_CONFIG" in os.environ:
-        app.beangrow_config = os.path.abspath(
-            os.path.join(app.ledger_root, os.environ["BEANGROW_CONFIG"])
-        )
-    else:
-        app.beangrow_config = os.path.abspath(
-            os.path.join(app.ledger_root, "beangrow.pbtxt")
-        )
-
-    if "INVESTMENT_CONFIG" in os.environ:
-        app.investment_config = os.path.abspath(
-            os.path.join(app.ledger_root, os.environ["INVESTMENT_CONFIG"])
-        )
-    else:
-        app.investment_config = os.path.abspath(
-            os.path.join(app.ledger_root, "config/investment_distribution.yaml")
-        )
-
-    if "CATEGORIZE_CONFIG" in os.environ:
-        app.categorize_config = os.path.abspath(
-            os.path.join(app.ledger_root, os.environ["CATEGORIZE_CONFIG"])
-        )
-    else:
-        app.categorize_config = os.path.abspath(
-            os.path.join(app.ledger_root, "config/main.bconv")
-        )
 
     init_corbado(app)
 

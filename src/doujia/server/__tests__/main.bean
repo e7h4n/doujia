@@ -5,3 +5,5 @@
 1970-01-01 open Assets:Stock:Current USD
 1970-01-01 open Income:Dividends:AAPL USD
 1970-01-01 open Income:Dividends:SPY USD
+
+2025-01-12 custom "doujia-option" "beangrow-config" "beangrow.pbtxt"
