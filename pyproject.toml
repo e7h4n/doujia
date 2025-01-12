@@ -17,7 +17,8 @@ dependencies = [
     "passkeys>=1.1.3",
     "flask-cors>=5.0.0",
     "pytest-mock>=3.14.0",
-    "Flask-APScheduler>=1.13.1"
+    "Flask-APScheduler>=1.13.1",
+    "requests>=2.32.3",
 ]
 requires-python = "~=3.12.0"
 readme = "README.md"
