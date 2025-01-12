@@ -1,7 +1,6 @@
 from datetime import date
 from beancount.core.data import Directive
 from freezegun import freeze_time
-import pytest
 
 from doujia.report.saving import calc_period_saving, calc_saving, calc_saving_summary
 
