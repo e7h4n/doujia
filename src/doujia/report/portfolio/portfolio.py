@@ -10,7 +10,7 @@ from beancount.core.prices import build_price_map, get_price
 from beancount.core.getters import get_commodity_directives
 from beancount.core.convert import get_cost
 
-from doujia.price.yahoo import get_realtime_prices
+from doujia.price.yahoo import get_realtime_prices, update_price_cache
 from doujia.report.portfolio.data import HoldingGroup, InvestmentHolding, Portfolio
 from doujia.report.portfolio.holding import create_holding
 from doujia.report.portfolio.stat import fill_stat_fields
@@ -22,6 +22,12 @@ def get_last_and_realtime_price_map(entries: list[Directive]):  # type: ignore
     last_price_map = build_price_map(entries)
     realtime_price_map = _build_realtime_price_map(entries, symbols)
     return last_price_map, realtime_price_map
+
+
+def build_realtime_price_cache(entries: list[Directive]):
+    commodity_map = get_commodity_directives(entries)
+    symbols = _get_yahoo_symbols(commodity_map)
+    update_price_cache(list(symbols.values()))
 
 
 def _get_yahoo_symbols(commodity_map):

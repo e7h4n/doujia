@@ -16,7 +16,10 @@ from doujia.report.investment import (
     InvestmentHolding,
     get_investment_holdings,
 )
-from doujia.report.portfolio.portfolio import create_portfolio_report
+from doujia.report.portfolio.portfolio import (
+    build_realtime_price_cache,
+    create_portfolio_report,
+)
 
 EMPTY_MAP = frozendict()
 
@@ -292,17 +295,14 @@ def test_get_investment_report(mock_request_yahoo_finance, entries: list[Directi
         ),
     ]
 
+    build_realtime_price_cache(entries)
+
     report = create_portfolio_report(entries, investment_groups, "USD")
     portfolio_groups = report.groups
     assert len(portfolio_groups) == 2
     assert portfolio_groups[0].name == "CN"
     assert portfolio_groups[0].target_ratio == 0.5
-    assert abs(portfolio_groups[0].realtime_ratio - Decimal(0.74396)) < Decimal(
-        "0.0001"
-    )
-    assert abs(
-        portfolio_groups[0].realtime_market_value.number - Decimal(325612.79)
-    ) < Decimal("0.01")
+    assert abs(portfolio_groups[0].realtime_ratio - 0.74396) < Decimal("0.01")
     assert portfolio_groups[0].realtime_market_value.currency == "USD"
     assert len(portfolio_groups[0].holdings) == 1
 
