@@ -109,6 +109,15 @@ def create_app(test_config=None):  # noqa: C901
             os.path.join(app.ledger_root, "config/investment_distribution.yaml")
         )
 
+    if "CATEGORIZE_CONFIG" in os.environ:
+        app.categorize_config = os.path.abspath(
+            os.path.join(app.ledger_root, os.environ["CATEGORIZE_CONFIG"])
+        )
+    else:
+        app.categorize_config = os.path.abspath(
+            os.path.join(app.ledger_root, "config/main.bconv")
+        )
+
     init_corbado(app)
 
     # 添加调度器配置

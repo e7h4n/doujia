@@ -127,7 +127,9 @@ def import_ccb_transactions(items) -> int:
         imported_content = output.getvalue()
 
     with io.StringIO() as output:
-        _categorize_transactions(imported_content, output)
+        _categorize_transactions(
+            current_app.categorize_config, imported_content, output
+        )
 
         imported_content = output.getvalue()
 

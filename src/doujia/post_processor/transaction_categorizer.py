@@ -153,10 +153,10 @@ def _parse_beancount_converter_dsl(dsl: str) -> List[Rule]:
     return rules
 
 
-def _categorize_transactions(input_string, output_io):
+def _categorize_transactions(config, input_string, output_io):
     # 读取规则文件
     try:
-        with open("./config/main.bconv", "r", encoding="utf-8") as file:
+        with open(config, "r", encoding="utf-8") as file:
             dsl = file.read()
 
         # 解析规则
@@ -171,7 +171,7 @@ def main():
     input_string = sys.stdin.read()
     output_io = sys.stdout
 
-    _categorize_transactions(input_string, output_io)
+    _categorize_transactions("./config/main.bconv", input_string, output_io)
 
 
 if __name__ == "__main__":
