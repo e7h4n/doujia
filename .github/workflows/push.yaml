@@ -14,8 +14,8 @@ jobs:
         run: pdm install -G :all
       - name: Run lint
         run: make lint
-      # - name: Run test
-      #   run: make test
+      - name: Run test
+        run: make test
 
   publish-dockerhub:
     name: Push Docker image to Docker Hub
