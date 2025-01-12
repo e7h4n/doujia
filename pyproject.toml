@@ -7,7 +7,7 @@ dependencies = [
     "setuptools>=69.2.0",
     "Flask==3.0.2",
     "beancount==3.0.0",
-    "beangrow@git+https://github.com/e7h4n/beangrow.git",
+    "beangrow@git+https://github.com/beancount/beangrow.git",
     "beanquery@git+https://github.com/beancount/beanquery.git",
     "fava==1.30",
     "frozendict==2.4.0",
@@ -32,3 +32,9 @@ dev = ["-e file:///${PROJECT_ROOT}/#egg=doujia"]
 
 [tool.pdm]
 distribution = false
+
+[tool.pdm.resolution]
+allow-prereleases = true
+
+[tool.pdm.resolution.overrides]
+beancount = "==3.0.0"
