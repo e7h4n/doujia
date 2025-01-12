@@ -1,5 +1,4 @@
 from datetime import date
-from decimal import Decimal
 
 from beancount.core import data
 from beancount.core.data import Directive

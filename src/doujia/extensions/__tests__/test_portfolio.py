@@ -169,7 +169,7 @@ def test_investments_performance_realized(entries: list[Directive]):  # type: ig
     assert abs(profitable_investments[0].pnl - Decimal("2971")) < 0.01
 
 
-def test_investments_performance_realized(entries: list[Directive]):  # type: ignore
+def test_investments_performance_realized_with_income_prefix(entries: list[Directive]):  # type: ignore
     """
     @@@/main.bean
     2020-01-01 commodity AAPL

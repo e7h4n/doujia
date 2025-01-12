@@ -1,6 +1,3 @@
-import datetime
-
-from beancount.core.data import Directive
 from beancount.core.inventory import Inventory
 from frozendict import frozendict
 

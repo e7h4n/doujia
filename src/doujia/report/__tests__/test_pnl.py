@@ -6,7 +6,6 @@ from pathlib import Path
 
 from beancount.core import data
 from doujia.extensions.portfolio_logic import extract_beangrow_config
-from doujia.report.nav import gen_nav_index_data
 from doujia.report.pnl import gen_pnl_data
 
 Directive = TypeVar("Directive", bound=data.Directive)  # type: ignore

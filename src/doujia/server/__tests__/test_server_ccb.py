@@ -1,10 +1,7 @@
 import json
 
-from flask import Flask
 from flask.testing import FlaskClient
 import pytest
-
-from doujia.server import create_app
 
 
 def test_ccb_importer_empty_hello(client: FlaskClient):

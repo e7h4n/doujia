@@ -3,7 +3,6 @@ from decimal import Decimal
 
 from beancount.core import data
 from beancount.core.prices import build_price_map
-from fava.core import FavaLedger
 from typing import TypeVar
 from doujia.report.balance import balance_at
 

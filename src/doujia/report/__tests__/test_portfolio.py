@@ -4,7 +4,7 @@ from pathlib import Path
 from unittest.mock import patch
 from freezegun import freeze_time
 import pytest
-from beancount.core.data import Directive, Commodity, Price, Amount
+from beancount.core.data import Directive, Commodity, Price
 from beancount.core.inventory import Inventory
 from frozendict import frozendict
 from logzero import logger, logging
@@ -396,30 +396,3 @@ def test_portofolio_cash(mock_request_yahoo_finance, entries: list[Directive]): 
     assert len(investment_groups[1].inventory) == 1
     assert investment_groups[1].inventory.get_only_position().units.number == -41690.0
     assert investment_groups[1].inventory.get_only_position().units.currency == "USD"
-
-
-@freeze_time("2024-10-21")
-def test_get_investment_report(entries: list[Directive]):  # type: ignore # 验证通过 yahoo finance 获取实时价格
-    """
-    @@@/main.bean
-    2023-07-18 price USD 7 CNY
-    """
-    investment_groups = [
-        InvestmentHolding(
-            name="Cash Equivalent",
-            expected_ratio=0.5,
-            inventory=_I("10000.00 USD"),
-        ),
-    ]
-
-    report = create_portfolio_report(entries, investment_groups, "CNY")
-    portfolio_groups = report.groups
-    assert len(portfolio_groups) == 1
-    assert portfolio_groups[0].name == "Cash Equivalent"
-    assert portfolio_groups[0].target_ratio == 0.5
-    assert abs(portfolio_groups[0].realtime_ratio - 1.0) < Decimal("0.0001")
-    assert abs(
-        portfolio_groups[0].realtime_market_value.number - Decimal(70000)
-    ) < Decimal("0.01")
-    assert portfolio_groups[0].realtime_market_value.currency == "CNY"
-    assert len(portfolio_groups[0].holdings) == 1

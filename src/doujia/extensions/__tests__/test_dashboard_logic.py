@@ -4,7 +4,6 @@ from beancount.core.prices import build_price_map
 from fava.core import FavaLedger
 from fava.util.date import parse_date
 from freezegun import freeze_time
-import pytest
 
 from doujia.extensions.dashboard_logic import (
     ExpenseChartConfig,
@@ -790,7 +789,7 @@ def test_dashboard_summary_saving_ratio(doc_ledger: FavaLedger):
 
 
 @freeze_time("2025-01-01")
-def test_dashboard_summary_saving_ratio(doc_ledger: FavaLedger):
+def test_dashboard_summary_saving_ratio_with_income_prefix(doc_ledger: FavaLedger):
     """
     @@@/main.bean
     2021-01-01 open Assets:Current
