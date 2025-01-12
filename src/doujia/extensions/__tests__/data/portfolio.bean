@@ -1,0 +1,42 @@
+option "title" "Example"
+option "operating_currency" "CNY"
+2010-01-01 custom "fava-extension" "doujia.extensions.dashboard" "{}"
+2010-01-01 custom "fava-extension" "doujia.extensions.portfolio" "{}"
+
+
+2020-01-01 commodity AAPL
+  name: "Apple Inc"
+  asset-class: "stock"
+
+2020-01-01 commodity SPY
+  name: "S&P 500"
+  asset-class: "stock"
+
+2020-01-01 open Equity:Opening-Balances
+2020-01-01 open Assets:Stock:Current
+
+2020-01-01 open Assets:Stock:AAPL
+2020-01-01 open Income:Dividends:AAPL
+
+2020-01-01 open Assets:Stock:SPY
+2020-01-01 open Income:Dividends:SPY
+
+2021-01-01 price AAPL      100 USD
+2021-07-01 price SPY        10 USD
+2021-01-01 price USD         7 CNY
+2021-07-01 price USD       7.4 CNY
+
+2021-01-01 * "Buy AAPL 100"
+    Assets:Stock:AAPL      100 AAPL {100 USD}
+    Assets:Stock:Current
+
+2021-07-01 * "Buy SPY 50"
+    Assets:Stock:SPY        50 SPY {10 USD}
+    Assets:Stock:Current
+
+2021-08-01 * "SPY Dividend"
+    Income:Dividends:SPY  -100 USD
+    Assets:Stock:Current
+
+2021-12-31 price AAPL      150 USD
+2021-12-31 price SPY        55 USD

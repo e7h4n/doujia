@@ -1,0 +1,38 @@
+{% set distributions = extension.investment_distribution() %}
+<div>
+  偏离率标准差: {{ "%.2f%%" | format(extension.difference_index(distributions) *
+  100) }}
+</div>
+<table>
+  <thead>
+    <tr>
+      <th>Group</th>
+      <th>Expected Ratio</th>
+      <th>Ratio</th>
+      <th>Expected IRR</th>
+      <th>IRR</th>
+      <th>Expected Amount</th>
+      <th>Amount</th>
+      <th>Difference</th>
+    </tr>
+  </thead>
+  {% for investment in distributions %}
+  <tr>
+    <td>{{ investment.name }}</td>
+    <td align="right">
+      {{ "%.0f%%" | format(investment.expected_ratio * 100) }}
+    </td>
+    <td align="right">{{ "%.0f%%" | format(investment.ratio * 100) }}</td>
+    <td align="right">
+      {{ "%.2f%%" | format(investment.expected_xirr * 100) }}
+    </td>
+    <td align="right">{{ "%.2f%%" | format(investment.xirr * 100) }}</td>
+    <td align="right">{{ "{:,.0f}".format(investment.expected_amount) }}</td>
+    <td align="right">{{ "{:,.0f}".format(investment.amount) }}</td>
+    <td align="right">
+      {{ (investment.diff >= 0 and "+" or "") +
+      "{:,.0f}".format(investment.diff) }}
+    </td>
+  </tr>
+  {% endfor %}
+</table>

@@ -1,0 +1,39 @@
+{% macro render_amount(amount) %}
+    {% if amount is none %}
+        <span class="num"></span>
+    {% else %}
+        <span class="num" title="{{ ledger.commodities.name(amount.currency) }}">
+    {{- "{:,.2f}".format(amount.number) }} {{ amount.currency -}}
+  </span>
+    {% endif %}
+{% endmacro %}
+
+{% macro render_amount_cell(amount) %}
+    {% if amount is none %}
+        <td class="num" data-sort-value="0">
+            {{ render_amount(amount) }}
+        </td>
+    {% else %}
+        <td class="num" data-sort-value="{{ amount.number }}">
+            {{ render_amount(amount) }}
+        </td>
+    {% endif %}
+{% endmacro %}
+
+{% set groups = extension.overview() %}
+<div class="headerline investments">
+    {% for group in groups %}
+        {% if group.name == current_group %}
+            <h3 class="activate">
+                {{ group.name }}
+                <span class="num {{ group.irr > 0 and 'positive' or 'negative' }}">{{ "%.2f" | format(group.irr * 100) }} %</span>
+            </h3>
+        {% else %}
+            <h3 class="deactivate">
+                <a href="{{ url_for('extension_report', extension_name='Portfolio', group=group.name) }}">{{ group.name }}
+                    <span class="num {{ group.irr > 0 and 'positive' or 'negative' }}">{{ "%.2f" | format(group.irr * 100) }} %</span>
+                </a>
+            </h3>
+        {% endif %}
+    {% endfor %}
+</div>

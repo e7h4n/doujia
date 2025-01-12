@@ -1,0 +1,2 @@
+{% set abs = extension.abs %} {% macro format_price(price) %}{{
+"{:,.2f}".format(abs(price.number)) }}{% endmacro %}

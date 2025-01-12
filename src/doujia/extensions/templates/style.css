@@ -1,0 +1,222 @@
+:root {
+  --positive-color: #3daf46;
+  --negative-color: #af3d3d;
+}
+
+.grid-container-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.grid-container-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.investments .activate h3 {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 0.25em;
+}
+
+.investments .num {
+  font-size: 0.8em;
+}
+
+.investments .positive {
+  color: var(--positive-color);
+}
+
+.investments .negative {
+  color: var(--negative-color);
+}
+
+.investments .deactivate {
+  font-weight: normal;
+}
+
+.investments .deactivate a {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 0.25em;
+}
+
+.summary-card-title {
+  font-weight: 400;
+}
+
+.summary-card-number {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  padding: 5px 5px 0 0;
+}
+
+.summary-card-container {
+  grid-column: 1;
+  gap: 30px 10px;
+}
+
+.m-b {
+  margin-bottom: 10px;
+}
+
+.summary-title {
+  text-transform: uppercase;
+  margin-bottom: 0;
+}
+
+.expense-title {
+  text-transform: uppercase;
+  margin-bottom: 0;
+  grid-column: span 3;
+}
+
+.grouped-expense-yoy-compare-container {
+  grid-column: span 3;
+  background: #efefef;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5px;
+}
+
+.expense-group {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 10px;
+}
+
+.expense-group .account {
+  text-align: right;
+}
+
+.expense-group .progress {
+  grid-column: span 5;
+  position: relative;
+  overflow: hidden;
+}
+
+.expense-group .summary {
+  text-align: right;
+}
+
+.expense-group .progress .percentage {
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  position: absolute;
+  z-index: 1;
+  left: 4px;
+  top: 0;
+  bottom: 0;
+}
+
+.expense-group .progress .balance-progress {
+  background: #85b5b2;
+  position: absolute;
+  left: 0;
+  top: 2px;
+  bottom: 2px;
+}
+
+.expense-group:nth-child(2) .progress .balance-progress {
+  background: #e49344;
+}
+
+.expense-group:nth-child(3) .progress .balance-progress {
+  background: #dbc05b;
+}
+
+.expense-group:nth-child(4) .progress .balance-progress {
+  background: #a77c9f;
+}
+
+.expense-group:nth-child(5) .progress .balance-progress {
+  background: #557f47;
+}
+
+.expense-group:nth-child(6) .progress .balance-progress {
+  background: #513033;
+}
+
+.expense-group .progress .date-progress {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-right: 1px dashed black;
+}
+
+.portfolio-summary {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.summary-details {
+  display: flex;
+  width: auto;
+  min-width: 300px;
+}
+
+.summary-item {
+  flex: 1;
+  padding: 10px;
+  margin-right: 10px;
+}
+
+.summary-item:last-child {
+  margin-right: 0;
+}
+
+.value {
+  font-size: 1.5em;
+  font-weight: bold;
+  font-family: "Monospace", monospace;
+}
+
+.positive {
+  color: green;
+}
+
+.negative {
+  color: red;
+}
+
+.chart {
+  height: 400px;
+}
+
+.change-rate {
+  font-size: 0.9em;
+  color: #666;
+  font-family: "Monospace", monospace;
+}
+
+.holdings-table {
+  width: 100%;
+}
+
+.holdings-table th {
+  text-transform: uppercase;
+}
+
+.holdings-table td,
+.holdings-table th {
+  text-align: right;
+  font-family: "Monospace", monospace;
+}
+
+.holdings-table td:first-child,
+.holdings-table th:first-child {
+  text-align: left;
+}
+
+.group-row {
+  font-weight: bold;
+}
+
+.group-name {
+  cursor: pointer;
+}

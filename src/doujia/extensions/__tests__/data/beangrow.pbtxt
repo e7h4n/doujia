@@ -1,0 +1,26 @@
+investments {
+    investment {
+      currency: "AAPL"
+      asset_account: "Assets:Stock:AAPL"
+      cash_accounts: "Assets:Stock:Current"
+      dividend_accounts: "Income:Dividends:AAPL"
+    }
+    investment {
+      currency: "SPY"
+      asset_account: "Assets:Stock:SPY"
+      cash_accounts: "Assets:Stock:Current"
+      dividend_accounts: "Income:Dividends:SPY"
+    }
+  }
+  groups {
+    group {
+      name: "All"
+      investment: "Assets:*"
+      currency: "CNY"
+    }
+    group {
+      name: "US"
+      investment: "Assets:*"
+    }
+
+  }

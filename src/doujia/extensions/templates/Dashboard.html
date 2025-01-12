@@ -1,0 +1,70 @@
+<style type="text/css">{% include "style.css" %}</style>
+
+{% macro number(value) %}{{ '{:,.0f}'.format(value) }}{% endmacro %}
+
+{% macro signed_number(value) %}{{ (value > 0 and '+' or '') }}{{ number(value) }}{% endmacro %}
+
+{% macro percentage(value) %}{{ (value >= 0 and '+' or '') + '{:,.2f}'.format(value * 100) }}%{% endmacro %}
+
+<div class="grid-container-4 m-b">
+    <h2 class="summary-title">Assets</h2>
+    <h2 class="expense-title">Consume Expenses</h2>
+</div>
+<div class="grid-container-4 m-b">
+    {% set dashboard_summary = extension.dashboard_summary() %}
+    <div class="summary-card-container grid-container-3">
+        <div class="summary-card">
+            <div class="summary-card-title">Net Worth</div>
+            <div class="summary-card-number"
+                 style="color: rgb(179, 136, 255)">{{ number(dashboard_summary.net_worth) }}</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-card-title">Net Investment</div>
+            <div class="summary-card-number"
+                 style="color: rgb(0, 176, 255)">{{ number(dashboard_summary.investment) }}</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-card-title">Net Cash</div>
+            <div class="summary-card-number"
+                 style="color: rgb(0, 176, 255)">{{ number(dashboard_summary.daily_report.cash_balance + dashboard_summary.daily_report.credit_card_balance) }}</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-card-title" title="To start of year">Gain / Loss</div>
+            <div class="summary-card-number"
+                 style="color: rgb(72, 199, 142)">{{ signed_number(dashboard_summary.gain_loss) }}</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-card-title">XIRR</div>
+            <div class="summary-card-number">{{ percentage(dashboard_summary.xirr) }}</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-card-title">Saving Ratio</div>
+            <div class="summary-card-number"
+                 style="color: rgb(138, 64, 0)">{{ percentage(dashboard_summary.saving_ratio) }}</div>
+        </div>
+    </div>
+
+    {% set grouped_expense_yoy_compare = extension.grouped_expense_yoy_compare() %}
+    <div class="grouped-expense-yoy-compare-container">
+        {% for group in grouped_expense_yoy_compare %}
+            <div class="expense-group">
+                <div class="account">{{ group.account[17:] }}</div>
+                <div class="progress">
+                    <div class="percentage">{{ '{:,.2f}'.format(group.balance_progress * 100) }}%</div>
+                    <div class="balance-progress"
+                         style="width: {{ '{:,.2f}'.format(group.balance_progress * 100) }}%"></div>
+                    <div class="date-progress" style="width: {{ '{:,.2f}'.format(group.date_progress * 100) }}%"></div>
+                </div>
+                <div class="summary">
+                    <div class="period-balance" title="Balance">{{ '{:,.0f}'.format(group.today_balance) }} ({{ '{:,.0f}'.format(group.remains) }})</div>
+                </div>
+                <div class="summary">
+                    <div class="predict-remains" title="Remains">{{ '{:,.0f}'.format(group.yoy_period_balance) }}</div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="charts" id="chartGroupA"></div>
+<div class="charts" id="chartGroupB"></div>

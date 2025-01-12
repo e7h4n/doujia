@@ -1,0 +1,23 @@
+option "title" "Example"
+option "operating_currency" "CNY"
+2010-01-01 custom "fava-extension" "doujia.extensions.dashboard" "{}"
+
+
+2020-01-01 open Equity:Opening-Balances
+2020-01-01 open Assets:Stock:Current
+
+2021-10-01 !
+    Assets:Stock:Current  100 USD
+    Equity:Opening-Balances
+
+; Outing Consumes
+2020-01-01 open Expenses:Outing
+2020-01-01 open Assets:Current
+
+2020-01-01 * ^2020-HK
+    Expenses:Outing       200 CNY
+    Assets:Current
+
+2021-01-01 * ^2021-HK
+    Expenses:Outing       100 CNY
+    Assets:Current

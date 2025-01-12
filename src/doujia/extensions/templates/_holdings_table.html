@@ -1,0 +1,238 @@
+{% from "_holdings_macro.html" import format_price with context %} {% set abs =
+extension.abs %} {% set ratio_threshold = 0.00005 %}
+
+<style>
+  .group-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  .group-header {
+    padding: 1.25rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: background-color 0.2s;
+  }
+
+  .group-header:hover {
+    background: #f1f3f5;
+  }
+
+  .group-name {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .group-summary {
+    display: flex;
+    justify-content: space-between;
+    font-family: "Monospace", monospace;
+  }
+
+  .group-content {
+    padding: 0 1.25rem;
+    margin-top: 0.5rem;
+    display: none;
+  }
+
+  .holdings-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .holdings-table th {
+    text-transform: uppercase;
+    text-align: right;
+    padding: 0.5rem;
+    color: #6c757d;
+    font-size: 0.875rem;
+  }
+
+  .holdings-table td {
+    text-align: right;
+    padding: 0.5rem;
+    font-family: "Monospace", monospace;
+  }
+
+  .holdings-table th:first-child,
+  .holdings-table td:first-child {
+    text-align: left;
+  }
+
+  .second-line {
+    font-size: 0.875rem;
+    color: #6c757d;
+  }
+
+  .positive {
+    color: #2e7d32;
+  }
+
+  .negative {
+    color: #c62828;
+  }
+
+  .trend-arrow {
+    font-size: 1rem;
+    margin-right: 0.25rem;
+  }
+</style>
+
+<style>
+  .holding-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 0.75rem 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .holding-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .holding-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    align-items: flex-end;
+  }
+
+  .holding-name-section {
+    font-weight: 500;
+    display: flex;
+    gap: 1rem;
+  }
+
+  .holding-metrics {
+    display: flex;
+    gap: 1rem;
+    font-family: Monospace, monospace;
+  }
+
+  .holding-details {
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+
+<!--Holding-->
+{% macro render_holding(holding) %}
+<div class="holding-card">
+  <div class="holding-header">
+    <div class="holding-name-section">
+      {% if abs(holding.today_price_change_ratio) >= ratio_threshold %}
+      <span
+        class="trend-arrow {% if holding.today_price_change_ratio >= 0 %}positive{% else %}negative{% endif %}"
+      >
+        {{ "▲" if holding.today_price_change_ratio >= 0 else "▼" }}
+      </span>
+      {% endif %}
+      <span>{{ holding.name }}</span>
+      <span style="font-family: Monospace, monospace"
+        >{{ "{:,.2f}".format(holding.position) }}</span
+      >
+    </div>
+    <div class="holding-metrics second-line">
+      <span>{{ format_price(holding.realtime_market_value) }}</span>
+      <span>{{ "{:.2%}".format(holding.realtime_ratio) }}</span>
+    </div>
+  </div>
+  <div class="holding-details second-line">
+    <div>
+      <span
+        class="{% if abs(holding.today_price_change_ratio) < ratio_threshold %}second-line{% elif holding.today_price_change_ratio >= 0 %}positive{% else %}negative{% endif %}"
+        style="font-family: Monospace, monospace"
+      >
+        <span title="Cost: {{ format_price(holding.average_cost) }}">
+          {{ format_price(holding.realtime_price) }}
+        </span>
+        <span>
+          {% if abs(holding.today_price_change_ratio) >= ratio_threshold %} {{
+          "{:+,.2f}".format(holding.today_price_change.number) }} {{
+          "{:.2%}".format(holding.today_price_change_ratio) }} {% endif %}
+        </span>
+      </span>
+    </div>
+    <div>
+      <span
+        class="{% if holding.unrealized_pnl.number >= 0 %}positive{% else %}negative{% endif %}"
+        style="font-family: Monospace, monospace"
+      >
+        {{ "{:+,.2f}".format(holding.unrealized_pnl.number) }} {{
+        "{:.2%}".format(holding.realtime_price_change_ratio) }}
+      </span>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+<!--HoldingGroup-->
+{% macro render_holding_group(group) %} {% set group_id = 'group-' ~ group.name
+| replace(' ', '-') | lower %}
+<div class="group-card">
+  <div class="group-header" onclick="toggleGroup('{{ group_id }}')">
+    <div class="group-name">
+      <div style="display: flex; align-items: center; gap: 0.5rem">
+        {% if abs(group.today_market_value_change_ratio) >= ratio_threshold %}
+        <span
+          class="trend-arrow {% if group.today_market_value_change_ratio >= 0 %}positive{% else %}negative{% endif %}"
+          title="Today's Change"
+        >
+          {{ "▲" if group.today_market_value_change_ratio >= 0 else "▼" }}
+        </span>
+        {% endif %} [{{ (group.target_ratio * 100) | int }}] {{ group.name }}
+      </div>
+      <div class="second-line" title="Target Diff">
+        {{ "SELL" if group.target_diff.number > 0 else "BUY" }} {{
+        "{:,.2f}".format(abs(group.target_diff.number)) }}
+      </div>
+    </div>
+    <div class="group-summary">
+      <div>
+        <div
+          class="{% if abs(group.today_market_value_change_ratio) < ratio_threshold %}{% elif group.today_market_value_change_ratio >= 0 %}positive{% else %}negative{% endif %}"
+          title="Today's Change"
+        >
+          {% if abs(group.today_market_value_change_ratio) < ratio_threshold
+          %}-{% else %} {{
+          "{:.2%}".format(group.today_market_value_change_ratio) }} {% endif %}
+        </div>
+        <div
+          class="second-line {% if abs(group.today_market_value_change_ratio) < ratio_threshold %}{% elif group.today_market_value_change.number >= 0 %}positive{% else %}negative{% endif %}"
+          title="Today's PnL"
+        >
+          {% if abs(group.today_market_value_change_ratio) < ratio_threshold
+          %}-{% else %} {{
+          "{:+,.2f}".format(group.today_market_value_change.number) }} {% endif
+          %}
+        </div>
+      </div>
+      <div style="text-align: right">
+        <div>{{ format_price(group.realtime_market_value) }}</div>
+        <div class="second-line">
+          {{ "{:.2%}".format(group.realtime_ratio) }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="{{ group_id }}" style="display: none">
+  {% for holding in group.holdings %} {{ render_holding(holding) }} {% endfor %}
+</div>
+{% endmacro %}
+
+<div class="groups-container">
+  {% for group in portfolio.groups %} {{ render_holding_group(group) }} {%
+  endfor %}
+</div>

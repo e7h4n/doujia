@@ -1,0 +1,80 @@
+{% set portfolio = extension.report() %}
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<style type="text/css">
+  {
+      % include "style.css" %
+  }
+</style>
+
+{% from "_holdings_macro.html" import render_holding, render_holding_group,
+format_price with context %}
+
+<style>
+  .portfolio-summary {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+  }
+
+  .summary-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    gap: 20px;
+  }
+
+  .summary-item {
+    padding: 10px;
+  }
+
+  .value {
+    font-size: 1.2em;
+    font-weight: bold;
+    font-family: "Monospace", monospace;
+  }
+
+  .positive {
+    color: green;
+  }
+
+  .negative {
+    color: red;
+  }
+
+  .change-rate {
+    font-size: 0.9em;
+    color: #666;
+    font-family: "Monospace", monospace;
+  }
+</style>
+
+<div class="portfolio-summary">
+  <div class="summary-details">
+    <div class="summary-item">
+      <h2>Market Value</h2>
+      <span class="value"
+        >{{ format_price(portfolio.realtime_market_value) }}</span
+      >
+      <br />
+      <span class="value">{{ "{:.2%}".format(portfolio.index) }}</span>
+    </div>
+    <div class="summary-item">
+      <h2>Today's PnL</h2>
+      <div>
+        <span
+          class="value {% if portfolio.today_market_value_change.number >= 0 %}positive{% else %}negative{% endif %}"
+        >
+          {{ portfolio.today_market_value_change.number >= 0 and "+" or "" }}{{
+          "{:,.2f}".format(portfolio.today_market_value_change.number) }}
+        </span>
+        <span class="change-rate">
+          ({{ "{:+.2%}".format(portfolio.today_market_value_change_ratio) }})
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include "_holdings_table.html" %}

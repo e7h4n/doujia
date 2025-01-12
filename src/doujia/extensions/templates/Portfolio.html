@@ -1,0 +1,5 @@
+<style type="text/css">{% include "style.css" %}</style>
+
+{% set current_group = request.args.get('group', 'All') %}
+{% include '_overview.html' %}
+{% include '_report.html' %}
