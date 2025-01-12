@@ -1,11 +1,13 @@
 import io
 from datetime import datetime
+import os
 
 from beancount.core import data
 from beancount.core.number import D
 from beancount.loader import load_file
 from beancount.parser import printer
 from beancount.scripts.format import align_beancount
+from flask import current_app
 
 from doujia.post_processor.merger import _merge_beancount_content
 from doujia.post_processor.transaction_categorizer import _categorize_transactions
@@ -130,7 +132,9 @@ def import_ccb_transactions(items) -> int:
         imported_content = output.getvalue()
 
     with io.StringIO() as output:
-        with open("main.bean", "r", encoding="utf-8") as file:
+        with open(
+            os.path.join(current_app.ledger_root, "main.bean"), "r", encoding="utf-8"
+        ) as file:
             main_content = file.read()
             _merge_beancount_content(main_content, imported_content, output)
 
@@ -138,7 +142,9 @@ def import_ccb_transactions(items) -> int:
 
         result = align_beancount(output.getvalue())
 
-        with open("main.bean", "w") as file:
+        with open(
+            os.path.join(current_app.ledger_root, "main.bean"), "w", encoding="utf-8"
+        ) as file:
             file.write(result)
 
     return len(txns)

@@ -47,7 +47,7 @@ def reload_beancount(app: FlaskApp) -> bool:
     重新加载 beancount 文件
     返回是否加载成功
     """
-    ledger_path = os.path.join(app.app_root, "main.bean")
+    ledger_path = os.path.join(app.ledger_root, "main.bean")
 
     entries, errors, options_map = load_file(ledger_path)
 
@@ -84,11 +84,30 @@ def create_app(test_config=None):  # noqa: C901
 
     if "CORBADO_API_SECRET" in os.environ:
         app.config["CORBADO_API_SECRET"] = os.environ["CORBADO_API_SECRET"]
-
-    if "PROJECT_ROOT" in app.config:
-        app.app_root = app.config["PROJECT_ROOT"]
+    if "LEDGER_ROOT" in os.environ:
+        app.ledger_root = os.path.abspath(os.environ["LEDGER_ROOT"])
+    elif "LEDGER_ROOT" in app.config:
+        app.ledger_root = os.path.abspath(app.config["LEDGER_ROOT"])
     else:
-        app.app_root = os.getcwd()
+        app.ledger_root = os.path.abspath(os.getcwd())
+
+    if "BEANGROW_CONFIG" in os.environ:
+        app.beangrow_config = os.path.abspath(
+            os.path.join(app.ledger_root, os.environ["BEANGROW_CONFIG"])
+        )
+    else:
+        app.beangrow_config = os.path.abspath(
+            os.path.join(app.ledger_root, "beangrow.pbtxt")
+        )
+
+    if "INVESTMENT_CONFIG" in os.environ:
+        app.investment_config = os.path.abspath(
+            os.path.join(app.ledger_root, os.environ["INVESTMENT_CONFIG"])
+        )
+    else:
+        app.investment_config = os.path.abspath(
+            os.path.join(app.ledger_root, "config/investment_distribution.yaml")
+        )
 
     init_corbado(app)
 

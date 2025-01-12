@@ -520,7 +520,7 @@ def test_dashboard_summary(doc_ledger: FavaLedger):
         Assets:Short 1 CNY
         Equity:Opening-Balances
 
-    @@@/beangrow.pbtxt
+    @@@/config/beangrow.pbtxt
     """
 
     begin, end = parse_date("month")
@@ -548,7 +548,7 @@ def test_dashboard_summary_investment(doc_ledger: FavaLedger):
         Assets:Short
         Assets:Stock 1 AAPL { 10 CNY }
 
-    @@@/beangrow.pbtxt
+    @@@/config/beangrow.pbtxt
     """
 
     begin, end = parse_date("month")
@@ -578,7 +578,7 @@ def test_dashboard_summary_investment_affected_by_price(doc_ledger: FavaLedger):
 
     2022-01-30 price AAPL 100 CNY
 
-    @@@/beangrow.pbtxt
+    @@@/config/beangrow.pbtxt
     """
 
     summary = dashboard_summary(
@@ -610,7 +610,7 @@ def test_dashboard_summary_xirr(doc_ledger: FavaLedger):
 
     2022-01-30 price AAPL 100 CNY
 
-    @@@/beangrow.pbtxt
+    @@@/config/beangrow.pbtxt
     investments {
         investment {
             currency: "AAPL"
@@ -770,7 +770,7 @@ def test_dashboard_summary_saving_ratio(doc_ledger: FavaLedger):
         Income:Salary -1,000.00 CNY
         Assets:Current
 
-    @@@/beangrow.pbtxt
+    @@@/config/beangrow.pbtxt
     """
 
     begin, end = parse_date("month")
@@ -812,7 +812,7 @@ def test_dashboard_summary_saving_ratio_with_income_prefix(doc_ledger: FavaLedge
         Income:Salary -1,000.00 CNY
         Assets:Current
 
-    @@@/beangrow.pbtxt
+    @@@/config/beangrow.pbtxt
     """
 
     begin, end = parse_date("month")

@@ -2,6 +2,7 @@ import datetime
 import json
 
 from fava.ext import FavaExtensionBase
+from flask import current_app
 
 from doujia.report.investment import (
     get_investment_holdings,
@@ -19,8 +20,8 @@ class Holdings(FavaExtensionBase):
 
         investment_groups = get_investment_holdings(
             entries,
-            self.ledger.join_path("./beangrow.pbtxt"),
-            self.ledger.join_path("./config/investment_distribution.yaml"),
+            current_app.beangrow_config,
+            current_app.investment_config,
             self.ledger.options,
             datetime.date.today() + datetime.timedelta(days=1),
         )

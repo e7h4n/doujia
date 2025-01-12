@@ -11,6 +11,7 @@ from fava.beans.abc import Posting, Amount
 from fava.core import FavaLedger, CounterInventory
 from fava.core.conversion import convert_position, conversion_from_str
 from fava.util.date import parse_date
+from flask import current_app
 
 from doujia.report.daily import DailyReport, daily_report
 from doujia.report.summerize import (
@@ -434,7 +435,7 @@ def dashboard_summary(
     report = daily_report(
         entries=ledger.all_entries,
         options=ledger.options,
-        beangrow_config_path=ledger.join_path("beangrow.pbtxt"),
+        beangrow_config_path="config/beangrow.pbtxt",
         cash_account_prefix_list=current_prefixes,
         credit_card_prefix_list=creditcard_prefixes,
     )

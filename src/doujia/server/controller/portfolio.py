@@ -36,7 +36,7 @@ def _extract_beangrow_config(
     price_map = prices.build_price_map(entries)
     pricer = returnslib.Pricer(price_map)
 
-    config_path = os.path.join(current_app.app_root, "beangrow.pbtxt")
+    config_path = current_app.beangrow_config
     logger.debug(f"config path: ${config_path}")
     beangrow_config = configlib.read_config(config_path, [], accounts)
 
@@ -55,7 +55,7 @@ def _extract_beangrow_config(
 def _extract_beangrow_config_from_fava(
     end_date: datetime.date,
 ) -> Tuple[returnslib.Pricer, Dict, Dict[investments.Account, investments.AccountData]]:
-    ledger_path = os.path.join(current_app.app_root, "main.bean")
+    ledger_path = os.path.join(current_app.ledger_root, "main.bean")
     logger.debug(f"ledger path: ${ledger_path}")
 
     dcontext = current_app.options_map["dcontext"]
@@ -188,9 +188,9 @@ def get_cumulative_returns():
 def get_holding():
     entries = current_app.entries
 
-    beangrow_path = os.path.join(current_app.app_root, "beangrow.pbtxt")
+    beangrow_path = current_app.beangrow_config
     distribution_path = os.path.join(
-        current_app.app_root, "config/investment_distribution.yaml"
+        current_app.ledger_root, current_app.investment_config
     )
     investment_groups = get_investment_holdings(
         entries,

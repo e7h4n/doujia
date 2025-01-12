@@ -9,6 +9,7 @@ from beancount.core import prices, getters
 from beancount.core.data import Directive
 from beangrow import investments
 from fava.core import FavaLedger
+from flask import current_app
 
 Config = namedtuple("Config", ["beangrow_config_path"])
 GroupPerformanceDigest = namedtuple("GroupPerformanceDigest", ["irr"])
@@ -28,7 +29,7 @@ GroupPerformance = namedtuple(
 def extract_beangrow_config_from_fava(
     ledger: FavaLedger, end_date: datetime.date
 ) -> Tuple[returnslib.Pricer, Dict, Dict[investments.Account, investments.AccountData]]:
-    beangrow_config_path = ledger.join_path("beangrow.pbtxt")
+    beangrow_config_path = current_app.beangrow_config
     entries = ledger.all_entries
     dcontext = ledger.options["dcontext"]
     return extract_beangrow_config(entries, beangrow_config_path, end_date, dcontext)
