@@ -32,7 +32,7 @@ def cmb_wechat_encrypted_importer():
 
 @bp.post("/hsbc_wechat")
 def hsbc_wechat_importer():
-    url = request.get_text()
+    url = request.data
 
     imported_count = import_hsbc_transactions(url)
 
