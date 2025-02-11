@@ -85,13 +85,14 @@ def main():
     report = daily_report(
         entries,
         options_map,
-        Path("./beangrow.pbtxt"),
+        Path("./config/beangrow.pbtxt"),
         [
             "Assets:Short:Current:CMB",
+            "Assets:Short:Current:HSBC",
             "Assets:Receivables",
             "Assets:Short:Current:Alipay",
         ],
-        ["Liabilities:Short:CreditCard:CMB"],
+        ["Liabilities:Short:CreditCard:CMB", "Liabilities:Short:CreditCard:HSBC"],
     )
     message = report_to_message(report)
 
