@@ -53,5 +53,4 @@ def load_beancount(ledger_path: str) -> Tuple[list[Directive], DoujiaConfig, dic
                     os.path.join(ledger_root, optValue.value)
                 )
 
-
     return entries, config, options_map
