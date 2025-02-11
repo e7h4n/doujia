@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+
+
+
+
+
+
+
+<meta charset="gbk">
+<meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="format-detection" content="telephone=no" />
+<meta name='apple-touch-fullscreen' content='yes'>
+<meta name="full-screen" content="yes">
+<link href="styles/theme/css/Common.css" rel="stylesheet" type="text/css">
+<link href="styles/theme/css/android.css" rel="stylesheet" type="text/css" />
+<script src="resource/js/common/jquery-1.7.2.min.js" type="text/javascript"></script>
+<script src="resource/js/RSA.js" type="text/javascript"></script>
+<script src="resource/js/BigInt.js" type="text/javascript"></script>
+<script src="resource/js/Barrett.js" type="text/javascript"></script>
+<script src="resource/js/rsaEnc.js" type="text/javascript"></script>
+<script src="resource/js/common/Common.js" type="text/javascript"></script>
+<script src="resource/js/common/top_section.js" language="javascript" type="text/javascript"></script>
+<script language="javascript" type="text/javascript">
+var path = '/wxhf';
+</script>
+<script src='dwr/engine.js' type="text/javascript"></script>
+<script src='dwr/util.js' type="text/javascript"></script>
+<script src='dwr/interface/WebBillService.js' type='text/javascript'></script>
+<script src="resource/js/javascript/accountBill.js?version=1.22" type="text/javascript"></script>
+<script src="//tags.tiqcdn.cn/utag/hsbc/cn-rbwm-wechat/prod/utag.sync.js"></script>
+<script type="text/javascript">
+	(function(a,b,c,d){
+		a='//tags.tiqcdn.cn/utag/hsbc/cn-rbwm-wechat/prod/utag.js';
+		b=document;c='script';d=b.createElement(c);d.src=a;d.type='text/java'+c;d.async=true;
+		a=b.getElementsByTagName(c)[0];a.parentNode.insertBefore(d,a);
+	})();
+</script>
+<script type="text/javascript">
+	$(function() {
+		checkLoad('SUCCESS');
+		if('' == '1'){//���Ʒ�ҳ
+			$("#loadingMore").css("display","block");
+		}
+		//��������
+		var unBillDetail = {"bankNum":"-","cardNum":"-","tranYM":null,"addAllAmt":"��288.00","rtnMsg":"SUCCESS","orderINFO":[{"pur_DateTime":"2025-02-11 07:34:25","amount":"��288.00","cardEND":"-","descline2":"-","descline1":"-","currNum":"156"}],"addAllAmtDol":"$0.00"};
+		getFirstPageUnBill1(unBillDetail);
+	});
+	
+//����ҳ���Զ���ҳ
+//$(window).scroll(function () {
+//        var scrollTop = $(this).scrollTop();
+ //       var scrollHeight = $(document).height();
+//        var windowHeight = $(this).height();
+///        if (scrollTop + windowHeight == scrollHeight) {
+//			if('' == '1'){  
+ //        		onQueryMoreUnBill();
+ //        	}
+ //       }
+ //   });
+	
+</script>
+</head>

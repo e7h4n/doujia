@@ -38,3 +38,10 @@ allow-prereleases = true
 
 [tool.pdm.resolution.overrides]
 beancount = "==3.0.0"
+
+[tool.setuptools.package-data]
+"doujia.extensions" = [
+    "templates/*.html",
+    "*.js",
+    "*.css"
+]

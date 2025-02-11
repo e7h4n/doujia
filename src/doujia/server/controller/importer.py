@@ -4,7 +4,7 @@ from doujia.server.logic.ccb import import_ccb_transactions
 from doujia.server.logic.cmb_encrypted import (
     import_cmb_transactions as import_cmb_encrypted_transactions,
 )
-
+from doujia.server.logic.hsbc import import_hsbc_transactions
 
 bp = Blueprint("importer", __name__)
 
@@ -26,5 +26,14 @@ def cmb_wechat_encrypted_importer():
     body = request.get_json()
 
     imported_count = import_cmb_encrypted_transactions(body)
+
+    return {"transactions": imported_count}
+
+
+@bp.post("/hsbc_wechat")
+def hsbc_wechat_importer():
+    url = request.get_text()
+
+    imported_count = import_hsbc_transactions(url)
 
     return {"transactions": imported_count}
