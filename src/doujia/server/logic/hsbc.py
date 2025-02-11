@@ -1,6 +1,7 @@
 import io
 from datetime import datetime
 import json
+import os
 
 from beancount.core import data
 from beancount.core.number import D
@@ -53,6 +54,12 @@ def convert_hsbc_item_to_postings(item):
     return [out_posting, DEFAULT_UFO_POSTING]
 
 
+def generate_hsbc_unique_no(item: dict) -> str:
+    datetime_obj = datetime.strptime(item["pur_DateTime"], "%Y-%m-%d %H:%M:%S")
+    amount = parse_amount_from_hsbc_item(item["amount"])
+    return f"HSBC_{datetime_obj.strftime('%Y%m%d%H%M%S')}_{amount.number}_{amount.currency}"
+
+
 def load_missing_transactions_from_hsbc_items(filename, items):
     last_balance_date = get_last_balance_date(
         filename, "Liabilities:Short:CreditCard:HSBC"
@@ -75,13 +82,7 @@ def load_missing_transactions_from_hsbc_items(filename, items):
         if last_balance_date is not None and txn_date < last_balance_date:
             continue
 
-        # 生成唯一标识进行检查
-        datetime_obj = datetime.strptime(item["pur_DateTime"], "%Y-%m-%d %H:%M:%S")
-        amount = parse_amount_from_hsbc_item(item["amount"])
-        unique_no = (
-            f"HSBC_{int(datetime_obj.timestamp())}_{amount.number}_{amount.currency}"
-        )
-
+        unique_no = generate_hsbc_unique_no(item)
         if unique_no in existed_unique_no_set:
             continue
 
@@ -94,15 +95,10 @@ def convert_hsbc_item_to_transaction(item):
     description = item["descline1"].strip() + " " + item["descline2"].strip()
     postings = convert_hsbc_item_to_postings(item)
 
-    # 解析日期时间
     datetime_obj = datetime.strptime(item["pur_DateTime"], "%Y-%m-%d %H:%M:%S")
     txn_date = datetime_obj.date()
 
-    # 生成新的唯一标识
-    amount = parse_amount_from_hsbc_item(item["amount"])
-    unique_no = (
-        f"HSBC_{int(datetime_obj.timestamp())}_{amount.number}_{amount.currency}"
-    )
+    unique_no = generate_hsbc_unique_no(item)
 
     transaction = data.Transaction(
         data.new_metadata(
@@ -163,7 +159,9 @@ def fetch_hsbc_html_content(url: str) -> dict:
 def import_hsbc_transactions(url: str) -> int:
     html = fetch_hsbc_html_content(url)
     items = get_hsbc_items(html)
-    txns = load_missing_transactions_from_hsbc_items("main.bean", items)
+    txns = load_missing_transactions_from_hsbc_items(
+        os.path.join(current_app.ledger_root, "main.bean"), items
+    )
 
     with io.StringIO() as output:
         for txn in txns:

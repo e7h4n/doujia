@@ -8,6 +8,7 @@ Directive = TypeVar("Directive", bound=data.Directive)  # type: ignore
 
 class FlaskApp(Flask):
     app_root: str
+    ledger_root: str
     corbado: CorbadoSDK
     sessions: SessionService
     entries: list[Directive]

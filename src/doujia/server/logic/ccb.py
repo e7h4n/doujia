@@ -1,5 +1,6 @@
 import io
 from datetime import datetime
+import os
 
 from beancount.core import data
 from beancount.core.number import D
@@ -116,11 +117,12 @@ def get_existed_unique_no_set(main_file_path, account_name):
 
 
 def import_ccb_transactions(items) -> int:
-    txns = load_missing_transactions_from_ccb_items("main.bean", items)
+    txns = load_missing_transactions_from_ccb_items(
+        os.path.join(current_app.ledger_root, "main.bean"), items
+    )
 
     with io.StringIO() as output:
         for txn in txns:
-            del txn.meta["billType"]
             output.write(printer.format_entry(txn)[:-1] + "\n" + "\n")
 
         imported_content = output.getvalue()
