@@ -52,7 +52,6 @@ def load_beancount(ledger_path: str) -> Tuple[list[Directive], DoujiaConfig, dic
                 config.import_to = os.path.abspath(
                     os.path.join(ledger_root, optValue.value)
                 )
-            elif optKey.value == "import-account":
-                config.import_account = optValue.value
+
 
     return entries, config, options_map

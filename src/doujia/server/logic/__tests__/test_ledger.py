@@ -22,4 +22,3 @@ def test_options(doc_fs_ledger_filename: str):
     assert config.investment_config == "/tmp/config/investment_distribution.yaml"
     assert config.beangrow_config == "/tmp/config/beangrow.pbtxt"
     assert config.import_to == "/tmp/ledgers/main.bean"
-    assert config.import_account == "Liabilities:Short:CreditCard:CMB"
