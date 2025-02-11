@@ -25,12 +25,6 @@ DEFAULT_UFO_POSTING = data.Posting(
 
 
 def parse_amount_from_hsbc_item(amount_str: str) -> data.Amount:
-    """从HSBC金额字符串解析出Amount对象和用于唯一标识的字符串
-    
-    Args:
-        amount_str: HSBC账单中的金额字符串，如 "￥288.00" 或 "$12.34"
-        
-    """
     if amount_str.startswith("￥"):
         currency = "CNY"
         amount = D(amount_str[1:].replace(",", ""))
@@ -40,13 +34,13 @@ def parse_amount_from_hsbc_item(amount_str: str) -> data.Amount:
     else:
         currency = "CNY"
         amount = D(amount_str.replace(",", ""))
-        
+
     return data.Amount(amount, currency)
 
 
 def convert_hsbc_item_to_postings(item):
     amount = parse_amount_from_hsbc_item(item["amount"])
-    
+
     out_posting = data.Posting(
         account="Liabilities:Short:CreditCard:HSBC",
         units=data.Amount(-amount.number, amount.currency),
@@ -84,7 +78,9 @@ def load_missing_transactions_from_hsbc_items(filename, items):
         # 生成唯一标识进行检查
         datetime_obj = datetime.strptime(item["pur_DateTime"], "%Y-%m-%d %H:%M:%S")
         amount = parse_amount_from_hsbc_item(item["amount"])
-        unique_no = f"HSBC_{int(datetime_obj.timestamp())}_{amount.number}_{amount.currency}"
+        unique_no = (
+            f"HSBC_{int(datetime_obj.timestamp())}_{amount.number}_{amount.currency}"
+        )
 
         if unique_no in existed_unique_no_set:
             continue
@@ -101,10 +97,12 @@ def convert_hsbc_item_to_transaction(item):
     # 解析日期时间
     datetime_obj = datetime.strptime(item["pur_DateTime"], "%Y-%m-%d %H:%M:%S")
     txn_date = datetime_obj.date()
-    
+
     # 生成新的唯一标识
     amount = parse_amount_from_hsbc_item(item["amount"])
-    unique_no = f"HSBC_{int(datetime_obj.timestamp())}_{amount.number}_{amount.currency}"
+    unique_no = (
+        f"HSBC_{int(datetime_obj.timestamp())}_{amount.number}_{amount.currency}"
+    )
 
     transaction = data.Transaction(
         data.new_metadata(
