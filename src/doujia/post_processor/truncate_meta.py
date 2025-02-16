@@ -3,7 +3,7 @@ from beancount.core.data import Balance, Directive, Transaction
 from beancount.loader import load_file
 
 
-def truncate_meta(entries: list[Directive], account: str = "Liabilities:Short:CreditCard:CMB"):  # type: ignore
+def collect_lines_to_truncate(entries: list[Directive], account: str = "Liabilities:Short:CreditCard:CMB"):  # type: ignore
     last_balance_date = None
 
     for entry in reversed(entries):
@@ -15,12 +15,30 @@ def truncate_meta(entries: list[Directive], account: str = "Liabilities:Short:Cr
 
     for entry in entries:
         if isinstance(entry, Transaction) and entry.date < last_balance_date:
+            matched_posting = False
+            for posting in entry.postings:
+                if posting.account == account:
+                    matched_posting = True
+                    break
+
+            if not matched_posting:
+                continue
+
             if "uniqueNo" not in entry.meta:
                 continue
 
             lineno = entry.meta["lineno"]
             filename = entry.meta["filename"]
             files_to_truncate.setdefault(filename, []).append(lineno)
+
+    return files_to_truncate
+
+
+def truncate_meta(entries: list[Directive], account: str = "Liabilities:Short:CreditCard:CMB"):  # type: ignore
+
+    files_to_truncate: dict[str, list[int]] = collect_lines_to_truncate(
+        entries, account
+    )
 
     for filename, linenos in files_to_truncate.items():
         with open(filename, "r", encoding="utf-8") as f:
