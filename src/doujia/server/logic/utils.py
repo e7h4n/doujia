@@ -1,3 +1,4 @@
+from datetime import datetime
 import io
 from typing import TypeVar
 from beancount.core import data
@@ -33,9 +34,23 @@ def get_existed_unique_no_set(main_file_path):
     return unique_no_set
 
 
+def _compare_transactions(transaction: Transaction):
+    if "time" in transaction.meta:
+        return datetime.combine(
+            transaction.date,
+            datetime.strptime(transaction.meta["time"], "%H:%M:%S").time(),
+        )
+
+    return datetime.combine(transaction.date, datetime.min.time())
+
+
+def sort_transactions(transactions: list[Transaction]) -> list[Transaction]:
+    return sorted(transactions, key=_compare_transactions)
+
+
 def import_transactions(transactions: list[Transaction]) -> int:
     with io.StringIO() as output:
-        for txn in transactions:
+        for txn in sort_transactions(transactions):
             output.write(printer.format_entry(txn)[:-1] + "\n" + "\n")
 
         imported_content = output.getvalue()

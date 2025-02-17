@@ -5,7 +5,7 @@ from beancount.core import data
 from beancount.core.number import D
 from flask import current_app
 
-from doujia.server.logic.common import (
+from doujia.server.logic.utils import (
     DEFAULT_UFO_POSTING,
     get_existed_unique_no_set,
     import_transactions,

@@ -6,7 +6,7 @@ from beancount.core.number import D
 from flask import current_app
 
 from doujia.server.logic.cmb_encrypted import DEFAULT_UFO_POSTING
-from doujia.server.logic.common import import_transactions
+from doujia.server.logic.utils import import_transactions
 from doujia.utils.util import get_last_balance_date
 
 
