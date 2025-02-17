@@ -1,28 +1,15 @@
-import io
 from datetime import datetime
 import json
 import os
 
 from beancount.core import data
 from beancount.core.number import D
-from beancount.loader import load_file
-from beancount.parser import printer
-from beancount.scripts.format import align_beancount
 from flask import current_app
 import requests
 
-from doujia.post_processor.merger import _merge_beancount_content
-from doujia.post_processor.transaction_categorizer import _categorize_transactions
+from doujia.server.logic.ccb import DEFAULT_UFO_POSTING
+from doujia.server.logic.common import get_existed_unique_no_set, import_transactions
 from doujia.utils.util import get_last_balance_date
-
-DEFAULT_UFO_POSTING = data.Posting(
-    "Equity:UFO",
-    None,
-    None,
-    None,
-    None,
-    None,
-)
 
 
 def parse_amount_from_hsbc_item(amount_str: str) -> data.Amount:
@@ -88,6 +75,7 @@ def load_missing_transactions_from_hsbc_items(filename, items):
 
         txn = convert_hsbc_item_to_transaction(item)
         txns.append(txn)
+
     return txns
 
 
@@ -122,17 +110,6 @@ def convert_hsbc_item_to_transaction(item):
     return transaction
 
 
-def get_existed_unique_no_set(main_file_path):
-    entries, _, _ = load_file(main_file_path)
-
-    unique_no_set = set()
-    for entry in entries:
-        if isinstance(entry, data.Transaction) and "uniqueNo" in entry.meta:
-            unique_no_set.add(entry.meta["uniqueNo"])
-
-    return unique_no_set
-
-
 def load_hsbc_html_content(html: str):
     # 查找包含 var unBillDetail = 的行
     for line in html.splitlines():
@@ -163,29 +140,4 @@ def import_hsbc_transactions(url: str) -> int:
         os.path.join(current_app.ledger_root, "main.bean"), items
     )
 
-    with io.StringIO() as output:
-        for txn in txns:
-            output.write(printer.format_entry(txn)[:-1] + "\n" + "\n")
-
-        imported_content = output.getvalue()
-
-    with io.StringIO() as output:
-        _categorize_transactions(
-            current_app.doujia_config.categorize_config, imported_content, output
-        )
-
-        imported_content = output.getvalue()
-
-    with io.StringIO() as output:
-        with open(current_app.doujia_config.import_to, "r", encoding="utf-8") as file:
-            main_content = file.read()
-            _merge_beancount_content(main_content, imported_content, output)
-
-        output.write("\n")
-
-        result = align_beancount(output.getvalue())
-
-        with open(current_app.doujia_config.import_to, "w", encoding="utf-8") as file:
-            file.write(result)
-
-    return len(txns)
+    return import_transactions(txns)
