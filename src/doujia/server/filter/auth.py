@@ -10,8 +10,10 @@ def require_auth(f):
     def decorated_function(*args, **kwargs):
         if current_app.config.get("TESTING") or (
             current_app.sessions is None
-            and request.args.get("__debug__user__") is not None
-            and request.headers.get("X-Debug-User") is not None
+            and (
+                request.args.get("__debug__user__") is not None
+                or request.headers.get("X-Debug-User") is not None
+            )
         ):
             return f(*args, **kwargs)
 

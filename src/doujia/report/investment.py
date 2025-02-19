@@ -14,6 +14,7 @@ from beancount.core.data import Directive, Transaction
 from beancount.core.inventory import Inventory
 from beangrow.investments import CashFlow
 import beangrow.returns as returnslib
+from doujia.report.nav import gen_nav_index_data
 from doujia.report.portfolio.data import (
     InvestmentHolding,
 )
@@ -210,6 +211,7 @@ def _get_cumulative_intervals(
     result.append(("Ytd", date(end_date.year, 1, 1), end_date))
     result.append(("Rolling 6 months", end_date - relativedelta(months=6), end_date))
     result.append(("Rolling 3 months", end_date - relativedelta(months=3), end_date))
+    result.append(("Rolling 1 months", end_date - relativedelta(months=1), end_date))
 
     return result
 
@@ -220,7 +222,7 @@ def _compute_returns_series(
     account_data: List[investments.AccountData],
     intervals: List[Tuple[str, date, date]],
 ) -> list[list[Tuple[date, float]]]:
-    series = [[], [], []]
+    series = [[], [], [], []]
 
     found = False
     for _, date1, date2 in intervals:
@@ -262,12 +264,41 @@ def cumulative_returns(
     target_currency: str,
 ):
 
-    return compute_returns_table(
+    nav_index = gen_nav_index_data(
+        account_datas=account_data,
+        price_map=pricer.price_map,
+        begin_date=start_date,
+        end_date=end_date,
+        target_currency=target_currency,
+    )
+
+    table = compute_returns_table(
         pricer,
         target_currency,
         account_data,
         _get_cumulative_intervals(start_date, end_date),
     )
+
+    table.rows.append(["Nav"])
+
+    intervals = _get_cumulative_intervals(start_date, end_date)
+    for _, date1, date2 in intervals:
+        begin_nav_index = None
+        end_nav_index = None
+        for index in nav_index:
+            if begin_nav_index is None or index[0] <= date1:
+                begin_nav_index = index
+            if end_nav_index is None or index[0] <= date2:
+                end_nav_index = index
+
+        if begin_nav_index is None or end_nav_index is None:
+            nav_changed_ratio = 1
+        else:
+            nav_changed_ratio = end_nav_index[1] / begin_nav_index[1] - 1
+
+        table.rows[3].append(nav_changed_ratio)
+
+    return table
 
 
 @dataclass
