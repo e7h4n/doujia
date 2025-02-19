@@ -294,7 +294,7 @@ def cumulative_returns(
         if begin_nav_index is None or end_nav_index is None:
             nav_changed_ratio = 1
         else:
-            nav_changed_ratio = end_nav_index[1] / begin_nav_index[1] - 1
+            nav_changed_ratio = float(end_nav_index[1] / begin_nav_index[1] - 1)
 
         table.rows[3].append(nav_changed_ratio)
 
