@@ -111,6 +111,7 @@ def convert_hsbc_item_to_transaction(item):
 
 
 def load_hsbc_html_content(html: str):
+    data = None
     # 查找包含 var unBillDetail = 的行
     for line in html.splitlines():
         if "var unBillDetail = " in line:
@@ -135,6 +136,9 @@ def fetch_hsbc_html_content(url: str) -> dict:
 
 def import_hsbc_transactions(url: str) -> int:
     html = fetch_hsbc_html_content(url)
+    if html is None:
+        return 0
+
     items = get_hsbc_items(html)
     txns = load_missing_transactions_from_hsbc_items(
         os.path.join(current_app.ledger_root, "main.bean"), items
