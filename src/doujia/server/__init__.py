@@ -1,13 +1,13 @@
 import os
 
 from flask import Flask
+from doujia.server.bootstrap.scheduler import setup_scheduler
 from doujia.server.bootstrap.setup_app import (
     init_data,
     setup_app_config,
     setup_corbado,
     setup_cors,
     setup_logger,
-    setup_scheduler,
     setup_controller,
 )
 

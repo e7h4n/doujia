@@ -7,7 +7,6 @@ from doujia.server.controller.portfolio import bp as portfolio_bp
 from doujia.server.controller.importer import bp as importer_bp
 from doujia.server.controller.balance import bp as balance_bp
 from doujia.server.task.price import update_price_cache
-from doujia.server.task.scheduler import scheduler
 from doujia.server.task.ledger import reload_ledger
 
 DEFAULT_CORBADO_PROJECT_ID = "pro-8910668211600497001"
@@ -59,19 +58,8 @@ def setup_app_config(app: Flask, test_config=None):
 
 def setup_logger(app: Flask):
     logger.debug("Setting up logger")
-    if not app.config.get("TESTING"):
+    if not app.config.get("TESTING") and not app.config.get("DEBUG"):
         setup_default_logger(level=INFO)
-
-
-def setup_scheduler(app):
-    logger.debug("Setting up scheduler")
-    # 添加调度器配置
-    app.config["SCHEDULER_API_ENABLED"] = True
-
-    # 初始化调度器
-    scheduler.init_app(app)
-    if not app.config.get("TESTING"):
-        scheduler.start()
 
 
 def setup_cors(app):
