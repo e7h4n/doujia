@@ -2,15 +2,16 @@ from collections import namedtuple
 
 from beancount.core.convert import convert_amount
 from beancount.core.data import Transaction
-from beancount.core.prices import build_price_map
 from beancount.loader import load_file
+
+from doujia.price.price_map import get_last_and_realtime_price_map
 
 Cashflow = namedtuple("Cashflow", ["date", "amount"])
 
 
 def main():  # noqa: C901
     entries, errors, options_map = load_file("./main.bean")
-    price_map = build_price_map(entries)
+    _, price_map = get_last_and_realtime_price_map(entries)
 
     investment_entries = []
     for entry in entries:

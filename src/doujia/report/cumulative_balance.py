@@ -4,9 +4,9 @@ from typing import Tuple, TypeVar
 from datetime import date
 
 from beancount.core import data
-from beancount.core.prices import build_price_map
 from beancount.core.inventory import Inventory
 
+from doujia.price.price_map import get_last_and_realtime_price_map
 from doujia.report.util import balance_at
 
 
@@ -97,7 +97,7 @@ def gen_cumulative_balances(
     transactions = _filter_transactions(
         entries, account_prefix, begin_date, end_date_inclusive
     )
-    price_map = build_price_map(entries)
+    _, price_map = get_last_and_realtime_price_map(entries)
     inventory = Inventory()
 
     return _generate_balance_timeline(

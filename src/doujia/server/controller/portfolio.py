@@ -6,7 +6,8 @@ from flask import Blueprint, abort, jsonify, request
 import beangrow.config as configlib
 import beangrow.returns as returnslib
 from beangrow import investments
-from beancount.core import data, prices, getters
+from beancount.core import data, getters
+from doujia.price.price_map import get_last_and_realtime_price_map
 from doujia.report.investment import (
     calendar_returns,
     cumulative_returns,
@@ -32,7 +33,7 @@ def _extract_beangrow_config(
 ) -> Tuple[returnslib.Pricer, Dict, Dict[investments.Account, investments.AccountData]]:
     accounts = getters.get_accounts(entries)
 
-    price_map = prices.build_price_map(entries)
+    _, price_map = get_last_and_realtime_price_map(entries)
     pricer = returnslib.Pricer(price_map)
 
     config_path = current_app.doujia_config.beangrow_config

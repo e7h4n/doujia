@@ -14,6 +14,8 @@ from beangrow import investments
 from beangrow.config_pb2 import Config
 from frozendict import frozendict
 
+from doujia.price.price_map import get_last_and_realtime_price_map
+
 EMPTY_MAP = frozendict()
 
 
@@ -155,7 +157,8 @@ def calc_xirr(
     currency: str,
 ) -> Decimal:
     config: Config = _extract_beangrow_config(entries, beangrow_config_path)  # type: ignore
-    price_map = prices.build_price_map(entries)
+    _, price_map = get_last_and_realtime_price_map(entries)
+
     pricer = returnslib.Pricer(price_map)
 
     account_data_map = investments.extract(

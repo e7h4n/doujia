@@ -6,10 +6,10 @@ from typing import NamedTuple
 
 from beancount.core import getters
 from beancount.core.data import Directive
-from beancount.core.prices import build_price_map
 from beancount.loader import load_file
 from logzero import logger
 
+from doujia.price.price_map import get_last_and_realtime_price_map
 from doujia.report.pushover import Pushover
 from doujia.report.summerize import sum_single_amount_between, calc_xirr
 
@@ -30,7 +30,7 @@ def daily_report(
     cash_account_prefix_list: list[str],
     credit_card_prefix_list: list[str],
 ) -> DailyReport:
-    price_map = build_price_map(entries)
+    _, price_map = get_last_and_realtime_price_map(entries)
     min_date, _ = getters.get_min_max_dates(entries)
     max_date = datetime.date.today() + datetime.timedelta(days=1)
 

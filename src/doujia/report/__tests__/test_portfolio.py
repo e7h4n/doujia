@@ -11,13 +11,13 @@ from logzero import logger, logging
 import logzero
 from beancount.core.prices import build_price_map
 
+from doujia.price.price_map import build_realtime_price_cache
 from doujia.price.yahoo import get_realtime_prices, request_yahoo_finance
 from doujia.report.investment import (
     InvestmentHolding,
     get_investment_holdings,
 )
 from doujia.report.portfolio.portfolio import (
-    build_realtime_price_cache,
     create_portfolio_report,
 )
 
