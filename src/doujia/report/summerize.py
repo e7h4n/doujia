@@ -5,7 +5,7 @@ from typing import Tuple, NamedTuple
 
 import beangrow.config as configlib
 import beangrow.returns as returnslib
-from beancount.core import convert, getters, prices
+from beancount.core import convert, getters
 from beancount.core.amount import Amount
 from beancount.core.data import Directive, Transaction, Posting
 from beancount.core.inventory import Inventory
