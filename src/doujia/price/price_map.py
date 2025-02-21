@@ -2,7 +2,7 @@ from datetime import date
 
 from beancount.core.data import Directive, Price
 from beancount.core.getters import get_commodity_directives
-from beancount.core.prices import build_price_map, get_price
+from beancount.core.prices import PriceMap, build_price_map, get_price
 
 from doujia.price.yahoo import get_realtime_prices, update_price_cache
 
@@ -11,7 +11,24 @@ def get_last_and_realtime_price_map(entries: list[Directive]):  # type: ignore
     commodity_map = get_commodity_directives(entries)
     symbols = _get_yahoo_symbols(commodity_map)
     last_price_map = build_price_map(entries)
-    realtime_price_map = _build_realtime_price_map(entries, symbols)
+    realtime_price_map: PriceMap = _build_realtime_price_map(entries, symbols)
+
+    latest_date = None
+    for pair in realtime_price_map.forward_pairs:
+        for price_date, _ in realtime_price_map[pair]:
+            if not latest_date or price_date > latest_date:
+                latest_date = price_date
+
+    if latest_date is not None:
+        for pair in last_price_map.forward_pairs:
+            last_price_map[pair] = [
+                (price_date, price) for price_date, price in last_price_map[pair] if price_date < latest_date
+            ]
+            reversed_pair = (pair[1], pair[0])
+            last_price_map[reversed_pair] = [
+                (price_date, price) for price_date, price in last_price_map[reversed_pair] if price_date < latest_date
+            ]
+
     return last_price_map, realtime_price_map
 
 

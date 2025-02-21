@@ -496,6 +496,8 @@ def test_dashboard_summary(doc_ledger: FavaLedger):
     @@@/main.bean
     2020-01-01 open Assets:Short
     2020-01-01 open Equity:Opening-Balances
+    2022-01-01 price FOO 1.00 CNY
+    2022-01-02 price FOO 2.00 CNY
 
     2021-12-31 !
         Assets:Short 10 CNY
