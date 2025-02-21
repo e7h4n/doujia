@@ -28,7 +28,7 @@ license = { text = "MIT" }
 
 [tool.pdm.dev-dependencies]
 lint = ["pre-commit", "ruff"]
-test = ["coverage", "freezegun", "pyfakefs", "pytest", "pytest-timeout"]
+test = ["coverage", "freezegun", "pyfakefs", "pytest", "pytest-timeout", "pytest-cov"]
 dev = ["-e file:///${PROJECT_ROOT}/#egg=doujia"]
 
 [tool.pdm]
@@ -60,3 +60,11 @@ exclude = [
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "RUF", "UP"]
 ignore = []
+
+[tool.coverage.run]
+branch = true
+source = ["src/doujia"]
+omit = [
+    "**/__tests__/*",
+    "**/__init__.py",
+]
