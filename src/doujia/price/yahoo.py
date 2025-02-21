@@ -12,7 +12,6 @@ FIELDS = "regularMarketPrice,postMarketPrice,preMarketPrice,marketCap,regularMar
 
 
 def _get_crumbs_and_cookies():
-
     with requests.session():
         # 发一个请求到 https://query1.finance.yahoo.com/v1/test/getcrumb?lang=en-US&region=US 获取 crumb
         header = {
@@ -96,11 +95,7 @@ def update_price_cache(symbols: list[str]):
     for result in resp["quoteResponse"]["result"]:
         symbol = result["symbol"]
 
-        if (
-            result["hasPrePostMarketData"]
-            and result["marketState"] == "PRE"
-            and "preMarketPrice" in result
-        ):
+        if result["hasPrePostMarketData"] and result["marketState"] == "PRE" and "preMarketPrice" in result:
             price = result["preMarketPrice"]["raw"]
             time = result["preMarketTime"]["raw"]
         # elif (
@@ -117,9 +112,7 @@ def update_price_cache(symbols: list[str]):
             price = result["regularMarketPrice"]["raw"]
             time = result["regularMarketTime"]["raw"]
 
-        time = datetime.fromtimestamp(time, tz=utc).astimezone(
-            timezone(timedelta(hours=8))
-        )
+        time = datetime.fromtimestamp(time, tz=utc).astimezone(timezone(timedelta(hours=8)))
         price = Amount(Decimal(price), result["currency"])
         prices[symbol] = price
 

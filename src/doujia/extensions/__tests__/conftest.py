@@ -43,21 +43,21 @@ def snap_dir(module_path: Path) -> Path:
 
 @pytest.fixture()
 def snapshot(
-        request: pytest.FixtureRequest,
-        test_data_dir: Path,
-        module_path: Path,
-        snap_dir: Path,
-        snap_count: Counter[str],
+    request: pytest.FixtureRequest,
+    test_data_dir: Path,
+    module_path: Path,
+    snap_dir: Path,
+    snap_count: Counter[str],
 ) -> SnapshotFunc:
     """Create a snaphot for some given data."""
     fn_name = request.function.__name__
     module_name = module_path.stem
 
     def snapshot_data(
-            data: Any,
-            name: str | None = None,
-            *,
-            json: bool = False,
+        data: Any,
+        name: str | None = None,
+        *,
+        json: bool = False,
     ) -> None:
         if os.environ.get("SNAPSHOT_IGNORE"):
             # For the tests runs with old dependencies, we avoid comparing
@@ -106,10 +106,7 @@ def snapshot(
             snap_file.write_text(out, "utf-8")
         else:
             contents = snap_file.read_text("utf-8") if snap_file.exists() else ""
-            assert out == contents, (
-                "Snaphot test failed. Snapshots can be updated with "
-                "`SNAPSHOT_UPDATE=1 pytest`"
-            )
+            assert out == contents, "Snaphot test failed. Snapshots can be updated with `SNAPSHOT_UPDATE=1 pytest`"
 
     return snapshot_data
 

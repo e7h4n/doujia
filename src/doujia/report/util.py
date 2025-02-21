@@ -61,12 +61,8 @@ def split_transactions(
     after_begin_transactions = []
     for account_data in account_datas:
         if begin_date is not None:
-            before_begin_transactions.extend(
-                filter(lambda x: x.date <= begin_date, account_data.transactions)
-            )
-            after_begin_transactions.extend(
-                filter(lambda x: x.date > begin_date, account_data.transactions)
-            )
+            before_begin_transactions.extend(filter(lambda x: x.date <= begin_date, account_data.transactions))
+            after_begin_transactions.extend(filter(lambda x: x.date > begin_date, account_data.transactions))
         else:
             after_begin_transactions.extend(account_data.transactions)
 
@@ -78,9 +74,7 @@ def split_transactions(
 def prepare_inventory_and_transactions(
     account_datas: list[AccountData], begin_date: date | None
 ) -> tuple[Inventory, list[Transaction]]:
-    before_begin_transactions, after_begin_transactions = split_transactions(
-        account_datas, begin_date
-    )
+    before_begin_transactions, after_begin_transactions = split_transactions(account_datas, begin_date)
 
     begin_inventory = inventory_processor.reduce_transactions(
         Inventory(),
@@ -90,9 +84,7 @@ def prepare_inventory_and_transactions(
     return begin_inventory, after_begin_transactions
 
 
-def balance_at(
-    inventory: Inventory, price_map: PriceMap, target_currency: str, at_date: date
-) -> data.Amount:
+def balance_at(inventory: Inventory, price_map: PriceMap, target_currency: str, at_date: date) -> data.Amount:
     balance = data.Amount(Decimal(0), target_currency)
     for posting in inventory.get_positions():
         amount = convert_amount(

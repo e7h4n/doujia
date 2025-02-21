@@ -11,9 +11,7 @@ def fill_stat_fields(portofolio_groups: list[HoldingGroup], target_currency: str
     填充 PortfolioGroup 中的统计字段, 这些统计字段需要计算所有 Group 以及 Group 下所有 Portfolio 的数据统计得来
     例如累计市值、各个投资标的的占比
     """
-    total_realtime_market_value = _fill_group_market_values_and_sum_total_value(
-        portofolio_groups, target_currency
-    )
+    total_realtime_market_value = _fill_group_market_values_and_sum_total_value(portofolio_groups, target_currency)
     _fill_ratios(portofolio_groups, total_realtime_market_value)
 
 
@@ -58,20 +56,14 @@ def _sum_group_values(portofolio_group: HoldingGroup) -> GroupValues:
     )
 
 
-def _set_group_amounts(
-    portofolio_group: HoldingGroup, values: GroupValues, target_currency: str
-):
+def _set_group_amounts(portofolio_group: HoldingGroup, values: GroupValues, target_currency: str):
     """
     填充 portfolio_group 的市值相关字段, 包括 realtime_market_value, last_market_value,
     unrealized_pnl, today_market_value_change, 这几个字段来自于 portfolioGroup 下所有 portfolio 的市值相关字段
     """
 
-    portofolio_group.realtime_market_value = Amount(
-        values.realtime_market_value, target_currency
-    )
-    portofolio_group.last_market_value = Amount(
-        values.last_market_value, target_currency
-    )
+    portofolio_group.realtime_market_value = Amount(values.realtime_market_value, target_currency)
+    portofolio_group.last_market_value = Amount(values.last_market_value, target_currency)
     portofolio_group.unrealized_pnl = Amount(values.unrealized_pnl, target_currency)
     portofolio_group.today_market_value_change = Amount(
         values.realtime_market_value - values.last_market_value, target_currency
@@ -84,9 +76,7 @@ def _set_group_amounts(
     )
 
 
-def _fill_ratios(
-    portofolio_groups: list[HoldingGroup], total_realtime_market_value: Decimal
-):
+def _fill_ratios(portofolio_groups: list[HoldingGroup], total_realtime_market_value: Decimal):
     """
     计算并填充各投资组合的实时市值占比
     """
@@ -96,12 +86,9 @@ def _fill_ratios(
         )
 
         portofolio_group.target_diff = Amount(
-            Decimal(portofolio_group.realtime_ratio - portofolio_group.target_ratio)
-            * total_realtime_market_value,
+            Decimal(portofolio_group.realtime_ratio - portofolio_group.target_ratio) * total_realtime_market_value,
             portofolio_group.target_diff.currency,
         )
 
         for portfolio in portofolio_group.holdings:
-            portfolio.realtime_ratio = float(
-                portfolio.realtime_market_value.number / total_realtime_market_value
-            )
+            portfolio.realtime_ratio = float(portfolio.realtime_market_value.number / total_realtime_market_value)

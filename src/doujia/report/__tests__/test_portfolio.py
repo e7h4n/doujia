@@ -84,9 +84,7 @@ def quote_resp(
     pre_market: tuple[float, int] | None = None,
     post_market: tuple[float, int] | None = None,
 ):
-    if (pre_market is not None and post_market is None) or (
-        pre_market is None and post_market is not None
-    ):
+    if (pre_market is not None and post_market is None) or (pre_market is None and post_market is not None):
         raise ValueError("pre_market 和 post_market 必须同时为 None 或者同时不为 None")
 
     return {
@@ -290,9 +288,7 @@ def test_get_investment_report(mock_request_yahoo_finance, entries: list[Directi
         InvestmentHolding(
             name="US",
             expected_ratio=0.5,
-            inventory=_I(
-                "100.00 VOO {400 USD}, 100.00 VOO {500 USD},100.00 VWO {500 USD}"
-            ),
+            inventory=_I("100.00 VOO {400 USD}, 100.00 VOO {500 USD},100.00 VWO {500 USD}"),
         ),
     ]
 

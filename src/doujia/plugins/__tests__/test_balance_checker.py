@@ -13,9 +13,7 @@ def test__find_first_unbalanced_entry():
   """
     )
 
-    _, errors = balance_checker(
-        entries, options_map, "{'Liabilities:Short:CreditCard:CMB': 'UNRESOLVED'}"
-    )
+    _, errors = balance_checker(entries, options_map, "{'Liabilities:Short:CreditCard:CMB': 'UNRESOLVED'}")
 
     assert len(errors) == 1
 
@@ -40,9 +38,7 @@ def test__find_first_unbalanced_entry_2():
   """
     )
 
-    _, errors = balance_checker(
-        entries, options_map, "{'Liabilities:Short:CreditCard:CMB': 'UNRESOLVED'}"
-    )
+    _, errors = balance_checker(entries, options_map, "{'Liabilities:Short:CreditCard:CMB': 'UNRESOLVED'}")
 
     assert errors[0].source["lineno"] == 7
 
@@ -67,9 +63,7 @@ def test__find_first_unbalanced_entry_3():
   """
     )
 
-    _, errors = balance_checker(
-        entries, options_map, "{'Liabilities:Short:CreditCard:CMB': 'UNRESOLVED'}"
-    )
+    _, errors = balance_checker(entries, options_map, "{'Liabilities:Short:CreditCard:CMB': 'UNRESOLVED'}")
 
     assert errors[0].source["lineno"] == 11
 
@@ -102,9 +96,7 @@ def test__find_first_unbalanced_entry_4():
   """
     )
 
-    _, errors = balance_checker(
-        entries, options_map, "{'Assets:Receivables': 'UNRESOLVED'}"
-    )
+    _, errors = balance_checker(entries, options_map, "{'Assets:Receivables': 'UNRESOLVED'}")
 
     assert len(errors) == 1
     assert errors[0].source["lineno"] == 15

@@ -131,9 +131,7 @@ def expense_summary(
     price_map = build_price_map(ledger.all_entries)
     expenses = [
         (x[1] - datetime.timedelta(days=1), x[2])
-        for x in sum_single_amount_between(
-            ledger.all_entries, price_map, account_prefix_list, intervals, currency
-        )
+        for x in sum_single_amount_between(ledger.all_entries, price_map, account_prefix_list, intervals, currency)
     ]
 
     compare_total = sum_single_amount_between(
@@ -152,9 +150,7 @@ def expense_summary(
     )
 
 
-def expense_group(
-    ledger: FavaLedger, configs: list[ExpenseChartConfig]
-) -> ExpenseChartGroup:
+def expense_group(ledger: FavaLedger, configs: list[ExpenseChartConfig]) -> ExpenseChartGroup:
     charts = [
         ExpenseChart(
             title=config.title,
@@ -187,9 +183,7 @@ def transaction_count(ledger: FavaLedger) -> int:
     return count
 
 
-def _get_only_amount(
-    inventory: CounterInventory, ledger: FavaLedger, currency: str, date: datetime.date
-) -> Decimal:
+def _get_only_amount(inventory: CounterInventory, ledger: FavaLedger, currency: str, date: datetime.date) -> Decimal:
     """返回 inventory 中特定账户的金额, 如果 inventory 中不能转换的货币则报错"""
     inventory = conversion_from_str(currency).apply(inventory, ledger.prices, date)
 
@@ -227,9 +221,7 @@ def _sum_amount_at(
     if len(inventory) == 0:
         return Decimal(0)
 
-    return _get_only_amount(
-        inventory, ledger, currency, end_exclude - datetime.timedelta(days=1)
-    )
+    return _get_only_amount(inventory, ledger, currency, end_exclude - datetime.timedelta(days=1))
 
 
 def _sum_amount_at_dates(
@@ -288,9 +280,7 @@ def _group_expense(
 
         for posting in txn.postings:
             if posting.account.startswith(account_prefix):
-                amount = convert_position(
-                    posting, currency, ledger.prices, date=txn.date
-                ).number
+                amount = convert_position(posting, currency, ledger.prices, date=txn.date).number
                 if group_name not in groups.keys():
                     groups[group_name] = amount
                 else:
@@ -333,9 +323,7 @@ def outing_expense_summary(
         currency,
     )[0][2]
 
-    groups = _group_expense(
-        begin, end, outing_account_prefix, ledger, currency, link_prefix, activity_tags
-    )
+    groups = _group_expense(begin, end, outing_account_prefix, ledger, currency, link_prefix, activity_tags)
     last_groups = _group_expense(
         last_begin,
         last_end,
@@ -346,9 +334,7 @@ def outing_expense_summary(
         activity_tags,
     )
 
-    return OutingExpenseSummary(
-        total=total, last_total=last_total, groups=groups, last_groups=last_groups
-    )
+    return OutingExpenseSummary(total=total, last_total=last_total, groups=groups, last_groups=last_groups)
 
 
 def interval_balance(
@@ -374,15 +360,11 @@ def interval_balance(
     while len(posting_by_date) > 0:
         while len(posting_by_date) > 0 and posting_by_date[-1][0] > end_date:
             _, posting = posting_by_date.pop()
-            amount = cast(
-                Amount, data.Amount(-posting.units.number, posting.units.currency)
-            )
+            amount = cast(Amount, data.Amount(-posting.units.number, posting.units.currency))
 
             all_inventory.add_amount(amount, posting.cost)
 
-        accumulated_amounts.append(
-            (end_date, _get_only_amount(all_inventory, ledger, currency, end_date))
-        )
+        accumulated_amounts.append((end_date, _get_only_amount(all_inventory, ledger, currency, end_date)))
 
         if begin_date and end_date == begin_date:
             break
@@ -413,9 +395,7 @@ def dashboard_summary(
         currency=currency,
     )
 
-    investment = _sum_amount_at(
-        end_date, account_prefixes=investment_prefixes, ledger=ledger, currency=currency
-    )
+    investment = _sum_amount_at(end_date, account_prefixes=investment_prefixes, ledger=ledger, currency=currency)
 
     saving = calc_saving(
         ledger.all_entries,
@@ -483,13 +463,9 @@ def grouped_account_compared_balance(
     today: datetime.date,
     target_currency: str,
 ) -> list[AccountComparedBalance]:
-    accounts = set(
-        [x for x in getters.get_accounts(entries) if x.startswith(account_prefix)]
-    )
+    accounts = set([x for x in getters.get_accounts(entries) if x.startswith(account_prefix)])
 
-    current_mpi = MultiplePeriodInventory(
-        inventories={}, start_inclusive=date_range[0], end_exclusive=date_range[1]
-    )
+    current_mpi = MultiplePeriodInventory(inventories={}, start_inclusive=date_range[0], end_exclusive=date_range[1])
     yoy_mpi = MultiplePeriodInventory(
         inventories={},
         start_inclusive=yoy_date_range[0],
@@ -501,9 +477,7 @@ def grouped_account_compared_balance(
         end_exclusive=today + datetime.timedelta(days=1),
     )
 
-    _fill_multiple_period_inventory(
-        entries, accounts, [current_mpi, yoy_mpi, today_mpi]
-    )
+    _fill_multiple_period_inventory(entries, accounts, [current_mpi, yoy_mpi, today_mpi])
 
     result: list[AccountComparedBalance] = []
     for account in accounts:
@@ -556,8 +530,7 @@ def grouped_account_compared_balance(
                 today_balance=today_balance.amount,
                 today=today,
                 currency=target_currency,
-                balance_progress=yoy_period_balance.amount
-                and period_balance.amount / yoy_period_balance.amount,
+                balance_progress=yoy_period_balance.amount and period_balance.amount / yoy_period_balance.amount,
                 date_progress=elapsed_percentage,
                 predict_balance=predict_balance,
                 predict_remains=predict_remains,

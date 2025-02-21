@@ -10,9 +10,7 @@ from beancount.core.data import Balance, Transaction
 from beancount.parser import parser, printer
 
 
-def _merge_beancount_content(
-    main_content: str, imported_content: str, output: io.StringIO
-):
+def _merge_beancount_content(main_content: str, imported_content: str, output: io.StringIO):
     main_lines = main_content.splitlines()
 
     imported_entries = _parse_beancount_file(imported_content)
@@ -22,9 +20,7 @@ def _merge_beancount_content(
     output.write("\n".join(merged_lines))
 
 
-def _merge_beancount_file(
-    main_filename: str, imported_filename: str, output: io.StringIO
-):
+def _merge_beancount_file(main_filename: str, imported_filename: str, output: io.StringIO):
     main_content = _read_file(main_filename)
     imported_content = _load_content(imported_filename)
 
@@ -71,9 +67,7 @@ def _sort_imported_entries(entries):
     return entries_by_date
 
 
-def _find_balance_insert_position(
-    main_lines: list[str], start_index: int, target_date
-) -> int:
+def _find_balance_insert_position(main_lines: list[str], start_index: int, target_date) -> int:
     """找到 balance 记录的位置, 并在这个位置之后找到同日期交易的最后一笔记录后的位置"""
 
     first_balance_position = None
@@ -87,11 +81,7 @@ def _find_balance_insert_position(
         if balance_date and balance_date == target_date:
             first_balance_position = index + 1
             break
-        elif (
-            balance_date
-            and balance_date < target_date
-            and first_balance_position is None
-        ):
+        elif balance_date and balance_date < target_date and first_balance_position is None:
             first_balance_position = index + 1
             break
         elif balance_date is None and line_date and line_date < target_date:
@@ -128,13 +118,9 @@ def _find_transaction_insert_position(main_lines, insert_position, target_date) 
 def _find_insert_position(main_lines: list[str], start_index: int, target_date) -> int:
     """找到 balance 记录的位置, 并在这个位置之后找到同日期交易的最后一笔记录后的位置"""
 
-    balance_insert_position = _find_balance_insert_position(
-        main_lines, start_index, target_date
-    )
+    balance_insert_position = _find_balance_insert_position(main_lines, start_index, target_date)
 
-    return _find_transaction_insert_position(
-        main_lines, balance_insert_position, target_date
-    )
+    return _find_transaction_insert_position(main_lines, balance_insert_position, target_date)
 
 
 def _insert_entries(main_lines, entries, insert_position):
@@ -162,9 +148,7 @@ def _merge_entries(main_lines: list[str], sorted_entries) -> list[str]:
             else:
                 transactions.append(entry)
 
-        balance_insert_position = _find_balance_insert_position(
-            main_lines, main_line_index, import_date
-        )
+        balance_insert_position = _find_balance_insert_position(main_lines, main_line_index, import_date)
 
         if len(balances) > 0:
             _insert_entries(main_lines, balances, balance_insert_position)
@@ -178,10 +162,7 @@ def _merge_entries(main_lines: list[str], sorted_entries) -> list[str]:
 
     cleaned_line_index = len(main_lines) - 1
     while cleaned_line_index > 0:
-        if (
-            len(main_lines[cleaned_line_index - 1]) == 0
-            and len(main_lines[cleaned_line_index]) == 0
-        ):
+        if len(main_lines[cleaned_line_index - 1]) == 0 and len(main_lines[cleaned_line_index]) == 0:
             del main_lines[cleaned_line_index]
 
         cleaned_line_index -= 1

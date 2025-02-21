@@ -349,9 +349,7 @@ def test_outing_expense_grouped_group_by_tag(doc_ledger: FavaLedger):
         Expenses:A 2 CNY
         Assets:A
     """
-    summary = outing_expense_summary(
-        doc_ledger, "Expenses:", "CNY", activity_tags=["PLAYGROUND", "HIKING"]
-    )
+    summary = outing_expense_summary(doc_ledger, "Expenses:", "CNY", activity_tags=["PLAYGROUND", "HIKING"])
     assert len(summary.groups) == 2
     assert summary.groups[0].name == "PLAYGROUND"
     assert summary.groups[0].total == 1
@@ -378,9 +376,7 @@ def test_net_worth_interval_amounts(doc_ledger: FavaLedger):
         Assets:Short 111 CNY
         Equity:Opening-Balances
     """
-    amounts = interval_balance(
-        doc_ledger, datetime.date(year=2023, month=3, day=1), ["Assets:Short"], "CNY"
-    )
+    amounts = interval_balance(doc_ledger, datetime.date(year=2023, month=3, day=1), ["Assets:Short"], "CNY")
     assert amounts[0] == (datetime.date(year=2021, month=12, day=29), 0)
     assert amounts[1] == (datetime.date(year=2022, month=1, day=5), 2)
     assert amounts[-1] == (datetime.date(year=2023, month=3, day=1), 113)
@@ -415,9 +411,7 @@ def test_net_worth_interval_amounts_generate_amount_event_if_no_transaction(
 
     2022-01-23 price CNYX 2 CNY
     """
-    amounts = interval_balance(
-        doc_ledger, datetime.date(year=2022, month=3, day=1), ["Assets:Short"], "CNY"
-    )
+    amounts = interval_balance(doc_ledger, datetime.date(year=2022, month=3, day=1), ["Assets:Short"], "CNY")
     assert amounts[2] == (datetime.date(year=2022, month=1, day=11), 113)
     assert amounts[3] == (datetime.date(year=2022, month=1, day=18), 114)
     assert amounts[4] == (datetime.date(year=2022, month=1, day=25), 115)
@@ -433,9 +427,7 @@ def test_net_worth_interval_amounts_should_contain_last_day(doc_ledger: FavaLedg
         Assets:Short 1 CNY
         Equity:Opening-Balances
     """
-    amounts = interval_balance(
-        doc_ledger, datetime.date(year=2022, month=3, day=1), ["Assets:Short"], "CNY"
-    )
+    amounts = interval_balance(doc_ledger, datetime.date(year=2022, month=3, day=1), ["Assets:Short"], "CNY")
 
     assert amounts[-1] == (datetime.date(year=2022, month=3, day=1), 1)
 

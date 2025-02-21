@@ -121,9 +121,7 @@ def _app():
         {
             "TESTING": True,
             "CORBADO_API_SECRET": "test-secret",
-            "LEDGER_ROOT": path.join(
-                path.dirname(__file__), "src/doujia/server/__tests__"
-            ),
+            "LEDGER_ROOT": path.join(path.dirname(__file__), "src/doujia/server/__tests__"),
         }
     )
 

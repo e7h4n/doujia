@@ -113,9 +113,7 @@ def get_first_days(start_year, start_month):
     while current_date <= next_month:
         first_days.append(current_date)
         if current_date.month == 12:
-            current_date = current_date.replace(
-                year=current_date.year + 1, month=1, day=1
-            )
+            current_date = current_date.replace(year=current_date.year + 1, month=1, day=1)
         else:
             current_date = current_date.replace(month=current_date.month + 1, day=1)
 
@@ -124,9 +122,7 @@ def get_first_days(start_year, start_month):
 
 def get_first_day_pairs(start_year, start_month):
     first_days = get_first_days(start_year, start_month)
-    first_day_pairs = [
-        (first_days[i], first_days[i + 1]) for i in range(len(first_days) - 1)
-    ]
+    first_day_pairs = [(first_days[i], first_days[i + 1]) for i in range(len(first_days) - 1)]
 
     return first_day_pairs
 
@@ -138,7 +134,6 @@ def calc_saving_summary(
     saving_accounts: list[str],
     debug_output=False,
 ) -> SavingSummary:
-
     periods = get_first_day_pairs(2024, 2)
 
     return SavingSummary(

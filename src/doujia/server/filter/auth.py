@@ -11,10 +11,7 @@ def require_auth(f):
     def decorated_function(*args, **kwargs):
         if current_app.config.get("TESTING") or (
             current_app.sessions is None
-            and (
-                request.args.get("__debug__user__") is not None
-                or request.headers.get("X-Debug-User") is not None
-            )
+            and (request.args.get("__debug__user__") is not None or request.headers.get("X-Debug-User") is not None)
         ):
             return f(*args, **kwargs)
 
@@ -23,10 +20,7 @@ def require_auth(f):
         if current_user is None:
             abort(401, description="Unauthorized")
 
-        if (
-            current_user.user_id != "usr-6722965184682784673"
-            and current_user.user_id != "usr-8326674140331757550"
-        ):
+        if current_user.user_id != "usr-6722965184682784673" and current_user.user_id != "usr-8326674140331757550":
             abort(403, description="Forbidden")
 
         return f(*args, **kwargs)

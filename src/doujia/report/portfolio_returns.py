@@ -19,11 +19,7 @@ def main():
             is_investment = False
             for posting in entry.postings:
                 # 如果账号中包含 stock 或者 investment, 则加入到投资交易列表中
-                if (
-                    "Stock" in posting.account
-                    or "Investment" in posting.account
-                    or "Saving" in posting.account
-                ):
+                if "Stock" in posting.account or "Investment" in posting.account or "Saving" in posting.account:
                     is_investment = True
                     break
             if is_investment:
@@ -42,11 +38,7 @@ def main():
             amount = 0
 
         for posting in entry.postings:
-            if (
-                "Stock" in posting.account
-                or "Investment" in posting.account
-                or "Saving" in posting.account
-            ):
+            if "Stock" in posting.account or "Investment" in posting.account or "Saving" in posting.account:
                 converted_amount = convert_amount(
                     posting.units,
                     "CNY",

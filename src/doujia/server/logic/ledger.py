@@ -38,20 +38,12 @@ def load_beancount(ledger_path: str) -> tuple[list[Directive], DoujiaConfig, dic
         if entry.type == "doujia-option":
             opt_key, opt_value = entry.values
             if opt_key.value == "categorize-config":
-                config.categorize_config = os.path.abspath(
-                    os.path.join(ledger_root, opt_value.value)
-                )
+                config.categorize_config = os.path.abspath(os.path.join(ledger_root, opt_value.value))
             elif opt_key.value == "investment-config":
-                config.investment_config = os.path.abspath(
-                    os.path.join(ledger_root, opt_value.value)
-                )
+                config.investment_config = os.path.abspath(os.path.join(ledger_root, opt_value.value))
             elif opt_key.value == "beangrow-config":
-                config.beangrow_config = os.path.abspath(
-                    os.path.join(ledger_root, opt_value.value)
-                )
+                config.beangrow_config = os.path.abspath(os.path.join(ledger_root, opt_value.value))
             elif opt_key.value == "import-to":
-                config.import_to = os.path.abspath(
-                    os.path.join(ledger_root, opt_value.value)
-                )
+                config.import_to = os.path.abspath(os.path.join(ledger_root, opt_value.value))
 
     return entries, config, options_map

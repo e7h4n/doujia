@@ -43,9 +43,7 @@ class PnlMemo:
 
 
 def _finalize_pnl(memo: PnlMemo) -> PnL:
-    unrealized_pnl = _get_unrealized_pnl(
-        memo.inventory, memo.price_map, memo.target_currency, memo.end_date
-    )
+    unrealized_pnl = _get_unrealized_pnl(memo.inventory, memo.price_map, memo.target_currency, memo.end_date)
 
     return PnL(
         realized_pnl_ex_fee=memo.realized_pnl - memo.fee,
@@ -67,9 +65,7 @@ def gen_pnl_data(
     if end_date is None:
         end_date = date.today()
 
-    inventory, transactions = prepare_inventory_and_transactions(
-        account_datas, begin_date
-    )
+    inventory, transactions = prepare_inventory_and_transactions(account_datas, begin_date)
 
     return pnl_processor.reduce_transactions(
         PnlMemo(
@@ -87,9 +83,7 @@ def gen_pnl_data(
     )
 
 
-def _get_unrealized_pnl(
-    inventory: Inventory, price_map: PriceMap, target_currency: str, end_date: date
-) -> Decimal:
+def _get_unrealized_pnl(inventory: Inventory, price_map: PriceMap, target_currency: str, end_date: date) -> Decimal:
     total_cost_amount = Decimal("0")
     market_value = Decimal("0")
     for position in inventory.average():
@@ -97,9 +91,7 @@ def _get_unrealized_pnl(
         if position.cost is None:
             cost_amount = position.units
         else:
-            cost_amount = Amount(
-                position.units.number * position.cost.number, position.cost.currency
-            )
+            cost_amount = Amount(position.units.number * position.cost.number, position.cost.currency)
 
         cost_amount = convert_amount(
             cost_amount,

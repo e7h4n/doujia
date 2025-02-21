@@ -53,10 +53,7 @@ def get_investment_holdings(
     results = []
     for group in beangrow_config.groups.group:
         # 如果投资组合在 investment_config 中不存在, 则跳过
-        if not any(
-            investment["group"] == group.name
-            for investment in investment_config["investments"]
-        ):
+        if not any(investment["group"] == group.name for investment in investment_config["investments"]):
             continue
 
         inventory = Inventory()
@@ -69,11 +66,7 @@ def get_investment_holdings(
             0,
         )
 
-        adlist = [
-            account_data_map[name]
-            for name in group.investment
-            if name in account_data_map
-        ]
+        adlist = [account_data_map[name] for name in group.investment if name in account_data_map]
 
         for data in adlist:
             for transaction in data.transactions:
@@ -81,11 +74,7 @@ def get_investment_holdings(
                     if posting.account == data.account:
                         inventory.add_position(posting)
 
-        results.append(
-            InvestmentHolding(
-                name=group.name, expected_ratio=expected_ratio, inventory=inventory
-            )
-        )
+        results.append(InvestmentHolding(name=group.name, expected_ratio=expected_ratio, inventory=inventory))
 
     if "cash" in investment_config:
         cash_config = investment_config["cash"]
@@ -161,7 +150,9 @@ def investments_performance(
         key=lambda x: (
             x.pnl / 7
             if x.currency.upper() == "CNY"
-            else x.pnl * Decimal("0.13") if x.currency.upper() == "HKD" else x.pnl
+            else x.pnl * Decimal("0.13")
+            if x.currency.upper() == "HKD"
+            else x.pnl
         ),
         reverse=True,
     )
@@ -169,27 +160,21 @@ def investments_performance(
         key=lambda x: (
             x.pnl / 7
             if x.currency.upper() == "CNY"
-            else x.pnl * Decimal("0.13") if x.currency.upper() == "HKD" else x.pnl
+            else x.pnl * Decimal("0.13")
+            if x.currency.upper() == "HKD"
+            else x.pnl
         )
     )
     return (profitable_investments, unprofitable_investments)
 
 
-def _get_calendar_intervals(
-    begin_date: date, end_date: date
-) -> list[tuple[str, date, date]]:
-
-    intervals = [
-        (str(year), date(year, 1, 1), date(year + 1, 1, 1))
-        for year in range(begin_date.year, end_date.year)
-    ]
+def _get_calendar_intervals(begin_date: date, end_date: date) -> list[tuple[str, date, date]]:
+    intervals = [(str(year), date(year, 1, 1), date(year + 1, 1, 1)) for year in range(begin_date.year, end_date.year)]
     intervals.append((str(end_date.year), date(end_date.year, 1, 1), end_date))
     return intervals
 
 
-def _get_cumulative_intervals(
-    begin_date: date, end_date: date
-) -> list[tuple[str, date, date]]:
+def _get_cumulative_intervals(begin_date: date, end_date: date) -> list[tuple[str, date, date]]:
     result: list[tuple[str, date, date]] = []
 
     result.append((f"From {begin_date}", begin_date, end_date))
@@ -226,9 +211,7 @@ def _compute_returns_series(
 
     found = False
     for _, date1, date2 in intervals:
-        cash_flows = returnslib.truncate_and_merge_cash_flows(
-            pricer, account_data, date1, date2
-        )
+        cash_flows = returnslib.truncate_and_merge_cash_flows(pricer, account_data, date1, date2)
         returns = returnslib.compute_returns(cash_flows, pricer, target_currency, date2)
         if returns.total != 0:
             found = True
@@ -247,7 +230,6 @@ def calendar_returns(
     end_date: date,
     target_currency: str,
 ):
-
     return _compute_returns_series(
         pricer,
         target_currency,
@@ -263,7 +245,6 @@ def cumulative_returns(
     end_date: date,
     target_currency: str,
 ):
-
     nav_index = gen_nav_index_data(
         account_datas=account_data,
         price_map=pricer.price_map,
@@ -318,9 +299,7 @@ def irr_summary(
     end_date: datetime.date,
     target_currency: str,
 ) -> IrrSummary:
-    cash_flows = returnslib.truncate_and_merge_cash_flows(
-        pricer, adlist, start_date, end_date
-    )
+    cash_flows = returnslib.truncate_and_merge_cash_flows(pricer, adlist, start_date, end_date)
 
     returns = returnslib.compute_returns(cash_flows, pricer, target_currency, end_date)
 

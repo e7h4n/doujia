@@ -93,8 +93,6 @@ def convert_ccb_item_to_transaction(item):
 
 
 def import_ccb_transactions(items) -> int:
-    txns = load_missing_transactions_from_ccb_items(
-        os.path.join(current_app.ledger_root, "main.bean"), items
-    )
+    txns = load_missing_transactions_from_ccb_items(os.path.join(current_app.ledger_root, "main.bean"), items)
 
     return import_transactions(txns)

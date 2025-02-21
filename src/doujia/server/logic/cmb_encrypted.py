@@ -47,9 +47,7 @@ def convert_cmb_item_to_postings(item):
 
 
 def load_missing_transactions_from_cmb_items(filename, items):
-    last_balance_date = get_last_balance_date(
-        filename, "Liabilities:Short:CreditCard:CMB"
-    )
+    last_balance_date = get_last_balance_date(filename, "Liabilities:Short:CreditCard:CMB")
     existed_unique_no_set = get_existed_unique_no_set(filename)
 
     txns = []
@@ -96,8 +94,6 @@ def convert_cmb_item_to_transaction(item):
 
 
 def import_cmb_transactions(items) -> int:
-    txns = load_missing_transactions_from_cmb_items(
-        os.path.join(current_app.ledger_root, "main.bean"), items
-    )
+    txns = load_missing_transactions_from_cmb_items(os.path.join(current_app.ledger_root, "main.bean"), items)
 
     return import_transactions(txns)

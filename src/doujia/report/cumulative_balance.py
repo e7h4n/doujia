@@ -92,9 +92,7 @@ def gen_cumulative_balances(
     if end_date_inclusive is None:
         end_date_inclusive = date.today()
 
-    transactions = _filter_transactions(
-        entries, account_prefix, begin_date, end_date_inclusive
-    )
+    transactions = _filter_transactions(entries, account_prefix, begin_date, end_date_inclusive)
     _, price_map = get_last_and_realtime_price_map(entries)
     inventory = Inventory()
 

@@ -19,9 +19,7 @@ def calc_portfolio_ratio_report(
     target_currency: str,
 ) -> list[HoldingGroup]:
     last_price_map, realtime_price_map = get_last_and_realtime_price_map(entries)
-    portofolio_groups = _create_portfolio_groups(
-        investment_groups, last_price_map, realtime_price_map, target_currency
-    )
+    portofolio_groups = _create_portfolio_groups(investment_groups, last_price_map, realtime_price_map, target_currency)
     fill_stat_fields(portofolio_groups, target_currency)
 
     portofolio_groups.sort(
@@ -91,9 +89,7 @@ def _add_portfolios_to_group(
         )
         portofolio_group.holdings.append(portfolio)
 
-    portofolio_group.holdings.sort(
-        key=lambda h: h.realtime_market_value.number, reverse=True
-    )
+    portofolio_group.holdings.sort(key=lambda h: h.realtime_market_value.number, reverse=True)
 
 
 @dataclass
@@ -137,9 +133,7 @@ def create_portfolio_report(
     investment_groups: list[InvestmentHolding],
     target_currency: str,
 ) -> Portfolio:
-    portfolio_groups = calc_portfolio_ratio_report(
-        entries, investment_groups, target_currency
-    )
+    portfolio_groups = calc_portfolio_ratio_report(entries, investment_groups, target_currency)
 
     total_unrealized_pnl = D(0)
     total_realtime_market_value = D(0)
@@ -162,10 +156,7 @@ def create_portfolio_report(
         unrealized_pnl=Amount(total_unrealized_pnl, target_currency),
         realtime_market_value=Amount(total_realtime_market_value, target_currency),
         last_market_value=Amount(total_last_market_value, target_currency),
-        today_market_value_change=Amount(
-            total_today_market_value_change, target_currency
-        ),
-        today_market_value_change_ratio=total_today_market_value_change
-        / total_last_market_value,
+        today_market_value_change=Amount(total_today_market_value_change, target_currency),
+        today_market_value_change_ratio=total_today_market_value_change / total_last_market_value,
         index=index,
     )

@@ -49,13 +49,10 @@ def test_forecast_multiple(entries: list[Directive], fs: FakeFilesystem):
     with open("/main.bean") as f:
         content = f.read()
         assert (
-            (
-                """include "forecast/Liabilities/CreditCard/CMB/2024-03-05.bean"
+            """include "forecast/Liabilities/CreditCard/CMB/2024-03-05.bean"
 include "forecast/Liabilities/CreditCard/CMB/2022-03-05.bean"
 """
-            )
-            == content
-        )
+        ) == content
 
 
 def test_forecast_relative(entries: list[Directive], fs: FakeFilesystem):
@@ -79,10 +76,7 @@ def test_forecast_relative(entries: list[Directive], fs: FakeFilesystem):
     with open("/ledgers/main.bean") as f:
         content = f.read()
         assert (
-            (
-                """include "forecast/Liabilities/CreditCard/CMB/2024-03-05.bean"
+            """include "forecast/Liabilities/CreditCard/CMB/2024-03-05.bean"
 include "forecast/Liabilities/CreditCard/CMB/2022-03-05.bean"
 """
-            )
-            == content
-        )
+        ) == content

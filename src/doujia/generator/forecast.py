@@ -88,11 +88,7 @@ def forecast_plugin(entries, options_map):
     forecast_entries = []
     filtered_entries = []
     for entry in entries:
-        outlist = (
-            forecast_entries
-            if (isinstance(entry, data.Transaction) and entry.flag == "#")
-            else filtered_entries
-        )
+        outlist = forecast_entries if (isinstance(entry, data.Transaction) and entry.flag == "#") else filtered_entries
         outlist.append(entry)
 
     forecasts = []
@@ -116,30 +112,26 @@ def forecast_plugin(entries, options_map):
             else (
                 rrule.WEEKLY
                 if match.group(2).strip() == "WEEKLY"
-                else rrule.DAILY if match.group(2).strip() == "DAILY" else rrule.MONTHLY
+                else rrule.DAILY
+                if match.group(2).strip() == "DAILY"
+                else rrule.MONTHLY
             )
         )
         forecast_periodicity = {"dtstart": entry.date}
         if match.group(6):  # e.g., [MONTHLY REPEAT 3 TIMES]:
             forecast_periodicity["count"] = int(match.group(6))
         elif match.group(8):  # e.g., [MONTHLY UNTIL 2020-01-01]:
-            forecast_periodicity["until"] = datetime.datetime.strptime(
-                match.group(8), "%Y-%m-%d"
-            ).date()
+            forecast_periodicity["until"] = datetime.datetime.strptime(match.group(8), "%Y-%m-%d").date()
         else:
             # e.g., [MONTHLY]
-            forecast_periodicity["until"] = datetime.date(
-                datetime.date.today().year, 12, 31
-            )
+            forecast_periodicity["until"] = datetime.date(datetime.date.today().year, 12, 31)
 
         if match.group(4):
             # SKIP
             forecast_periodicity["interval"] = int(match.group(4)) + 1
 
         # Generate a new entry for each forecast date.
-        forecast_dates = [
-            dt.date() for dt in rrule.rrule(forecast_interval, **forecast_periodicity)
-        ]
+        forecast_dates = [dt.date() for dt in rrule.rrule(forecast_interval, **forecast_periodicity)]
 
         # 找到为负值的 posting
         for posting in entry.postings:
@@ -155,9 +147,7 @@ def forecast_plugin(entries, options_map):
         )
 
         for forecast_date in forecast_dates:
-            forecast_entry = entry._replace(
-                date=forecast_date, narration=forecast_narration, flag="*"
-            )
+            forecast_entry = entry._replace(date=forecast_date, narration=forecast_narration, flag="*")
             forecast.generated_entries.append(forecast_entry)
 
         forecasts.append(forecast)

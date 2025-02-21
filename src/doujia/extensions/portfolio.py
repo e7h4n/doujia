@@ -40,9 +40,7 @@ class Portfolio(FavaExtensionBase):
 
     def _get_group_and_config(self, group_name=None):
         begin_date, end_date = self._get_date_range()
-        pricer, groups, account_data_map = extract_beangrow_config_from_fava(
-            self.ledger, end_date
-        )
+        pricer, groups, account_data_map = extract_beangrow_config_from_fava(self.ledger, end_date)
 
         if group_name is None:
             group_name = request.args.get("group", groups[0].name)
@@ -53,11 +51,7 @@ class Portfolio(FavaExtensionBase):
         else:
             raise FavaAPIError("Group not found")
 
-        adlist = [
-            account_data_map[name]
-            for name in group.investment
-            if name in account_data_map
-        ]
+        adlist = [account_data_map[name] for name in group.investment if name in account_data_map]
 
         return begin_date, end_date, pricer, group, adlist
 
@@ -116,9 +110,7 @@ class Portfolio(FavaExtensionBase):
     def cash_flows(self):
         begin_date, end_date, pricer, _, adlist = self._get_group_and_config()
 
-        cash_flows = returnslib.truncate_and_merge_cash_flows(
-            pricer, adlist, begin_date, end_date
-        )
+        cash_flows = returnslib.truncate_and_merge_cash_flows(pricer, adlist, begin_date, end_date)
 
         return jsonify(cash_flows)
 
@@ -126,13 +118,9 @@ class Portfolio(FavaExtensionBase):
     def investments(self):
         begin_date, end_date, pricer, _, adlist = self._get_group_and_config()
 
-        cash_flows = returnslib.truncate_and_merge_cash_flows(
-            pricer, adlist, begin_date, end_date
-        )
+        cash_flows = returnslib.truncate_and_merge_cash_flows(pricer, adlist, begin_date, end_date)
 
-        (profitable_investments, unprofitable_investments) = investments_performance(
-            cash_flows
-        )
+        (profitable_investments, unprofitable_investments) = investments_performance(cash_flows)
 
         return jsonify(
             {
@@ -144,13 +132,9 @@ class Portfolio(FavaExtensionBase):
     @extension_endpoint
     def calendar_returns(self):
         begin_date, end_date, pricer, group, adlist = self._get_group_and_config()
-        return jsonify(
-            calendar_returns(pricer, adlist, begin_date, end_date, group.currency)
-        )
+        return jsonify(calendar_returns(pricer, adlist, begin_date, end_date, group.currency))
 
     @extension_endpoint
     def cumulative_returns(self):
         begin_date, end_date, pricer, group, adlist = self._get_group_and_config()
-        return jsonify(
-            cumulative_returns(pricer, adlist, begin_date, end_date, group.currency)
-        )
+        return jsonify(cumulative_returns(pricer, adlist, begin_date, end_date, group.currency))

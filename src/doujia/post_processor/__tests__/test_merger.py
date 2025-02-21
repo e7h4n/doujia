@@ -432,9 +432,7 @@ def test_find_balance_insert_position():
 2023-03-20 balance Liabilities:Short:CreditCard:CMB -0.00 CNY
 2023-03-20 balance Assets:Current:CMS 0.00 CNY
 2023-03-21 balance Liabilities:Short:CreditCard:CMB                      0.00 CNY
-""".split(
-        "\n"
-    )
+""".split("\n")
 
     assert _find_balance_insert_position(lines, len(lines), date(2023, 3, 20)) == 10
 
@@ -451,8 +449,6 @@ def test_find_transaction_insert_position():
 2023-03-20 balance Liabilities:Short:CreditCard:CMB -0.00 CNY
 2023-03-20 balance Assets:Current:CMS 0.00 CNY
 2023-03-21 balance Liabilities:Short:CreditCard:CMB                      0.00 CNY
-""".split(
-        "\n"
-    )
+""".split("\n")
 
     assert _find_insert_position(lines, len(lines), date(2023, 3, 20)) == 10

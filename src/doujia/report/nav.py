@@ -55,9 +55,7 @@ def gen_nav_index_data(
     if end_date is None:
         end_date = date.today()
 
-    inventory, transactions = prepare_inventory_and_transactions(
-        account_datas, begin_date
-    )
+    inventory, transactions = prepare_inventory_and_transactions(account_datas, begin_date)
 
     begin_units = Decimal(0)
     for postion in inventory:
@@ -92,9 +90,7 @@ def gen_nav_index_data(
     )
 
 
-def update_price(
-    price_map: PriceMap, currency_pair: tuple[str, str], new_price: Decimal, date: date
-):
+def update_price(price_map: PriceMap, currency_pair: tuple[str, str], new_price: Decimal, date: date):
     prices = price_map.get(currency_pair, [])
     insert_idx = 0
     for idx, (price_date, _) in enumerate(prices):
@@ -176,9 +172,7 @@ def fill_gap_days(memo: NavMemo, up_to_date_exclude: date):
             memo.last_date = last_date
             continue
 
-        pre_balance = balance_at(
-            memo.inventory, memo.price_map, memo.target_currency, last_date
-        )
+        pre_balance = balance_at(memo.inventory, memo.price_map, memo.target_currency, last_date)
         post_index = pre_balance.number / pre_units
         memo.index = post_index
         memo.history[last_date] = Nav(index=post_index, units=pre_units)
@@ -196,9 +190,7 @@ index: {memo.index}
     )
     update_price_from_transaction(memo.price_map, transaction)
 
-    pre_balance = balance_at(
-        memo.inventory, memo.price_map, memo.target_currency, transaction.date
-    )
+    pre_balance = balance_at(memo.inventory, memo.price_map, memo.target_currency, transaction.date)
 
     if abs(memo.units) < 0.01:
         pre_index = memo.index
@@ -245,9 +237,7 @@ index: {memo.index}
 """
     )
 
-    pre_balance = balance_at(
-        memo.inventory, memo.price_map, memo.target_currency, transaction.date
-    )
+    pre_balance = balance_at(memo.inventory, memo.price_map, memo.target_currency, transaction.date)
 
     pre_units = memo.units
     pre_index = pre_balance.number / pre_units
@@ -303,9 +293,7 @@ post_index: {post_index}
 def close_inventory(memo: NavMemo, close_date: date):
     fill_gap_days(memo, close_date)
 
-    pre_balance = balance_at(
-        memo.inventory, memo.price_map, memo.target_currency, close_date
-    )
+    pre_balance = balance_at(memo.inventory, memo.price_map, memo.target_currency, close_date)
     pre_units = memo.units
     if abs(pre_balance.number) < 0.01:
         post_index = memo.index
@@ -341,15 +329,11 @@ def reduce_dividend_transaction(memo: NavMemo, transaction: Transaction) -> NavM
         via=["USD", "HKD", "CNY"],
     )
 
-    pre_balance = balance_at(
-        memo.inventory, memo.price_map, memo.target_currency, transaction.date
-    )
+    pre_balance = balance_at(memo.inventory, memo.price_map, memo.target_currency, transaction.date)
 
     pre_units = memo.units
     assert pre_balance.currency == cash_amount.currency
-    in_dividend_balance = data.Amount(
-        pre_balance.number + cash_amount.number, pre_balance.currency
-    )
+    in_dividend_balance = data.Amount(pre_balance.number + cash_amount.number, pre_balance.currency)
 
     post_index = in_dividend_balance.number / pre_units
     changed_units = cash_amount.number / post_index

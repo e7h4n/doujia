@@ -64,9 +64,7 @@ class Pushover:
 
     PUSHOVER_SERVER = "api.pushover.net:443"
     PUSHOVER_ENDPOINT = "/1/messages.json"
-    PUSHOVER_CONTENT_TYPE: ClassVar[dict[str, str]] = {
-        "Content-type": "application/x-www-form-urlencoded"
-    }
+    PUSHOVER_CONTENT_TYPE: ClassVar[dict[str, str]] = {"Content-type": "application/x-www-form-urlencoded"}
 
     def __init__(self, token=None):
         """
@@ -139,9 +137,7 @@ class Pushover:
 
         data = urlencode(kwargs)
         conn = HTTPSConnection(Pushover.PUSHOVER_SERVER)
-        conn.request(
-            "POST", Pushover.PUSHOVER_ENDPOINT, data, Pushover.PUSHOVER_CONTENT_TYPE
-        )
+        conn.request("POST", Pushover.PUSHOVER_ENDPOINT, data, Pushover.PUSHOVER_CONTENT_TYPE)
         output = conn.getresponse().read().decode("utf-8")
         data = json.loads(output)
 

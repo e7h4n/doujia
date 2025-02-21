@@ -48,9 +48,7 @@ def generate_hsbc_unique_no(item: dict) -> str:
 
 
 def load_missing_transactions_from_hsbc_items(filename, items):
-    last_balance_date = get_last_balance_date(
-        filename, "Liabilities:Short:CreditCard:HSBC"
-    )
+    last_balance_date = get_last_balance_date(filename, "Liabilities:Short:CreditCard:HSBC")
     existed_unique_no_set = get_existed_unique_no_set(filename)
 
     txns = []
@@ -140,8 +138,6 @@ def import_hsbc_transactions(url: str) -> int:
         return 0
 
     items = get_hsbc_items(html)
-    txns = load_missing_transactions_from_hsbc_items(
-        os.path.join(current_app.ledger_root, "main.bean"), items
-    )
+    txns = load_missing_transactions_from_hsbc_items(os.path.join(current_app.ledger_root, "main.bean"), items)
 
     return import_transactions(txns)

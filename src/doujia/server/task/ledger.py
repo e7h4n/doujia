@@ -27,11 +27,7 @@ def reload_ledger(app: FlaskApp) -> bool:
         logger.error(f"Failed to get git commit ID: {e!s}")
 
     # 如果 commit id 没有变化, 不需要重新加载
-    if (
-        hasattr(app, "ledger_commit_id")
-        and current_commit_id is not None
-        and app.ledger_commit_id == current_commit_id
-    ):
+    if hasattr(app, "ledger_commit_id") and current_commit_id is not None and app.ledger_commit_id == current_commit_id:
         logger.debug("Ledger content not changed, skip reloading")
         return True
 

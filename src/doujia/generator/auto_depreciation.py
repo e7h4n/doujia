@@ -43,9 +43,7 @@ class DepreciationConfig:
 
         return cls(
             assets_account=config.get("assets", ["Assets:Wealth:Fixed-Assets"]),
-            expenses_account=config.get(
-                "expenses", "Expenses:Property-Expenses:Depreciation"
-            ),
+            expenses_account=config.get("expenses", "Expenses:Property-Expenses:Depreciation"),
             method=config.get("method", "parabola"),
         )
 
@@ -73,24 +71,17 @@ def calculate_depreciation(
     days_list = [(x - buy_date).days for x in dates_list]
     depreciation_days = days_list[-1]
 
-    current_values = [
-        get_current_value(x, start_value, end_value, depreciation_days)
-        for x in days_list
-    ]
+    current_values = [get_current_value(x, start_value, end_value, depreciation_days) for x in days_list]
 
     depreciation_values = []
     for i, value in enumerate(current_values):
         previous_value = current_values[i - 1] if i > 0 else start_value
-        depreciation_values.append(
-            D(previous_value - value).quantize(decimal.Decimal("0.00"))
-        )
+        depreciation_values.append(D(previous_value - value).quantize(decimal.Decimal("0.00")))
 
     return DepreciationResult(dates_list, current_values, depreciation_values)
 
 
-def calculate_parabola_value(
-    x: int, start_value: float, end_value: float, days: int
-) -> float:
+def calculate_parabola_value(x: int, start_value: float, end_value: float, days: int) -> float:
     """使用抛物线方法计算当前价值"""
     a = (start_value - end_value) / days**2
     b = -2 * (start_value - end_value) / days
@@ -98,9 +89,7 @@ def calculate_parabola_value(
     return round(a * x**2 + b * x + c)
 
 
-def calculate_linear_value(
-    x: int, start_value: float, end_value: float, days: int
-) -> float:
+def calculate_linear_value(x: int, start_value: float, end_value: float, days: int) -> float:
     """使用线性方法计算当前价值"""
     k = -(start_value - end_value) / days
     b = start_value
@@ -134,9 +123,7 @@ def create_depreciation_posting(
 
     # 卖出原资产
     units = convert.get_units(original_posting)
-    sell_posting = original_posting._replace(
-        units=amount.mul(units, Decimal(-1)), meta=new_meta
-    )
+    sell_posting = original_posting._replace(units=amount.mul(units, Decimal(-1)), meta=new_meta)
 
     # 买入新资产
     new_cost = original_posting.cost._replace(date=date, number=Decimal(current_value))
@@ -147,9 +134,7 @@ def create_depreciation_posting(
         original_posting.units.number * depreciation_value,
         original_posting.cost.currency,
     )
-    expense_posting = original_posting._replace(
-        account=expenses_account, units=expense_units, cost=None, meta=new_meta
-    )
+    expense_posting = original_posting._replace(account=expenses_account, units=expense_units, cost=None, meta=new_meta)
 
     return [sell_posting, buy_posting, expense_posting]
 
@@ -170,9 +155,7 @@ def create_depreciation_entry(
     else:
         new_narration = "自动折旧"
 
-    return original_entry._replace(
-        date=date, narration=new_narration, flag="*", postings=postings
-    )
+    return original_entry._replace(date=date, narration=new_narration, flag="*", postings=postings)
 
 
 def create_price_entry(
@@ -209,9 +192,7 @@ def generate_directives(
     )
 
     # 创建折旧交易
-    depreciation_entry = create_depreciation_entry(
-        entry, txn_date, posting.cost.label, postings
-    )
+    depreciation_entry = create_depreciation_entry(entry, txn_date, posting.cost.label, postings)
 
     # 创建价格记录
     price_entry = create_price_entry(entry, txn_date, posting, current_value)
@@ -229,9 +210,7 @@ def process_fixed_asset_posting(
     end_value = float(posting.meta.get("residual_value", 0))
     months = parse_useful_life(posting.meta["useful_life"])
 
-    depreciation_result = calculate_depreciation(
-        original_value, end_value, entry.date, months, config.method
-    )
+    depreciation_result = calculate_depreciation(original_value, end_value, entry.date, months, config.method)
 
     depreciation_entries = []
     price_entries = []
@@ -252,7 +231,9 @@ def process_fixed_asset_posting(
 
 
 def auto_depreciation(
-    entries: list[data.Transaction], _, config: dict | None = None  # type: ignore
+    entries: list[data.Transaction],
+    _,
+    config: dict | None = None,  # type: ignore
 ) -> tuple[dict[str, list[data.Transaction]], dict[str, list[data.Price]]]:  # type: ignore
     """自动生成固定资产折旧分录"""
     config = DepreciationConfig.from_dict(config)
@@ -271,9 +252,7 @@ def auto_depreciation(
             if not (posting.meta and "useful_life" in posting.meta):
                 continue
 
-            new_entries, new_prices = process_fixed_asset_posting(
-                entry, posting, config
-            )
+            new_entries, new_prices = process_fixed_asset_posting(entry, posting, config)
 
             if new_entries:
                 depreciation_entries.extend(new_entries)

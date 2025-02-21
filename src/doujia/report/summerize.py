@@ -37,10 +37,7 @@ def _sum_inventory_between(
 ) -> Inventory:
     result = Inventory()
     for entry in entries:
-        if (
-            isinstance(entry, Transaction)
-            and date_range[0] <= entry.date < date_range[1]
-        ):
+        if isinstance(entry, Transaction) and date_range[0] <= entry.date < date_range[1]:
             for posting in entry.postings:
                 founds = False
                 for account_prefix in account_prefix_list:
@@ -68,14 +65,7 @@ def sum_inventory_between(
     account_prefix_list: list[str],
     date_range: list[tuple[datetime.date, datetime.date]],
 ) -> list[PeriodInventory]:
-    return [
-        (
-            PeriodInventory(
-                x[0], x[1], _sum_inventory_between(entries, account_prefix_list, x)
-            )
-        )
-        for x in date_range
-    ]
+    return [(PeriodInventory(x[0], x[1], _sum_inventory_between(entries, account_prefix_list, x))) for x in date_range]
 
 
 def sum_single_amount_between(
@@ -91,9 +81,7 @@ def sum_single_amount_between(
     ]
 
 
-def convert_period_inventory(
-    period_inventory: PeriodInventory, price_map: dict, target_currency: str
-) -> PeriodAmount:
+def convert_period_inventory(period_inventory: PeriodInventory, price_map: dict, target_currency: str) -> PeriodAmount:
     return PeriodAmount(
         start_inclusive=period_inventory.start_inclusive,
         end_exclusive=period_inventory.end_exclusive,
@@ -145,18 +133,10 @@ def calc_xirr(
             break
 
     if group:
-        adlist = [
-            account_data_map[name]
-            for name in group.investment
-            if name in account_data_map
-        ]
+        adlist = [account_data_map[name] for name in group.investment if name in account_data_map]
 
-        truncated_cash_flows = returnslib.truncate_and_merge_cash_flows(
-            pricer, adlist, None, date_end=end_date
-        )
-        irr = returnslib.compute_returns(
-            truncated_cash_flows, pricer, currency, end_date
-        ).total
+        truncated_cash_flows = returnslib.truncate_and_merge_cash_flows(pricer, adlist, None, date_end=end_date)
+        irr = returnslib.compute_returns(truncated_cash_flows, pricer, currency, end_date).total
     else:
         irr = Decimal(0)
 

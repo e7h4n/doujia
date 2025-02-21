@@ -72,9 +72,7 @@ def _get_group_and_config(group_name=None):
     else:
         abort(404, description="Group not found")
 
-    adlist = [
-        account_data_map[name] for name in group.investment if name in account_data_map
-    ]
+    adlist = [account_data_map[name] for name in group.investment if name in account_data_map]
 
     return begin_date, end_date, pricer, group, adlist
 
@@ -132,9 +130,7 @@ def get_nav_index():
 def get_cash_flows():
     begin_date, end_date, pricer, _, adlist = _get_group_and_config()
 
-    cash_flows = returnslib.truncate_and_merge_cash_flows(
-        pricer, adlist, begin_date, end_date
-    )
+    cash_flows = returnslib.truncate_and_merge_cash_flows(pricer, adlist, begin_date, end_date)
 
     return jsonify(cash_flows)
 
@@ -144,13 +140,9 @@ def get_cash_flows():
 def get_investments():
     begin_date, end_date, pricer, _, adlist = _get_group_and_config()
 
-    cash_flows = returnslib.truncate_and_merge_cash_flows(
-        pricer, adlist, begin_date, end_date
-    )
+    cash_flows = returnslib.truncate_and_merge_cash_flows(pricer, adlist, begin_date, end_date)
 
-    (profitable_investments, unprofitable_investments) = investments_performance(
-        cash_flows
-    )
+    (profitable_investments, unprofitable_investments) = investments_performance(cash_flows)
 
     return jsonify(
         {
@@ -165,9 +157,7 @@ def get_investments():
 def get_calendar_returns():
     begin_date, end_date, pricer, group, adlist = _get_group_and_config()
 
-    return jsonify(
-        calendar_returns(pricer, adlist, begin_date, end_date, group.currency)
-    )
+    return jsonify(calendar_returns(pricer, adlist, begin_date, end_date, group.currency))
 
 
 @require_auth
@@ -175,9 +165,7 @@ def get_calendar_returns():
 def get_cumulative_returns():
     begin_date, end_date, pricer, group, adlist = _get_group_and_config()
 
-    return jsonify(
-        cumulative_returns(pricer, adlist, begin_date, end_date, group.currency)
-    )
+    return jsonify(cumulative_returns(pricer, adlist, begin_date, end_date, group.currency))
 
 
 @require_auth
@@ -186,9 +174,7 @@ def get_holding():
     entries = current_app.entries
 
     beangrow_path = current_app.doujia_config.beangrow_config
-    distribution_path = os.path.join(
-        current_app.ledger_root, current_app.doujia_config.investment_config
-    )
+    distribution_path = os.path.join(current_app.ledger_root, current_app.doujia_config.investment_config)
     investment_groups = get_investment_holdings(
         entries,
         beangrow_path,
@@ -198,3 +184,7 @@ def get_holding():
     )
 
     return jsonify(create_portfolio_report(entries, investment_groups, "USD"))
+
+
+def unused_function():
+    pass

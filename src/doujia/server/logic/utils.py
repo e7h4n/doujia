@@ -57,9 +57,7 @@ def import_transactions(transactions: list[Transaction]) -> int:
         imported_content = output.getvalue()
 
     with io.StringIO() as output:
-        _categorize_transactions(
-            current_app.doujia_config.categorize_config, imported_content, output
-        )
+        _categorize_transactions(current_app.doujia_config.categorize_config, imported_content, output)
 
         imported_content = output.getvalue()
 

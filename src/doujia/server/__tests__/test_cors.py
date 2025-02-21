@@ -20,9 +20,7 @@ def test_portfolio_cors(client, mocker):
             "Authorization": "Bearer 1234567890",
         },
     )
-    assert (
-        response.headers["Access-Control-Allow-Origin"] == "https://grandet.vercel.app"
-    )
+    assert response.headers["Access-Control-Allow-Origin"] == "https://grandet.vercel.app"
 
     response = client.get(
         "/portfolio/irr_summary",

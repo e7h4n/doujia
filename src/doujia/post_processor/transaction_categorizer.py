@@ -33,27 +33,18 @@ class Rule:
         if not isinstance(other, Rule):
             return False
 
-        return (
-            self.account == other.account
-            and self.matcher == other.matcher
-            and self.target == other.target
-        )
+        return self.account == other.account and self.matcher == other.matcher and self.target == other.target
 
 
 def _is_transaction_matching_rule(transaction: Transaction, rule: Rule) -> bool:
     # 检查摘要是否匹配
-    if (
-        rule.matcher["summary"] not in transaction.payee
-        and rule.matcher["summary"] not in transaction.narration
-    ):
+    if rule.matcher["summary"] not in transaction.payee and rule.matcher["summary"] not in transaction.narration:
         return False
 
     # 检查金额是否匹配 (如果需要)
     if rule.matcher["amount"] is not None:
         for posting in transaction.postings:
-            if posting.units is not MISSING and _decimals_almost_equal(
-                posting.units.number, rule.matcher["amount"]
-            ):
+            if posting.units is not MISSING and _decimals_almost_equal(posting.units.number, rule.matcher["amount"]):
                 return True
 
         return False
@@ -83,16 +74,8 @@ def _apply_rule_to_transaction(transaction: Transaction, rule: Rule) -> Transact
     modified_transaction = Transaction(
         date=transaction.date,
         flag=rule.target["flag"] if rule.target["flag"] is not None else "*",
-        payee=(
-            rule.target["payee"]
-            if rule.target["payee"] is not None
-            else transaction.payee
-        ),
-        narration=(
-            rule.target["narration"]
-            if rule.target["narration"] is not None
-            else transaction.narration
-        ),
+        payee=(rule.target["payee"] if rule.target["payee"] is not None else transaction.payee),
+        narration=(rule.target["narration"] if rule.target["narration"] is not None else transaction.narration),
         tags=transaction.tags,
         links=transaction.links,
         postings=modified_postings,

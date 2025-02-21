@@ -20,14 +20,10 @@ def _compute_balances(entries, account_name, tag):
                     currency = posting.units.currency
                     currency_set.add(currency)
 
-                    balances[currency] = (
-                        balances.get(currency, ZERO) + posting.units.number
-                    )
+                    balances[currency] = balances.get(currency, ZERO) + posting.units.number
 
                     if tag in entry.tags:
-                        tag_balances[currency] = (
-                            tag_balances.get(currency, ZERO) + posting.units.number
-                        )
+                        tag_balances[currency] = tag_balances.get(currency, ZERO) + posting.units.number
 
     return balances, tag_balances, currency_set
 
@@ -39,10 +35,7 @@ def _find_first_unbalanced_entry(entries, account_name, currency, tag):
     for entry in entries:
         if isinstance(entry, Transaction):
             for posting in entry.postings:
-                if (
-                    posting.account == account_name
-                    and posting.units.currency == currency
-                ):
+                if posting.account == account_name and posting.units.currency == currency:
                     balance += posting.units.number
                     if tag in entry.tags:
                         tag_balance += posting.units.number
@@ -60,10 +53,7 @@ def _find_first_unbalanced_entry(entries, account_name, currency, tag):
         curr_entries = curr_entries[: -len(curr_date_entries)]
         for entry in curr_date_entries:
             for posting in entry.postings:
-                if (
-                    posting.account == account_name
-                    and posting.units.currency == currency
-                ):
+                if posting.account == account_name and posting.units.currency == currency:
                     last_balance = balance
                     last_tag_balance = tag_balance
 
@@ -88,9 +78,7 @@ def balance_checker(entries, options_map, config=None):
 
     # 遍历字典
     for account_name, tag in config_dict.items():
-        balance, tag_balance, currency_set = _compute_balances(
-            entries, account_name, tag
-        )
+        balance, tag_balance, currency_set = _compute_balances(entries, account_name, tag)
 
         for currency in currency_set:
             left = balance.get(currency, ZERO)

@@ -82,14 +82,8 @@ def test_investments_performance(entries: list[Directive]):  # type: ignore
         dict(),
     )
 
-    account_data = [
-        account_data_map[name]
-        for name in groups[0].investment
-        if name in account_data_map
-    ]
-    cash_flows = returnslib.truncate_and_merge_cash_flows(
-        pricer, account_data, begin_date, end_date
-    )
+    account_data = [account_data_map[name] for name in groups[0].investment if name in account_data_map]
+    cash_flows = returnslib.truncate_and_merge_cash_flows(pricer, account_data, begin_date, end_date)
 
     (profitable_investments, _) = investments_performance(cash_flows)
     assert len(profitable_investments) > 0
@@ -157,14 +151,8 @@ def test_investments_performance_realized(entries: list[Directive]):  # type: ig
         dict(),
     )
 
-    account_data = [
-        account_data_map[name]
-        for name in groups[0].investment
-        if name in account_data_map
-    ]
-    cash_flows = returnslib.truncate_and_merge_cash_flows(
-        pricer, account_data, begin_date, end_date
-    )
+    account_data = [account_data_map[name] for name in groups[0].investment if name in account_data_map]
+    cash_flows = returnslib.truncate_and_merge_cash_flows(pricer, account_data, begin_date, end_date)
 
     (profitable_investments, _) = investments_performance(cash_flows)
     assert len(profitable_investments) > 0
@@ -232,14 +220,8 @@ def test_investments_performance_realized_with_income_prefix(entries: list[Direc
         dict(),
     )
 
-    account_data = [
-        account_data_map[name]
-        for name in groups[0].investment
-        if name in account_data_map
-    ]
-    cash_flows = returnslib.truncate_and_merge_cash_flows(
-        pricer, account_data, begin_date, end_date
-    )
+    account_data = [account_data_map[name] for name in groups[0].investment if name in account_data_map]
+    cash_flows = returnslib.truncate_and_merge_cash_flows(pricer, account_data, begin_date, end_date)
 
     (profitable_investments, _) = investments_performance(cash_flows)
 

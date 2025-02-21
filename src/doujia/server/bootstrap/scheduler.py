@@ -11,15 +11,11 @@ def setup_scheduler(app: Flask):
 
     scheduler = APScheduler()
 
-    @scheduler.task(
-        "interval", id="reload_ledger", seconds=3, max_instances=1, coalesce=True
-    )
+    @scheduler.task("interval", id="reload_ledger", seconds=3, max_instances=1, coalesce=True)
     def scheduler_reload_ledger():
         reload_ledger(app)
 
-    @scheduler.task(
-        "interval", id="reload_price_cache", minutes=1, max_instances=1, coalesce=True
-    )
+    @scheduler.task("interval", id="reload_price_cache", minutes=1, max_instances=1, coalesce=True)
     def scheduler_reload_price_cache():
         update_price_cache(app)
 

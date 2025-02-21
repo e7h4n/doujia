@@ -24,9 +24,7 @@ def build_realtime_price_cache(entries: list[Directive]):
 def _get_yahoo_symbols(commodity_map):
     symbols = dict()
     for currency, commodity in commodity_map.items():
-        if "price" not in commodity.meta or not isinstance(
-            commodity.meta["price"], str
-        ):
+        if "price" not in commodity.meta or not isinstance(commodity.meta["price"], str):
             continue
 
         if "=X" in commodity.meta["price"]:

@@ -69,15 +69,9 @@ def overview_report(
 ) -> list[dict]:
     group_performances = []
     for group in groups:
-        adlist = [
-            account_data_map[name]
-            for name in group.investment
-            if name in account_data_map
-        ]
+        adlist = [account_data_map[name] for name in group.investment if name in account_data_map]
 
-        performance = _calculate_simple_group_performance(
-            pricer, adlist, start_date, end_date, group.currency
-        )
+        performance = _calculate_simple_group_performance(pricer, adlist, start_date, end_date, group.currency)
         group_performances.append(dict(name=group.name, irr=performance.irr))
 
     return group_performances
@@ -90,11 +84,7 @@ def _calculate_simple_group_performance(
     end_date: datetime.date,
     target_currency: str,
 ) -> GroupPerformanceDigest:
-    truncated_cash_flows = returnslib.truncate_and_merge_cash_flows(
-        pricer, adlist, start_date, end_date
-    )
-    irr = returnslib.compute_returns(
-        truncated_cash_flows, pricer, target_currency, end_date
-    )
+    truncated_cash_flows = returnslib.truncate_and_merge_cash_flows(pricer, adlist, start_date, end_date)
+    irr = returnslib.compute_returns(truncated_cash_flows, pricer, target_currency, end_date)
 
     return GroupPerformanceDigest(irr=irr.total)

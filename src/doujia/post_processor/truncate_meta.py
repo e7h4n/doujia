@@ -36,10 +36,7 @@ def collect_lines_to_truncate(entries: list[Directive], account: str = "Liabilit
 
 
 def truncate_meta(entries: list[Directive], account: str = "Liabilities:Short:CreditCard:CMB"):  # type: ignore
-
-    files_to_truncate: dict[str, list[int]] = collect_lines_to_truncate(
-        entries, account
-    )
+    files_to_truncate: dict[str, list[int]] = collect_lines_to_truncate(entries, account)
 
     for filename, linenos in files_to_truncate.items():
         with open(filename, encoding="utf-8") as f:
