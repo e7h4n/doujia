@@ -80,13 +80,13 @@ def test_format_message():
         cash_balance=100.00,
         credit_card_balance=-100.00,
         date=datetime.date(2024, 1, 3),
-        xirr=Decimal(0.10396),
+        xirr=Decimal("0.10396"),
         today_change=-59.23,
         yesterday_change=-1273.82,
     )
     ret = report_to_message(report)
 
-    assert ret == "[2024 年 1 月 3 日] 目前现金类权益 0.00 元，XIRR 10.40%。"
+    assert ret == "[2024 年 1 月 3 日] 目前现金类权益 0.00 元, XIRR 10.40%。"
 
 
 @freeze_time("2022-01-03")

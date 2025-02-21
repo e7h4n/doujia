@@ -1,6 +1,6 @@
 from datetime import date
 from decimal import Decimal
-from typing import Tuple, TypeVar
+from typing import TypeVar
 
 from beancount.core import data
 from beancount.core.inventory import Inventory
@@ -49,7 +49,7 @@ def _generate_balance_timeline(
     price_map: dict,
     begin_date: date,
     end_date: date,
-) -> list[Tuple[date, Decimal]]:
+) -> list[tuple[date, Decimal]]:
     """生成余额时间线"""
     result = []
     last_date = None
@@ -87,7 +87,7 @@ def gen_cumulative_balances(
     account_prefix: str,
     begin_date: date,
     end_date_inclusive: date | None = None,
-) -> list[Tuple[date, Decimal]]:
+) -> list[tuple[date, Decimal]]:
     """生成累计余额报表"""
     if end_date_inclusive is None:
         end_date_inclusive = date.today()

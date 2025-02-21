@@ -48,12 +48,10 @@ def read_string_or_entries(entries_or_str, allow_incomplete=False):
         if errors:
             oss = io.StringIO()
             printer.print_errors(errors, file=oss)
-            raise TestError("Unexpected errors in expected: {}".format(oss.getvalue()))
+            raise TestError(f"Unexpected errors in expected: {oss.getvalue()}")
 
     else:
-        assert isinstance(entries_or_str, list), "Expecting list: {}".format(
-            entries_or_str
-        )
+        assert isinstance(entries_or_str, list), f"Expecting list: {entries_or_str}"
         entries = entries_or_str
 
     return entries
@@ -104,7 +102,7 @@ def _local_booking(entry):
             if cost.number_total not in (None, MISSING):
                 if not isinstance(posting.units, amount.Amount):
                     raise ValueError(
-                        "Cannot convert posting without units: {}".format(orig_posting)
+                        f"Cannot convert posting without units: {orig_posting}"
                     )
                 number = posting.units.number
                 total = (cost.number_per or ZERO) * number + (cost.number_total or ZERO)
@@ -178,9 +176,7 @@ def assert_equal_entries(
         expected_entries, actual_entries
     )
     if not same:
-        assert expected_missing or actual_missing, "Missing is missing: {}, {}".format(
-            expected_missing, actual_missing
-        )
+        assert expected_missing or actual_missing, f"Missing is missing: {expected_missing}, {actual_missing}"
         oss = io.StringIO()
         if expected_missing:
             oss.write("Present in expected set and not in actual set:\n\n")
@@ -217,7 +213,7 @@ def assert_includes_entries(
 
     includes, missing = compare.includes_entries(subset_entries, entries)
     if not includes:
-        assert missing, "Missing is empty: {}".format(missing)
+        assert missing, f"Missing is empty: {missing}"
         oss = io.StringIO()
         if missing:
             oss.write("Missing from from expected set:\n\n")
@@ -249,7 +245,7 @@ def assert_excludes_entries(
 
     excludes, extra = compare.excludes_entries(subset_entries, entries)
     if not excludes:
-        assert extra, "Extra is empty: {}".format(extra)
+        assert extra, f"Extra is empty: {extra}"
         oss = io.StringIO()
         if extra:
             oss.write("Extra from from first/excluded set:\n\n")

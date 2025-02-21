@@ -1,6 +1,6 @@
 import datetime
 import os
-from typing import Any, Dict, Tuple, TypeVar
+from typing import Any, TypeVar
 
 import beangrow.config as configlib
 import beangrow.returns as returnslib
@@ -31,7 +31,7 @@ def _extract_beangrow_config(
     entries: list[Directive],
     end_date: datetime.date,
     dcontext: Any,
-) -> Tuple[returnslib.Pricer, Dict, Dict[investments.Account, investments.AccountData]]:
+) -> tuple[returnslib.Pricer, dict, dict[investments.Account, investments.AccountData]]:
     accounts = getters.get_accounts(entries)
 
     _, price_map = get_last_and_realtime_price_map(entries)
@@ -54,7 +54,7 @@ def _extract_beangrow_config(
 
 def _extract_beangrow_config_from_fava(
     end_date: datetime.date,
-) -> Tuple[returnslib.Pricer, Dict, Dict[investments.Account, investments.AccountData]]:
+) -> tuple[returnslib.Pricer, dict, dict[investments.Account, investments.AccountData]]:
     dcontext = current_app.options_map["dcontext"]
     return _extract_beangrow_config(current_app.entries, end_date, dcontext)
 

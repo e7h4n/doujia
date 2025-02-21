@@ -8,7 +8,7 @@ from doujia.price.cache import symbol_price_cache
 
 ACCEPT = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"  # noqa: E501
 USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"  # noqa: E501
-FIELDS = "regularMarketPrice,postMarketPrice,preMarketPrice,marketCap,regularMarketTime,postMarketTime,preMarketTime"  # noqa: E501
+FIELDS = "regularMarketPrice,postMarketPrice,preMarketPrice,marketCap,regularMarketTime,postMarketTime,preMarketTime"
 
 
 def _get_crumbs_and_cookies():
@@ -60,7 +60,7 @@ def request_yahoo_finance(symbols: list[str]):
 
 def get_realtime_prices(symbols: list[str]):
     """
-    从缓存中获取价格，如果缓存中没有则返回0
+    从缓存中获取价格, 如果缓存中没有则返回0
     """
     if not symbols:
         return {}

@@ -1,7 +1,7 @@
 import datetime
 from decimal import Decimal
 from pathlib import Path
-from typing import NamedTuple, Tuple
+from typing import NamedTuple
 
 import beangrow.config as configlib
 import beangrow.returns as returnslib
@@ -33,7 +33,7 @@ class PeriodAmount(NamedTuple):
 def _sum_inventory_between(
     entries: list[Directive],  # type: ignore
     account_prefix_list: list[str],
-    date_range: Tuple[datetime.date, datetime.date],
+    date_range: tuple[datetime.date, datetime.date],
 ) -> Inventory:
     result = Inventory()
     for entry in entries:
@@ -66,7 +66,7 @@ def _get_only_amount_number(inventory: Inventory, expect_currency: str) -> Decim
 def sum_inventory_between(
     entries: list[Directive],  # type: ignore
     account_prefix_list: list[str],
-    date_range: list[Tuple[datetime.date, datetime.date]],
+    date_range: list[tuple[datetime.date, datetime.date]],
 ) -> list[PeriodInventory]:
     return [
         (
@@ -82,7 +82,7 @@ def sum_single_amount_between(
     entries: list[Directive],  # type: ignore
     price_map: dict,  # type: ignore
     account_prefix_list: list[str],
-    date_range: list[Tuple[datetime.date, datetime.date]],
+    date_range: list[tuple[datetime.date, datetime.date]],
     target_currency: str,
 ) -> list[PeriodAmount]:
     return [

@@ -1,8 +1,9 @@
 import os
 import re
+from collections import Counter
 from pathlib import Path
 from pprint import pformat
-from typing import Any, Counter
+from typing import Any
 
 import pytest
 from fava.core import FavaLedger

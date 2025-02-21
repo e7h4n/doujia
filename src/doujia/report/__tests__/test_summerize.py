@@ -102,7 +102,7 @@ def test_ignore_history_transaction(
     )
 
 
-def test_price(entries: list[Directive]):  # type: ignore # 计算现金流应该考虑价格，价格位期末价值
+def test_price(entries: list[Directive]):  # type: ignore # 计算现金流应该考虑价格, 价格位期末价值
     """
     @@@/main.bean
     2021-01-01 open Assets:Checking
@@ -129,7 +129,7 @@ def test_price(entries: list[Directive]):  # type: ignore # 计算现金流应�
 
 def test_price_no_cost(
     entries: list[Directive],  # type: ignore
-):  # 只有价格，没有 cost 的交易，应该只计算 unit
+):  # 只有价格, 没有 cost 的交易, 应该只计算 unit
     """
     @@@/main.bean
     2021-01-01 open Assets:Checking
@@ -174,7 +174,7 @@ def test_price_via(entries: list[Directive]):  # type: ignore # 计算现金流�
 
 def test_ignore_price_map(
     entries: list[Directive],  # type: ignore
-):  # 计算消耗掉特定商品时产生的现金流，不考虑货币转换
+):  # 计算消耗掉特定商品时产生的现金流, 不考虑货币转换
     """
     @@@/main.bean
     2021-01-01 open Assets:Checking

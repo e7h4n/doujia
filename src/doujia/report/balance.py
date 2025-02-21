@@ -1,6 +1,6 @@
 import datetime
 from decimal import Decimal
-from typing import Tuple, TypeVar
+from typing import TypeVar
 
 from beancount.core import data
 from beancount.core.convert import convert_amount
@@ -8,7 +8,7 @@ from beancount.core.inventory import Inventory
 from beancount.core.prices import PriceMap
 
 Directive = TypeVar("Directive", bound=data.Directive)  # type: ignore
-DataPoint = Tuple[datetime.date, Decimal]
+DataPoint = tuple[datetime.date, Decimal]
 
 
 def balance_at(
@@ -18,7 +18,7 @@ def balance_at(
     target_currency: str,
     price_map: PriceMap,
 ) -> Decimal:
-    """统计特定账户在 end 日期之前的 balance，不包括 end_exclude 这一天"""
+    """统计特定账户在 end 日期之前的 balance, 不包括 end_exclude 这一天"""
     inventory = Inventory()
 
     for txn in entries:

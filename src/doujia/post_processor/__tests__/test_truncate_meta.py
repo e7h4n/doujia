@@ -20,7 +20,7 @@ def test_truncate_meta(entries: list[Directive]):  # type: ignore
 
     truncate_meta(entries)
 
-    with open("main.bean", "r", encoding="utf-8") as f:
+    with open("main.bean", encoding="utf-8") as f:
         actual = f.read()
 
     assert (
@@ -57,7 +57,7 @@ def test_truncate_meta_2(entries: list[Directive]):  # type: ignore
 
     truncate_meta(entries)
 
-    with open("main.bean", "r", encoding="utf-8") as f:
+    with open("main.bean", encoding="utf-8") as f:
         actual = f.read()
 
     assert (
@@ -101,7 +101,7 @@ def test_truncate_meta_for_multiple_account(entries: list[Directive]):  # type: 
 
     truncate_meta(entries)
 
-    with open("main.bean", "r", encoding="utf-8") as f:
+    with open("main.bean", encoding="utf-8") as f:
         actual = f.read()
 
     assert (

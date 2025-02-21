@@ -18,7 +18,7 @@ def main():
         if isinstance(entry, Transaction):
             is_investment = False
             for posting in entry.postings:
-                # 如果账号中包含 stock 或者 investment，则加入到投资交易列表中
+                # 如果账号中包含 stock 或者 investment, 则加入到投资交易列表中
                 if (
                     "Stock" in posting.account
                     or "Investment" in posting.account

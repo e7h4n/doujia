@@ -1,6 +1,6 @@
 import os
 from dataclasses import dataclass
-from typing import Tuple, TypeVar
+from typing import TypeVar
 
 from beancount.core import data
 from beancount.loader import load_file
@@ -17,7 +17,7 @@ class DoujiaConfig:
     import_account: str
 
 
-def load_beancount(ledger_path: str) -> Tuple[list[Directive], DoujiaConfig, dict]:
+def load_beancount(ledger_path: str) -> tuple[list[Directive], DoujiaConfig, dict]:
     entries, errors, options_map = load_file(ledger_path)
     if errors:
         raise ValueError(f"Beancount load errors: {errors}")

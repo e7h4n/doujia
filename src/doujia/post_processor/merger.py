@@ -5,7 +5,6 @@ import io
 import sys
 from collections import defaultdict
 from datetime import datetime
-from typing import List
 
 from beancount.core.data import Balance, Transaction
 from beancount.parser import parser, printer
@@ -33,7 +32,7 @@ def _merge_beancount_file(
 
 
 def _read_file(file_path: str) -> str:
-    with open(file_path, "r", encoding="utf-8") as f:
+    with open(file_path, encoding="utf-8") as f:
         content = f.read()
     return content
 
@@ -42,7 +41,7 @@ def _load_content(file_path: str):
     if file_path == "-":
         file_content = sys.stdin.read()
     else:
-        with open(file_path, "r", encoding="utf-8") as opened_file:
+        with open(file_path, encoding="utf-8") as opened_file:
             file_content = opened_file.read()
 
     return file_content
@@ -58,7 +57,7 @@ def _sort_imported_entries(entries):
     entries_by_date = defaultdict(list)
 
     for entry in entries:
-        if isinstance(entry, (Transaction, Balance)):
+        if isinstance(entry, Transaction | Balance):
             entries_by_date[entry.date].append(entry)
 
     for _, date_entries in entries_by_date.items():
@@ -73,9 +72,9 @@ def _sort_imported_entries(entries):
 
 
 def _find_balance_insert_position(
-    main_lines: List[str], start_index: int, target_date
+    main_lines: list[str], start_index: int, target_date
 ) -> int:
-    """找到 balance 记录的位置，并在这个位置之后找到同日期交易的最后一笔记录后的位置"""
+    """找到 balance 记录的位置, 并在这个位置之后找到同日期交易的最后一笔记录后的位置"""
 
     first_balance_position = None
     start_index = min(start_index, len(main_lines) - 1)
@@ -115,7 +114,7 @@ def _find_balance_insert_position(
 
 
 def _find_transaction_insert_position(main_lines, insert_position, target_date) -> int:
-    # 从 insert_position 开始往下查找，找到第一个包含日期但不等于 target_date 的记录位置
+    # 从 insert_position 开始往下查找, 找到第一个包含日期但不等于 target_date 的记录位置
     for index in range(insert_position, len(main_lines)):
         line = main_lines[index]
         current_date = _get_date_from_line(line)
@@ -126,8 +125,8 @@ def _find_transaction_insert_position(main_lines, insert_position, target_date) 
     return len(main_lines)
 
 
-def _find_insert_position(main_lines: List[str], start_index: int, target_date) -> int:
-    """找到 balance 记录的位置，并在这个位置之后找到同日期交易的最后一笔记录后的位置"""
+def _find_insert_position(main_lines: list[str], start_index: int, target_date) -> int:
+    """找到 balance 记录的位置, 并在这个位置之后找到同日期交易的最后一笔记录后的位置"""
 
     balance_insert_position = _find_balance_insert_position(
         main_lines, start_index, target_date
@@ -149,7 +148,7 @@ def _insert_entries(main_lines, entries, insert_position):
         main_lines.insert(insert_position, "")
 
 
-def _merge_entries(main_lines: List[str], sorted_entries) -> List[str]:
+def _merge_entries(main_lines: list[str], sorted_entries) -> list[str]:
     main_line_index = len(main_lines) - 1
     sorted_entries_items = sorted(sorted_entries.items(), reverse=True)
 
@@ -192,8 +191,8 @@ def _merge_entries(main_lines: List[str], sorted_entries) -> List[str]:
 
 def _get_date_from_line(line: str) -> datetime.date:
     # 尝试在 line 中查找 \d{4}-\d{2}-\d{2} 格式的日期
-    # 如果找到，返回 datetime.date 对象
-    # 如果找不到，返回 None
+    # 如果找到, 返回 datetime.date 对象
+    # 如果找不到, 返回 None
 
     parts = line.split()
     if parts and parts[0].count("-") == 2:

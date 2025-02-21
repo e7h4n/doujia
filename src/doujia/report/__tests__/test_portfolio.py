@@ -81,8 +81,8 @@ def quote_resp(
     market_state: str,
     currency: str,
     regular_market: tuple[float, int],
-    pre_market: tuple[float, int] = None,
-    post_market: tuple[float, int] = None,
+    pre_market: tuple[float, int] | None = None,
+    post_market: tuple[float, int] | None = None,
 ):
     if (pre_market is not None and post_market is None) or (
         pre_market is None and post_market is not None

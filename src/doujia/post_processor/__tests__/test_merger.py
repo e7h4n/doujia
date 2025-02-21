@@ -20,7 +20,7 @@ def unify_content(entry_content: str):
     return "\n".join([printer.format_entry(x) for x in entries])
 
 
-# 一个工具函数，去掉一个字符串的行尾空格
+# 一个工具函数, 去掉一个字符串的行尾空格
 def remove_trailing_whitespace(text: str) -> str:
     return "\n".join([x.rstrip() for x in text.splitlines()])
 
@@ -260,7 +260,7 @@ def test_merge_beancount_entries_4():
 
 
 def test_merge_beancount_entries_5():
-    """测试记录导入，导入的记录大于已经存在的所有时间"""
+    """测试记录导入, 导入的记录大于已经存在的所有时间"""
 
     output = io.StringIO()
     _merge_beancount_content(
@@ -299,7 +299,7 @@ def test_merge_beancount_entries_5():
 
 
 def test_merge_insert_position_future_date():
-    """测试插入位置，插入一个未来的时间"""
+    """测试插入位置, 插入一个未来的时间"""
 
     lines = [
         "2023-03-19 balance Liabilities:Short:CreditCard:CMB 0.00 CNY",
@@ -317,7 +317,7 @@ def test_merge_insert_position_future_date():
 
 
 def test_merge_insert_position_prev_date():
-    """测试插入位置，插入上一个交易日的记录"""
+    """测试插入位置, 插入上一个交易日的记录"""
 
     lines = [
         "2023-03-19 balance Liabilities:Short:CreditCard:CMB 0.00 CNY",
@@ -335,7 +335,7 @@ def test_merge_insert_position_prev_date():
 
 
 def test_merge_insert_position_next_date():
-    """测试插入位置，查找后一天的位置"""
+    """测试插入位置, 查找后一天的位置"""
 
     lines = [
         "2023-03-19 balance Liabilities:Short:CreditCard:CMB 0.00 CNY",
@@ -353,7 +353,7 @@ def test_merge_insert_position_next_date():
 
 
 def test_merge_insert_position_unexisted_next_date():
-    """测试插入位置，查找后一天的位置"""
+    """测试插入位置, 查找后一天的位置"""
 
     lines = [
         "2023-03-19 balance Liabilities:Short:CreditCard:CMB 0.00 CNY",
@@ -368,7 +368,7 @@ def test_merge_insert_position_unexisted_next_date():
 
 
 def test_merge_insert_position_unexisted_middle_date():
-    """测试插入位置，查找其中一天的位置"""
+    """测试插入位置, 查找其中一天的位置"""
 
     lines = [
         "2023-03-19 balance Liabilities:Short:CreditCard:CMB 0.00 CNY",
@@ -385,7 +385,7 @@ def test_merge_insert_position_unexisted_middle_date():
 
 
 def test_merge_insert_position_existed_balance():
-    """测试插入位置，查找已经存在 balance 的日期"""
+    """测试插入位置, 查找已经存在 balance 的日期"""
 
     lines = [
         "2023-03-19 balance Liabilities:Short:CreditCard:CMB 0.00 CNY",
@@ -403,7 +403,7 @@ def test_merge_insert_position_existed_balance():
 
 
 def test_merge_insert_position_existed_date():
-    """测试插入位置，同一天的记录应该追加在最后"""
+    """测试插入位置, 同一天的记录应该追加在最后"""
 
     lines = [
         "2023-03-19 balance Liabilities:Short:CreditCard:CMB 0.00 CNY",

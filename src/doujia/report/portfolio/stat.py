@@ -8,7 +8,7 @@ from doujia.report.portfolio.data import HoldingGroup
 
 def fill_stat_fields(portofolio_groups: list[HoldingGroup], target_currency: str):
     """
-    填充 PortfolioGroup 中的统计字段，这些统计字段需要计算所有 Group 以及 Group 下所有 Portfolio 的数据统计得来
+    填充 PortfolioGroup 中的统计字段, 这些统计字段需要计算所有 Group 以及 Group 下所有 Portfolio 的数据统计得来
     例如累计市值、各个投资标的的占比
     """
     total_realtime_market_value = _fill_group_market_values_and_sum_total_value(
@@ -19,7 +19,7 @@ def fill_stat_fields(portofolio_groups: list[HoldingGroup], target_currency: str
 
 @dataclass
 class GroupValues:
-    """临时传递数据的 DTO，传递一个投资组合下所有的累加数据"""
+    """临时传递数据的 DTO, 传递一个投资组合下所有的累加数据"""
 
     realtime_market_value: Decimal
     last_market_value: Decimal
@@ -29,7 +29,7 @@ class GroupValues:
 def _fill_group_market_values_and_sum_total_value(
     portofolio_groups: list[HoldingGroup], target_currency: str
 ) -> Decimal:
-    """填充每个投资组合组的市值相关字段，并返回总实时市值"""
+    """填充每个投资组合组的市值相关字段, 并返回总实时市值"""
     total_realtime_market_value = Decimal(0)
 
     for portofolio_group in portofolio_groups:
@@ -62,8 +62,8 @@ def _set_group_amounts(
     portofolio_group: HoldingGroup, values: GroupValues, target_currency: str
 ):
     """
-    填充 portfolio_group 的市值相关字段，包括 realtime_market_value, last_market_value,
-    unrealized_pnl, today_market_value_change，这几个字段来自于 portfolioGroup 下所有 portfolio 的市值相关字段
+    填充 portfolio_group 的市值相关字段, 包括 realtime_market_value, last_market_value,
+    unrealized_pnl, today_market_value_change, 这几个字段来自于 portfolioGroup 下所有 portfolio 的市值相关字段
     """
 
     portofolio_group.realtime_market_value = Amount(

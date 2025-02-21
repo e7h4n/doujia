@@ -1,5 +1,6 @@
 import sys
-from typing import Callable, Generic, TypeVar
+from collections.abc import Callable
+from typing import Generic, TypeVar
 
 from beancount.core import data
 from beancount.parser import printer
@@ -12,7 +13,7 @@ Reducer = TypeVar("Reducer", bound=Callable[[Memo, Directive], Memo])
 
 
 class TransactionProcessor(Generic[Memo, Ret, Directive]):
-    """处理交易的处理器，可以注册多个 reducer 并对交易进行 reduce 操作"""
+    """处理交易的处理器, 可以注册多个 reducer 并对交易进行 reduce 操作"""
 
     def __init__(self):
         """初始化处理器"""
@@ -41,7 +42,7 @@ class TransactionProcessor(Generic[Memo, Ret, Directive]):
         Args:
             signature: reducer 签名
         Returns:
-            reducer 的描述，如果签名不存在则返回 None
+            reducer 的描述, 如果签名不存在则返回 None
         """
         _, description = self.registry.get(signature, (None, None))
         return description

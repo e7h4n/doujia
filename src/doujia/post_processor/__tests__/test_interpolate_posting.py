@@ -17,7 +17,7 @@ def test_posting_filler(entries: list[Directive]):  # type: ignore
 
     interpolate_postings(entries)
 
-    with open("main.bean", "r", encoding="utf-8") as f:
+    with open("main.bean", encoding="utf-8") as f:
         actual = f.read()
 
     assert (
@@ -50,7 +50,7 @@ def test_posting_filler_multiple_entries(entries: list[Directive]):  # type: ign
 
     interpolate_postings(entries)
 
-    with open("main.bean", "r", encoding="utf-8") as f:
+    with open("main.bean", encoding="utf-8") as f:
         actual = f.read()
 
     assert (
@@ -88,7 +88,7 @@ def test_posting_filler_multiple_entries_multiline(entries: list[Directive]):  #
 
     interpolate_postings(entries)
 
-    with open("main.bean", "r", encoding="utf-8") as f:
+    with open("main.bean", encoding="utf-8") as f:
         actual = f.read()
 
     assert (
@@ -128,7 +128,7 @@ def test_posting_filler_multiple_entries_multiline_2(entries: list[Directive]): 
 
     interpolate_postings(entries)
 
-    with open("main.bean", "r", encoding="utf-8") as f:
+    with open("main.bean", encoding="utf-8") as f:
         actual = f.read()
 
     assert (
@@ -170,7 +170,7 @@ def test_posting_filler_multiple_entries_multiline_3(entries: list[Directive]): 
 
     interpolate_postings(entries)
 
-    with open("main.bean", "r", encoding="utf-8") as f:
+    with open("main.bean", encoding="utf-8") as f:
         actual = f.read()
 
     assert (
@@ -209,7 +209,7 @@ def test_posting_filler_multiple_entries_with_comment(entries: list[Directive]):
 
     interpolate_postings(entries)
 
-    with open("main.bean", "r", encoding="utf-8") as f:
+    with open("main.bean", encoding="utf-8") as f:
         actual = f.read()
 
     assert (
@@ -247,7 +247,7 @@ def test_posting_filler_multiple_entries_with_include(entries: list[Directive]):
 
     interpolate_postings(entries)
 
-    with open("ledger.bean", "r", encoding="utf-8") as f:
+    with open("ledger.bean", encoding="utf-8") as f:
         actual = f.read()
 
     assert (
@@ -280,7 +280,7 @@ def test_posting_filler_multiple_entries_with_create_posting(entries: list[Direc
 
     interpolate_postings(entries)
 
-    with open("main.bean", "r", encoding="utf-8") as f:
+    with open("main.bean", encoding="utf-8") as f:
         actual = f.read()
 
     assert (
@@ -310,7 +310,7 @@ def test_posting_filler_multiple_entries_with_hash_flag(entries: list[Directive]
 
     interpolate_postings(entries)
 
-    with open("main.bean", "r", encoding="utf-8") as f:
+    with open("main.bean", encoding="utf-8") as f:
         actual = f.read()
 
     assert (

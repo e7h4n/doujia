@@ -1,6 +1,6 @@
 import datetime
 from decimal import Decimal
-from typing import Dict, NamedTuple, Set, Tuple, cast
+from typing import NamedTuple, cast
 
 from beancount.core import data, getters
 from beancount.core.data import Directive
@@ -19,7 +19,7 @@ from doujia.report.summerize import (
     sum_single_amount_between,
 )
 
-DataPoint = Tuple[datetime.date, Decimal]
+DataPoint = tuple[datetime.date, Decimal]
 
 
 class ExpenseSummary(NamedTuple):
@@ -79,7 +79,7 @@ class OutingExpenseSummary(NamedTuple):
 
 class AccountComparedBalance(NamedTuple):
     account: str
-    period: Tuple[datetime.date, datetime.date]
+    period: tuple[datetime.date, datetime.date]
     period_balance: Decimal
     yoy_period_balance: Decimal
     balance_progress: Decimal
@@ -92,7 +92,7 @@ class AccountComparedBalance(NamedTuple):
     remains: Decimal
 
 
-# 定义一个异常， CurrencyConversionError
+# 定义一个异常,  CurrencyConversionError
 class CurrencyConversionError(Exception):
     def __init__(self, message):
         super().__init__(message)
@@ -190,14 +190,12 @@ def transaction_count(ledger: FavaLedger) -> int:
 def _get_only_amount(
     inventory: CounterInventory, ledger: FavaLedger, currency: str, date: datetime.date
 ) -> Decimal:
-    """返回 inventory 中特定账户的金额，如果 inventory 中不能转换的货币则报错"""
+    """返回 inventory 中特定账户的金额, 如果 inventory 中不能转换的货币则报错"""
     inventory = conversion_from_str(currency).apply(inventory, ledger.prices, date)
 
     invalid_currencies = [x for x in inventory.keys() if x != currency]
     if len(invalid_currencies) > 0:
-        message = "can't convert currencies {} at date {}".format(
-            invalid_currencies, date
-        )
+        message = f"can't convert currencies {invalid_currencies} at date {date}"
         raise CurrencyConversionError(message=message)
 
     amount = inventory.get(currency)
@@ -210,7 +208,7 @@ def _sum_amount_at(
     ledger: FavaLedger,
     currency: str,
 ) -> Decimal:
-    """统计特定账户在 end 日期之前的 balance，不包括 end_exclude 这一天"""
+    """统计特定账户在 end 日期之前的 balance, 不包括 end_exclude 这一天"""
     inventory = CounterInventory()
 
     for txn in ledger.all_entries_by_type.Transaction:
@@ -240,7 +238,7 @@ def _sum_amount_at_dates(
     ledger: FavaLedger,
     currency: str,
 ) -> list[Decimal]:
-    """返回在 balance_at_dates 之前的每一次 balance，不包括 at_date 当天"""
+    """返回在 balance_at_dates 之前的每一次 balance, 不包括 at_date 当天"""
     min_date, _ = getters.get_min_max_dates(ledger.all_entries)
     intervals = [(min_date, x) for x in balance_at_dates]
     period_inventories = sum_single_amount_between(
@@ -264,10 +262,10 @@ def _group_expense(
     activity_tags: list[str],
 ) -> list[GroupExpenseSummary]:
     """
-    对于 [begin, end) 之间的 account_prefix 的的交易尝试分组，分组规则是按照
-    link_prefix 和 activity_tags 进行识别，如果都不能识别则进入 Other
+    对于 [begin, end) 之间的 account_prefix 的的交易尝试分组, 分组规则是按照
+    link_prefix 和 activity_tags 进行识别, 如果都不能识别则进入 Other
     """
-    groups: Dict[str, Decimal] = {}
+    groups: dict[str, Decimal] = {}
 
     for txn in ledger.all_entries_by_type.Transaction:
         if txn.date < begin_inclusive or txn.date >= end_exclusive:
@@ -362,7 +360,7 @@ def interval_balance(
     begin_date: datetime.date | None = None,
 ) -> list[DataPoint]:
     all_inventory = CounterInventory()
-    posting_by_date: list[Tuple[datetime.date, Posting]] = []
+    posting_by_date: list[tuple[datetime.date, Posting]] = []
     for txn in ledger.all_entries_by_type.Transaction:
         if txn.date <= end_date:
             for posting in txn.postings:
@@ -452,14 +450,14 @@ def dashboard_summary(
 
 
 class MultiplePeriodInventory(NamedTuple):
-    inventories: Dict[str, Inventory]
+    inventories: dict[str, Inventory]
     start_inclusive: datetime.date
     end_exclusive: datetime.date
 
 
 def _fill_multiple_period_inventory(
     entries: list[Directive],  # type: ignore
-    accounts: Set[str],
+    accounts: set[str],
     multiple_period_inventories: list[MultiplePeriodInventory],
 ):
     for entry in entries:
@@ -480,8 +478,8 @@ def grouped_account_compared_balance(
     entries: list[Directive],  # type: ignore
     price_map: dict,
     account_prefix: str,
-    date_range: Tuple[datetime.date, datetime.date],
-    yoy_date_range: Tuple[datetime.date, datetime.date],
+    date_range: tuple[datetime.date, datetime.date],
+    yoy_date_range: tuple[datetime.date, datetime.date],
     today: datetime.date,
     target_currency: str,
 ) -> list[AccountComparedBalance]:

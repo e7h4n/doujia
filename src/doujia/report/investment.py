@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
 from pathlib import Path
-from typing import Dict, List, Tuple
 
 import beangrow.config as configlib
 import beangrow.returns as returnslib
@@ -48,12 +47,12 @@ def get_investment_holdings(
         "",
     )
 
-    with open(investment_config_path, "r", encoding="utf-8") as f:
+    with open(investment_config_path, encoding="utf-8") as f:
         investment_config = yaml.safe_load(f)
 
     results = []
     for group in beangrow_config.groups.group:
-        # 如果投资组合在 investment_config 中不存在，则跳过
+        # 如果投资组合在 investment_config 中不存在, 则跳过
         if not any(
             investment["group"] == group.name
             for investment in investment_config["investments"]
@@ -117,9 +116,9 @@ class InvestmentPerformance:
 
 
 def investments_performance(
-    cash_flows: List[CashFlow],
-) -> Tuple[List[InvestmentPerformance], List[InvestmentPerformance]]:
-    account_map: Dict[str, List[CashFlow]] = {}
+    cash_flows: list[CashFlow],
+) -> tuple[list[InvestmentPerformance], list[InvestmentPerformance]]:
+    account_map: dict[str, list[CashFlow]] = {}
 
     # Group cash flows by account
     for cf in cash_flows:
@@ -178,7 +177,7 @@ def investments_performance(
 
 def _get_calendar_intervals(
     begin_date: date, end_date: date
-) -> List[Tuple[str, date, date]]:
+) -> list[tuple[str, date, date]]:
 
     intervals = [
         (str(year), date(year, 1, 1), date(year + 1, 1, 1))
@@ -190,8 +189,8 @@ def _get_calendar_intervals(
 
 def _get_cumulative_intervals(
     begin_date: date, end_date: date
-) -> list[Tuple[str, date, date]]:
-    result: list[Tuple[str, date, date]] = []
+) -> list[tuple[str, date, date]]:
+    result: list[tuple[str, date, date]] = []
 
     result.append((f"From {begin_date}", begin_date, end_date))
 
@@ -220,9 +219,9 @@ def _get_cumulative_intervals(
 def _compute_returns_series(
     pricer: returnslib.Pricer,
     target_currency: str,
-    account_data: List[investments.AccountData],
-    intervals: List[Tuple[str, date, date]],
-) -> list[list[Tuple[date, float]]]:
+    account_data: list[investments.AccountData],
+    intervals: list[tuple[str, date, date]],
+) -> list[list[tuple[date, float]]]:
     series = [[], [], [], []]
 
     found = False
@@ -243,7 +242,7 @@ def _compute_returns_series(
 
 def calendar_returns(
     pricer: returnslib.Pricer,
-    account_data: List[investments.AccountData],
+    account_data: list[investments.AccountData],
     start_date: date,
     end_date: date,
     target_currency: str,
@@ -259,7 +258,7 @@ def calendar_returns(
 
 def cumulative_returns(
     pricer: returnslib.Pricer,
-    account_data: List[investments.AccountData],
+    account_data: list[investments.AccountData],
     start_date: date,
     end_date: date,
     target_currency: str,
@@ -314,7 +313,7 @@ class IrrSummary:
 
 def irr_summary(
     pricer: returnslib.Pricer,
-    adlist: List[investments.AccountData],
+    adlist: list[investments.AccountData],
     start_date: datetime.date,
     end_date: datetime.date,
     target_currency: str,

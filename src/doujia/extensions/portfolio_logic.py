@@ -1,7 +1,7 @@
 import datetime
 from collections import namedtuple
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 import beangrow.config as configlib
 import beangrow.returns as returnslib
@@ -28,7 +28,7 @@ GroupPerformance = namedtuple(
 
 def extract_beangrow_config_from_fava(
     ledger: FavaLedger, end_date: datetime.date
-) -> Tuple[returnslib.Pricer, Dict, Dict[investments.Account, investments.AccountData]]:
+) -> tuple[returnslib.Pricer, dict, dict[investments.Account, investments.AccountData]]:
     beangrow_config_path = current_app.doujia_config.beangrow_config
     entries = ledger.all_entries
     dcontext = ledger.options["dcontext"]
@@ -40,7 +40,7 @@ def extract_beangrow_config(
     beangrow_config_path: Path,
     end_date: datetime.date,
     dcontext: Any,
-) -> Tuple[returnslib.Pricer, Dict, Dict[investments.Account, investments.AccountData]]:
+) -> tuple[returnslib.Pricer, dict, dict[investments.Account, investments.AccountData]]:
     accounts = getters.get_accounts(entries)
 
     price_map = prices.build_price_map(entries)
@@ -62,11 +62,11 @@ def extract_beangrow_config(
 
 def overview_report(
     pricer: returnslib.Pricer,
-    groups: Dict,
-    account_data_map: Dict[investments.Account, investments.AccountData],
+    groups: dict,
+    account_data_map: dict[investments.Account, investments.AccountData],
     start_date: datetime.date,
     end_date: datetime.date,
-) -> list[Dict]:
+) -> list[dict]:
     group_performances = []
     for group in groups:
         adlist = [
@@ -85,7 +85,7 @@ def overview_report(
 
 def _calculate_simple_group_performance(
     pricer: returnslib.Pricer,
-    adlist: List[investments.AccountData],
+    adlist: list[investments.AccountData],
     start_date: datetime.date,
     end_date: datetime.date,
     target_currency: str,

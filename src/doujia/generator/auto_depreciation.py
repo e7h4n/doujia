@@ -1,8 +1,8 @@
 """
 Fixed assets depreciation plugin for beancount.
 
-在交易账户下，如果资产账户有 `useful_life` 和 `residual_value` 元数据，则自动生成折旧交易。
-例如：
+在交易账户下, 如果资产账户有 `useful_life` 和 `residual_value` 元数据, 则自动生成折旧交易。
+例如:
 ```python
 2024-03-05 * "京东" "Sony A7C2" #FIXED_EXPENSE ^202403-SONY-A7C2
   Liabilities:Short:CreditCard:CMB                                             -13,993.00 CNY
@@ -19,7 +19,6 @@ import decimal
 import re
 from dataclasses import dataclass
 from datetime import date
-from typing import Dict, List, Optional, Tuple
 
 from beancount.core import amount, convert, data
 from beancount.core.number import D, Decimal
@@ -32,12 +31,12 @@ from dateutil.relativedelta import relativedelta
 class DepreciationConfig:
     """折旧配置"""
 
-    assets_account: List[str]
+    assets_account: list[str]
     expenses_account: str
     method: str
 
     @classmethod
-    def from_dict(cls, config: Optional[dict] = None) -> "DepreciationConfig":
+    def from_dict(cls, config: dict | None = None) -> "DepreciationConfig":
         """从配置字典创建配置对象"""
         if config is None:
             config = {}
@@ -55,9 +54,9 @@ class DepreciationConfig:
 class DepreciationResult:
     """折旧计算结果"""
 
-    dates: List[date]
-    current_values: List[float]
-    depreciation_values: List[Decimal]
+    dates: list[date]
+    current_values: list[float]
+    depreciation_values: list[Decimal]
 
 
 def calculate_depreciation(
@@ -109,7 +108,7 @@ def calculate_linear_value(
 
 
 def parse_useful_life(useful_life: str) -> int:
-    """解析使用寿命字符串，返回月数"""
+    """解析使用寿命字符串, 返回月数"""
     m = re.match(r"([0-9]+)([my])", str.lower(useful_life))
     months = int(m.group(1))
     if m.group(2) == "y":
@@ -123,7 +122,7 @@ def create_depreciation_posting(
     current_value: float,
     expenses_account: str,
     depreciation_value: Decimal,
-) -> List[data.Posting]:
+) -> list[data.Posting]:
     """创建折旧相关的过账"""
     # 移除折旧相关的元数据
     new_meta = original_posting.meta.copy()
@@ -158,8 +157,8 @@ def create_depreciation_posting(
 def create_depreciation_entry(
     original_entry: data.Transaction,  # type: ignore
     date: date,
-    label: Optional[str],
-    postings: List[data.Posting],
+    label: str | None,
+    postings: list[data.Posting],
 ) -> data.Transaction:  # type: ignore
     """创建折旧交易"""
     if original_entry.narration and label:
@@ -198,7 +197,7 @@ def generate_directives(
     current_value: float,
     expenses_account: str,
     depreciation_value: Decimal,
-) -> Tuple[data.Transaction, data.Price]:  # type: ignore
+) -> tuple[data.Transaction, data.Price]:  # type: ignore
     """生成折旧和价格指令"""
     # 创建折旧过账
     postings = create_depreciation_posting(
@@ -224,7 +223,7 @@ def process_fixed_asset_posting(
     entry: data.Transaction,  # type: ignore
     posting: data.Posting,
     config: DepreciationConfig,
-) -> Tuple[List[data.Transaction], List[data.Price]]:  # type: ignore
+) -> tuple[list[data.Transaction], list[data.Price]]:  # type: ignore
     """处理单个固定资产过账"""
     original_value = float(posting.cost.number)
     end_value = float(posting.meta.get("residual_value", 0))
@@ -253,13 +252,13 @@ def process_fixed_asset_posting(
 
 
 def auto_depreciation(
-    entries: List[data.Transaction], _, config: Optional[dict] = None  # type: ignore
-) -> Tuple[Dict[str, List[data.Transaction]], Dict[str, List[data.Price]]]:  # type: ignore
+    entries: list[data.Transaction], _, config: dict | None = None  # type: ignore
+) -> tuple[dict[str, list[data.Transaction]], dict[str, list[data.Price]]]:  # type: ignore
     """自动生成固定资产折旧分录"""
     config = DepreciationConfig.from_dict(config)
 
-    depreciation_entries: List[data.Transaction] = []  # type: ignore
-    price_entries: List[data.Price] = []  # type: ignore
+    depreciation_entries: list[data.Transaction] = []  # type: ignore
+    price_entries: list[data.Price] = []  # type: ignore
 
     for entry in entries:
         if not isinstance(entry, data.Transaction):

@@ -64,7 +64,7 @@ def import_transactions(transactions: list[Transaction]) -> int:
         imported_content = output.getvalue()
 
     with io.StringIO() as output:
-        with open(current_app.doujia_config.import_to, "r", encoding="utf-8") as file:
+        with open(current_app.doujia_config.import_to, encoding="utf-8") as file:
             main_content = file.read()
             _merge_beancount_content(main_content, imported_content, output)
 

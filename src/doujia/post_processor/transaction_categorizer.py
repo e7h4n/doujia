@@ -2,7 +2,6 @@
 
 import re
 import sys
-from typing import Dict, List, Optional
 
 from beancount.core.data import Balance, D, Posting, Transaction
 from beancount.core.number import MISSING
@@ -20,8 +19,8 @@ class Rule:
     def __init__(
         self,
         account: str,
-        matcher: Dict[str, Optional[str]],
-        target: Dict[str, Optional[str]],
+        matcher: dict[str, str | None],
+        target: dict[str, str | None],
     ):
         self.account = account
         self.matcher = matcher
@@ -49,7 +48,7 @@ def _is_transaction_matching_rule(transaction: Transaction, rule: Rule) -> bool:
     ):
         return False
 
-    # 检查金额是否匹配（如果需要）
+    # 检查金额是否匹配 (如果需要)
     if rule.matcher["amount"] is not None:
         for posting in transaction.postings:
             if posting.units is not MISSING and _decimals_almost_equal(
@@ -117,7 +116,7 @@ def _process_beancount(input_string, rules, output_file):
             output_file.write(format_entry(entry) + "\n")
 
 
-def _parse_beancount_converter_dsl(dsl: str) -> List[Rule]:
+def _parse_beancount_converter_dsl(dsl: str) -> list[Rule]:
     rules = []
     current_account = None
 
@@ -156,7 +155,7 @@ def _parse_beancount_converter_dsl(dsl: str) -> List[Rule]:
 def _categorize_transactions(config, input_string, output_io):
     # 读取规则文件
     try:
-        with open(config, "r", encoding="utf-8") as file:
+        with open(config, encoding="utf-8") as file:
             dsl = file.read()
 
         # 解析规则

@@ -104,7 +104,7 @@ Assets:Expenses:Example
 
 
 def test_process_beancount_with_amount_matching():
-    """测试整个处理流程，包括匹配金额"""
+    """测试整个处理流程, 包括匹配金额"""
 
     rules = _parse_beancount_converter_dsl(
         """
@@ -134,7 +134,7 @@ Assets:Expenses:Example
 
 
 def test_process_beancount_with_amount_not_matching():
-    """测试整个处理流程，当金额不匹配时，规则不会被应用"""
+    """测试整个处理流程, 当金额不匹配时, 规则不会被应用"""
 
     rules = _parse_beancount_converter_dsl(
         """
@@ -164,7 +164,7 @@ Assets:Expenses:Example
 
 
 def test_process_beancount_with_balance():
-    """测试整个处理流程，包括处理 Balance"""
+    """测试整个处理流程, 包括处理 Balance"""
 
     rules = _parse_beancount_converter_dsl(
         """

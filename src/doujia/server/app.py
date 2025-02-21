@@ -1,4 +1,4 @@
-from typing import Dict, TypeVar
+from typing import TypeVar
 
 from beancount.core import data
 from corbado_python_sdk import CorbadoSDK, SessionService
@@ -14,7 +14,7 @@ class FlaskApp(Flask):
     corbado: CorbadoSDK
     sessions: SessionService
     entries: list[Directive]
-    options_map: Dict
+    options_map: dict
 
 
 current_app: FlaskApp = _current_app

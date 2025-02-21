@@ -1,5 +1,4 @@
 import argparse
-from typing import Dict, List
 
 from beancount.core.data import Directive, Transaction
 from beancount.core.interpolate import AUTOMATIC_META
@@ -9,7 +8,7 @@ from beancount.parser.printer import EntryPrinter
 
 def _collect_posting_lines(
     entry: Transaction,  # type: ignore
-    file_to_lines: Dict[str, Dict[int, List[str]]],
+    file_to_lines: dict[str, dict[int, list[str]]],
     printer: EntryPrinter,
 ) -> None:
     """收集需要填充的 posting 行"""
@@ -28,16 +27,13 @@ def _collect_posting_lines(
         if line_to_replace not in file_to_lines[filename]:
             file_to_lines[filename][line_to_replace] = []
 
-        posting_str = "{} {}".format(
-            printer.render_posting_strings(posting)[0],
-            printer.render_posting_strings(posting)[1],
-        )
+        posting_str = f"{printer.render_posting_strings(posting)[0]} {printer.render_posting_strings(posting)[1]}"
         file_to_lines[filename][line_to_replace].append(posting_str)
 
 
-def _update_file_lines(filename: str, file_lines: Dict[int, List[str]]) -> None:
+def _update_file_lines(filename: str, file_lines: dict[int, list[str]]) -> None:
     """更新文件内容"""
-    with open(filename, "r", encoding="utf-8") as f:
+    with open(filename, encoding="utf-8") as f:
         lines = f.readlines()
 
     for line_no in sorted(file_lines.keys(), reverse=True):
@@ -56,7 +52,7 @@ def _update_file_lines(filename: str, file_lines: Dict[int, List[str]]) -> None:
 
 
 def interpolate_postings(entries: list[Directive]):  # type: ignore
-    file_to_lines: Dict[str, Dict[int, List[str]]] = dict()
+    file_to_lines: dict[str, dict[int, list[str]]] = dict()
     printer = EntryPrinter()
 
     # 收集需要填充的 posting 行

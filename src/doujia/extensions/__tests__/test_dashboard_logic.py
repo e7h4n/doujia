@@ -116,7 +116,7 @@ def test_expenses_first_expense_should_include_last_day(doc_ledger: FavaLedger):
 
 
 @freeze_time("2021-01-01")
-# 测试计算现金流时的日程应该包含第一天，7 天一个时间节点，且金额应该包括前一个周期的金额
+# 测试计算现金流时的日程应该包含第一天, 7 天一个时间节点, 且金额应该包括前一个周期的金额
 def test_expenses_summary_interval(
     doc_ledger: FavaLedger,
 ):

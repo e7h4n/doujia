@@ -38,11 +38,11 @@ def create_holding(
 
     Args:
         commodity: 投资标的名称
-        cost_currency: 成本货币，该投资标的的所有买卖必须在同一货币下进行
+        cost_currency: 成本货币, 该投资标的的所有买卖必须在同一货币下进行
         units_number: 当前持仓数量
-        last_price_map: 价格映射表，不包括正在进行中的市场上的报价
-        realtime_price_map: 价格映射表，包括正在进行中的市场上的报价
-        target_currency: 目标货币，用于计算市值、盈亏
+        last_price_map: 价格映射表, 不包括正在进行中的市场上的报价
+        realtime_price_map: 价格映射表, 包括正在进行中的市场上的报价
+        target_currency: 目标货币, 用于计算市值、盈亏
     Returns:
         Portfolio: 返回该投资标的的收益报告
     """

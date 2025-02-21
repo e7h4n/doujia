@@ -42,7 +42,7 @@ def truncate_meta(entries: list[Directive], account: str = "Liabilities:Short:Cr
     )
 
     for filename, linenos in files_to_truncate.items():
-        with open(filename, "r", encoding="utf-8") as f:
+        with open(filename, encoding="utf-8") as f:
             lines = f.readlines()
 
         for lineno in reversed(linenos):

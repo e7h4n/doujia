@@ -31,7 +31,7 @@ class Holdings(FavaExtensionBase):
     def fake(self):
         json_path = self.ledger.join_path("web/src/mocks/realtime_report.json")
         # load json to Portfolio
-        with open(json_path, "r") as f:
+        with open(json_path) as f:
             return json.load(f)
 
     def abs(self, value):

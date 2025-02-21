@@ -68,7 +68,7 @@ def daily_report(
 def report_to_message(report: DailyReport) -> str:
     formatted_report = (
         f"[{report.date.year} 年 {report.date.month} 月 {report.date.day} 日] "
-        f"目前现金类权益 {(report.cash_balance + report.credit_card_balance):,.2f} 元，"
+        f"目前现金类权益 {(report.cash_balance + report.credit_card_balance):,.2f} 元, "
         f"XIRR {(report.xirr * 100):.2f}%。"
     )
     return formatted_report

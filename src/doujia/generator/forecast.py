@@ -144,7 +144,7 @@ def forecast_plugin(entries, options_map):
         # 找到为负值的 posting
         for posting in entry.postings:
             if posting.units.number < 0:
-                # 构建循环交易的 key，格式为交易日期 + 付款账户
+                # 构建循环交易的 key, 格式为交易日期 + 付款账户
                 entry_key = (entry.date, posting.account)
                 break
 

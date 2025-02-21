@@ -33,8 +33,8 @@ def test_cumulative_balance_simple(entries: list[Directive]):
 
     assert len(balances) == 3
     assert balances[0] == (date(2020, 1, 1), Decimal(0))
-    assert balances[1] == (date(2020, 1, 2), Decimal(100.0))
-    assert balances[2] == (date(2020, 1, 3), Decimal(100.0))
+    assert balances[1] == (date(2020, 1, 2), Decimal("100.0"))
+    assert balances[2] == (date(2020, 1, 3), Decimal("100.0"))
 
 
 def test_cumulative_balance_date_range(entries: list[Directive]):
