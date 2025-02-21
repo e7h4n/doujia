@@ -184,7 +184,3 @@ def get_holding():
     )
 
     return jsonify(create_portfolio_report(entries, investment_groups, "USD"))
-
-
-def unused_function():
-    pass
