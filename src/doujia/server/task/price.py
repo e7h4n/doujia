@@ -1,7 +1,7 @@
 from beancount.core.getters import get_commodity_directives
-from doujia.price.yahoo import update_price_cache as update_price_cache_from_yahoo
 from logzero import logger
 
+from doujia.price.yahoo import update_price_cache as update_price_cache_from_yahoo
 from doujia.server.app import FlaskApp
 
 

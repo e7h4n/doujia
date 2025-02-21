@@ -27,7 +27,7 @@ license = { text = "MIT" }
 
 
 [tool.pdm.dev-dependencies]
-lint = ["black", "flake8", "pre-commit", "pylint"]
+lint = ["black", "pre-commit", "ruff"]
 test = ["coverage", "freezegun", "pyfakefs", "pytest", "pytest-timeout"]
 dev = ["-e file:///${PROJECT_ROOT}/#egg=doujia"]
 
@@ -46,3 +46,20 @@ beancount = "==3.0.0"
     "*.js",
     "*.css"
 ]
+
+[tool.ruff]
+line-length = 120
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "build",
+    "dist"
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N"]
+ignore = []
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]

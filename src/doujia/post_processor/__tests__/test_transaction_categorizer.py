@@ -6,8 +6,8 @@ from beancount.parser import parser
 
 from doujia.post_processor.transaction_categorizer import (
     Rule,
-    _is_transaction_matching_rule,
     _apply_rule_to_transaction,
+    _is_transaction_matching_rule,
     _parse_beancount_converter_dsl,
     _process_beancount,
 )

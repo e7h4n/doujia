@@ -1,5 +1,6 @@
-from beancount.core import data
 from typing import TypeVar
+
+from beancount.core import data
 
 from doujia.server.logic.ledger import load_beancount
 

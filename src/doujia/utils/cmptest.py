@@ -4,21 +4,14 @@
 __copyright__ = "Copyright (C) 2014-2017  Martin Blais"
 __license__ = "GNU GPLv2"
 
-import unittest
 import io
 import textwrap
+import unittest
 
 import pytest  # pylint: disable=wrong-import-order
-
-from beancount.core import amount
-from beancount.core import compare
-from beancount.core import data
-from beancount.core import position
-from beancount.core.number import MISSING
-from beancount.core.number import ZERO
-from beancount.parser import booking
-from beancount.parser import parser
-from beancount.parser import printer
+from beancount.core import amount, compare, data, position
+from beancount.core.number import MISSING, ZERO
+from beancount.parser import booking, parser, printer
 
 
 class TestError(Exception):
@@ -66,7 +59,7 @@ def read_string_or_entries(entries_or_str, allow_incomplete=False):
     return entries
 
 
-def _local_booking(entry):  # noqa: C901
+def _local_booking(entry):
     """Transform incomplete entries as booked.
 
     This method converts incomplete entries with positions that sport CostSpec
@@ -147,20 +140,20 @@ def _transform_incomplete_amount(amt):
 
 class TestCase(unittest.TestCase):
 
-    def assertEqualEntries(self, expected_entries, actual_entries):
-        return assertEqualEntries(expected_entries, actual_entries, self.fail)
+    def assert_equal_entries(self, expected_entries, actual_entries):
+        return assert_equal_entries(expected_entries, actual_entries, self.fail)
 
-    def assertIncludesEntries(self, subset_entries, entries):
-        return assertIncludesEntries(subset_entries, entries, self.fail)
+    def assert_includes_entries(self, subset_entries, entries):
+        return assert_includes_entries(subset_entries, entries, self.fail)
 
-    def assertExcludesEntries(self, subset_entries, entries):
-        return assertExcludesEntries(subset_entries, entries, self.fail)
+    def assert_excludes_entries(self, subset_entries, entries):
+        return assert_excludes_entries(subset_entries, entries, self.fail)
 
 
 DEFAULT_FAILFUNC = pytest.fail
 
 
-def assertEqualEntries(
+def assert_equal_entries(
     expected_entries, actual_entries, failfunc=DEFAULT_FAILFUNC, allow_incomplete=False
 ):
     """Compare two lists of entries exactly and print missing entries verbosely if
@@ -202,7 +195,7 @@ def assertEqualEntries(
         failfunc(oss.getvalue())
 
 
-def assertIncludesEntries(
+def assert_includes_entries(
     subset_entries, entries, failfunc=DEFAULT_FAILFUNC, allow_incomplete=False
 ):
     """Check that subset_entries is included in entries and print missing entries.
@@ -234,7 +227,7 @@ def assertIncludesEntries(
         failfunc(oss.getvalue())
 
 
-def assertExcludesEntries(
+def assert_excludes_entries(
     subset_entries, entries, failfunc=DEFAULT_FAILFUNC, allow_incomplete=False
 ):
     """Check that subset_entries is not included in entries and print extra entries.

@@ -1,10 +1,10 @@
-from typing import TypeVar
-
 from datetime import date
 from decimal import Decimal
 from pathlib import Path
+from typing import TypeVar
 
 from beancount.core import data
+
 from doujia.extensions.portfolio_logic import extract_beangrow_config
 from doujia.report.pnl import gen_pnl_data
 
@@ -341,17 +341,17 @@ def test_pnl_510310(entries: list[Directive]):
     2020-01-01 open Income:Passive:Dividends:SS510310
 
     2024-04-08 *
-        Assets:Short:Stock:CN:SS510310                                                10,600.00 SS510310 { 1.7360 CNY }
+        Assets:Short:Stock:CN:SS510310 10,600.00 SS510310 { 1.7360 CNY }
         Assets:Short:Stock:CN:Current
 
     2024-09-23 *
-        Assets:Short:Stock:CN:SS510310                                               -10,600.00 SS510310 {1.7360 CNY, 2024-04-08}
-        Assets:Short:Stock:CN:SS510310                                                20,000.00 SS510310 { 3.552105964 CNY }
+        Assets:Short:Stock:CN:SS510310 -10,600.00 SS510310 {1.7360 CNY, 2024-04-08}
+        Assets:Short:Stock:CN:SS510310 20,000.00 SS510310 { 3.552105964 CNY }
         Income:Passive:Dividends:SS510310
 
     2024-09-30 * "招商证券" "清仓沪深 300"
-        Assets:Short:Stock:CN:SS510310                                               -20,000.00 SS510310 {} @ 3.8960 CNY
-        Assets:Short:Stock:CN:Current                                                 77,920.00 CNY
+        Assets:Short:Stock:CN:SS510310 -20,000.00 SS510310 {} @ 3.8960 CNY
+        Assets:Short:Stock:CN:Current 77,920.00 CNY
         Income:Passive:PnL
 
     @@@/beangrow.pbtxt

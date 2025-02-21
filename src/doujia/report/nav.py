@@ -2,16 +2,16 @@ from dataclasses import dataclass
 from datetime import date, timedelta
 from decimal import Decimal
 from typing import TypeVar
+
 from beancount.core import data
+from beancount.core.convert import convert_amount
 from beancount.core.inventory import Inventory
 from beancount.core.prices import PriceMap
-from beancount.core.convert import convert_amount
 from beangrow.investments import AccountData, Cat
-from doujia.portfolio.processor import TransactionProcessor
 from logzero import logger
 
+from doujia.portfolio.processor import TransactionProcessor
 from doujia.report.util import balance_at, prepare_inventory_and_transactions
-
 
 Directive = TypeVar("Directive", bound=data.Directive)  # type: ignore
 Transaction = TypeVar("Transaction", bound=data.Transaction)  # type: ignore

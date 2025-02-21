@@ -2,10 +2,10 @@ import datetime
 from decimal import Decimal
 from typing import Tuple, TypeVar
 
-from beancount.core.convert import convert_amount
 from beancount.core import data
-from beancount.core.prices import PriceMap
+from beancount.core.convert import convert_amount
 from beancount.core.inventory import Inventory
+from beancount.core.prices import PriceMap
 
 Directive = TypeVar("Directive", bound=data.Directive)  # type: ignore
 DataPoint = Tuple[datetime.date, Decimal]

@@ -1,9 +1,10 @@
 import datetime
 from decimal import Decimal
+from typing import TypeVar
 
 from beancount.core import data
 from beancount.core.prices import build_price_map
-from typing import TypeVar
+
 from doujia.report.balance import balance_at
 
 Directive = TypeVar("Directive", bound=data.Directive)  # type: ignore

@@ -1,10 +1,10 @@
 import os
-import git
 
+import git
+from logzero import logger
 
 from doujia.server.app import FlaskApp
 from doujia.server.logic.ledger import load_beancount
-from logzero import logger
 
 
 def reload_ledger(app: FlaskApp) -> bool:
@@ -24,9 +24,9 @@ def reload_ledger(app: FlaskApp) -> bool:
     except git.InvalidGitRepositoryError:
         logger.warning(f"{app.ledger_root} is not a git repository")
     except Exception as e:
-        logger.error(f"Failed to get git commit ID: {str(e)}")
+        logger.error(f"Failed to get git commit ID: {e!s}")
 
-    # 如果 commit id 没有变化，不需要重新加载
+    # 如果 commit id 没有变化, 不需要重新加载
     if (
         hasattr(app, "ledger_commit_id")
         and current_commit_id is not None

@@ -1,8 +1,9 @@
 from functools import wraps
 
 from flask import abort, request
-from doujia.server.filter.user import get_current_user
+
 from doujia.server.app import current_app
+from doujia.server.filter.user import get_current_user
 
 
 def require_auth(f):

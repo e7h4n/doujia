@@ -11,7 +11,7 @@ from logzero import logger
 
 from doujia.price.price_map import get_last_and_realtime_price_map
 from doujia.report.pushover import Pushover
-from doujia.report.summerize import sum_single_amount_between, calc_xirr
+from doujia.report.summerize import calc_xirr, sum_single_amount_between
 
 
 class DailyReport(NamedTuple):

@@ -1,15 +1,13 @@
 import datetime
 from decimal import Decimal
 from pathlib import Path
-from typing import Tuple, NamedTuple
+from typing import NamedTuple, Tuple
 
 import beangrow.config as configlib
 import beangrow.returns as returnslib
 from beancount.core import convert, getters
-from beancount.core.amount import Amount
-from beancount.core.data import Directive, Transaction, Posting
+from beancount.core.data import Directive, Transaction
 from beancount.core.inventory import Inventory
-from beancount.core.position import Position
 from beangrow import investments
 from beangrow.config_pb2 import Config
 from frozendict import frozendict
@@ -30,35 +28,6 @@ class PeriodAmount(NamedTuple):
     end_exclusive: datetime.date
     amount: Decimal
     currency: str
-
-
-def _infer_real_cost_by_related_postings(
-    pos: Posting | Position, postings: list[Posting], target_currency: str
-) -> Inventory:
-    weight: Amount = convert.get_weight(pos)
-    if weight.currency == target_currency:
-        ret = Inventory()
-        ret.add_amount(weight)
-        return ret
-
-    # 遍历所有的 posting，找到可能包含价格信息的 posting
-    inventory = Inventory()
-    for posting in postings:
-        units = convert.get_units(posting)
-        if units.currency != weight.currency:
-            continue
-
-        if posting.price is not None:
-            inventory.add_amount(
-                Amount(-posting.price.number * units.number, posting.price.currency)
-            )
-
-    if inventory.is_empty():
-        ret = Inventory()
-        ret.add_amount(weight)
-        return ret
-
-    return inventory
 
 
 def _sum_inventory_between(

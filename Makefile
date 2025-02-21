@@ -4,7 +4,7 @@ test:
 	@pdm run coverage xml
 
 lint:
-	@pdm run flake8 --max-complexity 10 src
+	@pdm run ruff check .
 
 format:
 	@pdm run pre-commit run --all accounting-style

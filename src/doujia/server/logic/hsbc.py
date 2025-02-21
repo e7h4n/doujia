@@ -1,11 +1,11 @@
-from datetime import datetime
 import json
 import os
+from datetime import datetime
 
+import requests
 from beancount.core import data
 from beancount.core.number import D
 from flask import current_app
-import requests
 
 from doujia.server.logic.ccb import DEFAULT_UFO_POSTING
 from doujia.server.logic.utils import get_existed_unique_no_set, import_transactions
@@ -115,7 +115,7 @@ def load_hsbc_html_content(html: str):
     # 查找包含 var unBillDetail = 的行
     for line in html.splitlines():
         if "var unBillDetail = " in line:
-            # 从 = 后面开始截取，去掉末尾的分号
+            # 从 = 后面开始截取, 去掉末尾的分号
             json_str = line.split("=", 1)[1].strip().rstrip(";")
             data = json.loads(json_str)
             break

@@ -1,10 +1,11 @@
-from datetime import datetime
 import io
+from datetime import datetime
 from typing import TypeVar
+
 from beancount.core import data
+from beancount.loader import load_file
 from beancount.parser import printer
 from beancount.scripts.format import align_beancount
-from beancount.loader import load_file
 from flask import current_app
 
 from doujia.post_processor.merger import _merge_beancount_content

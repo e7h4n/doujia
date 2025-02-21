@@ -1,13 +1,13 @@
-from typing import TypeVar
-
 from datetime import date
 from decimal import Decimal
 from pathlib import Path
+from typing import TypeVar
 
+import logzero
 from beancount.core import data
+
 from doujia.extensions.portfolio_logic import extract_beangrow_config
 from doujia.report.nav import gen_nav_index_data
-import logzero
 
 logzero.loglevel(logzero.DEBUG)
 

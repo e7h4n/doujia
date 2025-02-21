@@ -1,24 +1,23 @@
 import datetime
 from decimal import Decimal
-from typing import Tuple, Dict, NamedTuple, Set
-from typing import cast
+from typing import Dict, NamedTuple, Set, Tuple, cast
 
 from beancount.core import data, getters
 from beancount.core.data import Directive
 from beancount.core.inventory import Inventory
 from beancount.core.prices import build_price_map
-from fava.beans.abc import Posting, Amount
-from fava.core import FavaLedger, CounterInventory
-from fava.core.conversion import convert_position, conversion_from_str
+from fava.beans.abc import Amount, Posting
+from fava.core import CounterInventory, FavaLedger
+from fava.core.conversion import conversion_from_str, convert_position
 from fava.util.date import parse_date
 
 from doujia.report.daily import DailyReport, daily_report
-from doujia.report.summerize import (
-    sum_single_amount_between,
-    convert_period_inventory,
-    PeriodInventory,
-)
 from doujia.report.saving import calc_saving
+from doujia.report.summerize import (
+    PeriodInventory,
+    convert_period_inventory,
+    sum_single_amount_between,
+)
 
 DataPoint = Tuple[datetime.date, Decimal]
 
@@ -93,8 +92,8 @@ class AccountComparedBalance(NamedTuple):
     remains: Decimal
 
 
-# 定义一个异常， CurrencyConversionException
-class CurrencyConversionException(Exception):
+# 定义一个异常， CurrencyConversionError
+class CurrencyConversionError(Exception):
     def __init__(self, message):
         super().__init__(message)
 
@@ -199,7 +198,7 @@ def _get_only_amount(
         message = "can't convert currencies {} at date {}".format(
             invalid_currencies, date
         )
-        raise CurrencyConversionException(message=message)
+        raise CurrencyConversionError(message=message)
 
     amount = inventory.get(currency)
     return amount or Decimal(0)
@@ -255,7 +254,7 @@ def _sum_amount_at_dates(
     return [x.amount for x in period_inventories]
 
 
-def _group_expense(  # noqa: C901
+def _group_expense(
     begin_inclusive: datetime.date,
     end_exclusive: datetime.date,
     account_prefix: str,
@@ -264,7 +263,10 @@ def _group_expense(  # noqa: C901
     link_prefix: str,
     activity_tags: list[str],
 ) -> list[GroupExpenseSummary]:
-    """对于 [begin, end) 之间的 account_prefix 的的交易尝试分组，分组规则是按照 link_prefix 和 activity_tags 进行识别，如果都不能识别则进入 Other"""
+    """
+    对于 [begin, end) 之间的 account_prefix 的的交易尝试分组，分组规则是按照
+    link_prefix 和 activity_tags 进行识别，如果都不能识别则进入 Other
+    """
     groups: Dict[str, Decimal] = {}
 
     for txn in ledger.all_entries_by_type.Transaction:

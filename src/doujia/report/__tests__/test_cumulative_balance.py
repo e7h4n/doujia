@@ -1,7 +1,6 @@
+from datetime import date
 from decimal import Decimal
 from typing import TypeVar
-
-from datetime import date
 
 from beancount.core import data
 

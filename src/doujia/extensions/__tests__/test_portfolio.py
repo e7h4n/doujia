@@ -1,14 +1,14 @@
+from datetime import date
 from decimal import Decimal
 from pathlib import Path
 
-import pytest
 import beangrow.returns as returnslib
+import pytest
+from beancount.core.data import Directive
 from fava.application import create_app
 from flask.app import Flask
 from flask.testing import FlaskClient
 from freezegun import freeze_time
-from beancount.core.data import Directive
-from datetime import date
 
 from doujia.extensions.portfolio_logic import (
     extract_beangrow_config,

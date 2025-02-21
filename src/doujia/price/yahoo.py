@@ -1,8 +1,14 @@
 from datetime import datetime, timedelta, timezone
-from pytz import utc
+
 import requests
 from beancount.core.data import Amount, Decimal
+from pytz import utc
+
 from doujia.price.cache import symbol_price_cache
+
+ACCEPT = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"  # noqa: E501
+USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"  # noqa: E501
+FIELDS = "regularMarketPrice,postMarketPrice,preMarketPrice,marketCap,regularMarketTime,postMarketTime,preMarketTime"  # noqa: E501
 
 
 def _get_crumbs_and_cookies():
@@ -10,7 +16,7 @@ def _get_crumbs_and_cookies():
     with requests.session():
         # 发一个请求到 https://query1.finance.yahoo.com/v1/test/getcrumb?lang=en-US&region=US 获取 crumb
         header = {
-            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+            "accept": ACCEPT,
             "accept-encoding": "gzip, deflate, br, zstd",
             "accept-language": "zh-CN,zh;q=0.9",
             "dnt": "1",
@@ -23,7 +29,7 @@ def _get_crumbs_and_cookies():
             "sec-fetch-site": "none",
             "sec-fetch-user": "?1",
             "upgrade-insecure-requests": "1",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
+            "user-agent": USER_AGENT,
         }
         url = "https://query1.finance.yahoo.com/v1/test/getcrumb?lang=en-US&region=US"
 
@@ -35,7 +41,7 @@ def _get_crumbs_and_cookies():
 def request_yahoo_finance(symbols: list[str]):
     header, crumb, cookies = _get_crumbs_and_cookies()
     params = {
-        "fields": "regularMarketPrice,postMarketPrice,preMarketPrice,marketCap,regularMarketTime,postMarketTime,preMarketTime",
+        "fields": FIELDS,
         "formatted": "true",
         "symbols": ",".join(symbols),
         "lang": "en-US",
@@ -52,7 +58,7 @@ def request_yahoo_finance(symbols: list[str]):
     return resp
 
 
-def get_realtime_prices(symbols: list[str]):  # noqa: C901
+def get_realtime_prices(symbols: list[str]):
     """
     从缓存中获取价格，如果缓存中没有则返回0
     """

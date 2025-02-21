@@ -1,9 +1,10 @@
 import argparse
 from typing import Dict, List
+
 from beancount.core.data import Directive, Transaction
 from beancount.core.interpolate import AUTOMATIC_META
-from beancount.parser.printer import EntryPrinter
 from beancount.loader import load_file
+from beancount.parser.printer import EntryPrinter
 
 
 def _collect_posting_lines(
@@ -48,7 +49,7 @@ def _update_file_lines(filename: str, file_lines: Dict[int, List[str]]) -> None:
         for posting in file_lines[line_no]:
             new_lines.append(indent_str + posting + "\n")
 
-        lines[line_no : line_no + 1] = new_lines  # noqa: E203
+        lines[line_no : line_no + 1] = new_lines
 
     with open(filename, "w", encoding="utf-8") as f:
         f.writelines(lines)

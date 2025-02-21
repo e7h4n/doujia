@@ -1,7 +1,8 @@
-from dataclasses import dataclass
 import os
+from dataclasses import dataclass
+from typing import Tuple, TypeVar
+
 from beancount.core import data
-from typing import TypeVar, Tuple
 from beancount.loader import load_file
 
 Directive = TypeVar("Directive", bound=data.Directive)
@@ -35,22 +36,22 @@ def load_beancount(ledger_path: str) -> Tuple[list[Directive], DoujiaConfig, dic
         if not isinstance(entry, data.Custom):
             continue
         if entry.type == "doujia-option":
-            optKey, optValue = entry.values
-            if optKey.value == "categorize-config":
+            opt_key, opt_value = entry.values
+            if opt_key.value == "categorize-config":
                 config.categorize_config = os.path.abspath(
-                    os.path.join(ledger_root, optValue.value)
+                    os.path.join(ledger_root, opt_value.value)
                 )
-            elif optKey.value == "investment-config":
+            elif opt_key.value == "investment-config":
                 config.investment_config = os.path.abspath(
-                    os.path.join(ledger_root, optValue.value)
+                    os.path.join(ledger_root, opt_value.value)
                 )
-            elif optKey.value == "beangrow-config":
+            elif opt_key.value == "beangrow-config":
                 config.beangrow_config = os.path.abspath(
-                    os.path.join(ledger_root, optValue.value)
+                    os.path.join(ledger_root, opt_value.value)
                 )
-            elif optKey.value == "import-to":
+            elif opt_key.value == "import-to":
                 config.import_to = os.path.abspath(
-                    os.path.join(ledger_root, optValue.value)
+                    os.path.join(ledger_root, opt_value.value)
                 )
 
     return entries, config, options_map

@@ -7,7 +7,7 @@ from collections import defaultdict
 from datetime import datetime
 from typing import List
 
-from beancount.core.data import Transaction, Balance
+from beancount.core.data import Balance, Transaction
 from beancount.parser import parser, printer
 
 

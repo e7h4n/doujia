@@ -1,7 +1,8 @@
 from datetime import date
+
 from beancount.core.data import Directive, Price
-from beancount.core.prices import build_price_map, get_price
 from beancount.core.getters import get_commodity_directives
+from beancount.core.prices import build_price_map, get_price
 
 from doujia.price.yahoo import get_realtime_prices, update_price_cache
 

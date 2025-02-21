@@ -51,16 +51,16 @@ __copyright__ = "Copyright (C) 2014-2017  Martin Blais"
 __license__ = "GNU GPLv2"
 
 import argparse
-from dataclasses import dataclass
 import datetime
 import os
 import re
+from dataclasses import dataclass
+from typing import TypeVar
 
 from beancount.core import data
+from beancount.loader import load_file
 from beancount.parser.printer import print_entries
 from dateutil import rrule
-from beancount.loader import load_file
-from typing import TypeVar
 
 Directive = TypeVar("Directive", bound=data.Directive)  # type: ignore
 
@@ -72,7 +72,7 @@ class Forecast:
     generated_entries: list[Directive]
 
 
-def forecast_plugin(entries, options_map):  # noqa: C901
+def forecast_plugin(entries, options_map):
     """An example filter that piggybacks on top of the Beancount input syntax to
     insert forecast entries automatically. This functions accepts the return
     value of beancount.loader.load_file() and must return the same type of output.

@@ -1,7 +1,9 @@
-from corbado_python_sdk import CorbadoSDK, SessionService
-from flask import Flask, current_app as _current_app
-from beancount.core import data
 from typing import Dict, TypeVar
+
+from beancount.core import data
+from corbado_python_sdk import CorbadoSDK, SessionService
+from flask import Flask
+from flask import current_app as _current_app
 
 Directive = TypeVar("Directive", bound=data.Directive)  # type: ignore
 

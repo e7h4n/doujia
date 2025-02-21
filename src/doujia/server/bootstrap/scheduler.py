@@ -1,8 +1,9 @@
 from flask import Flask
 from flask_apscheduler import APScheduler
+from logzero import logger
+
 from doujia.server.task.ledger import reload_ledger
 from doujia.server.task.price import update_price_cache
-from logzero import logger
 
 
 def setup_scheduler(app: Flask):
@@ -29,5 +30,5 @@ def setup_scheduler(app: Flask):
             scheduler.start()
             logger.info("Scheduler started successfully")
         except Exception as e:
-            logger.error(f"Failed to start scheduler: {str(e)}")
+            logger.error(f"Failed to start scheduler: {e!s}")
             raise

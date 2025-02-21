@@ -1,4 +1,5 @@
 from flask import request
+
 from doujia.server.app import current_app
 
 

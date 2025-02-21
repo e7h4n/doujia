@@ -1,11 +1,11 @@
+from collections import defaultdict
 from dataclasses import dataclass
 from decimal import Decimal
-
-from collections import defaultdict
 from math import sqrt
-from beancount.core.data import Directive, Amount, D
-from beancount.core.inventory import Inventory
+
 from beancount.core.convert import get_cost
+from beancount.core.data import Amount, D, Directive
+from beancount.core.inventory import Inventory
 
 from doujia.price.price_map import get_last_and_realtime_price_map
 from doujia.report.portfolio.data import HoldingGroup, InvestmentHolding, Portfolio

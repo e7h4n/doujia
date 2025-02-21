@@ -5,7 +5,7 @@ from pathlib import Path
 from fava.core import FavaLedger
 from freezegun import freeze_time
 
-from doujia.report.daily import daily_report, DailyReport, report_to_message
+from doujia.report.daily import DailyReport, daily_report, report_to_message
 
 
 @freeze_time("2022-01-01")

@@ -4,13 +4,13 @@ from os import path
 from textwrap import dedent
 
 import certifi
-from flask import Flask
 import logzero
 import pytest
 from beancount.core.data import Directive
 from beancount.loader import load_file
 from fava.core import FavaLedger
-from logzero import INFO, DEBUG
+from flask import Flask
+from logzero import DEBUG, INFO
 from pyfakefs.fake_filesystem import FakeFilesystem
 
 from doujia.server import create_app

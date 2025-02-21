@@ -32,7 +32,7 @@ def _compute_balances(entries, account_name, tag):
     return balances, tag_balances, currency_set
 
 
-def _find_first_unbalanced_entry(entries, account_name, currency, tag):  # noqa: C901
+def _find_first_unbalanced_entry(entries, account_name, currency, tag):
     balance = ZERO
     tag_balance = ZERO
     curr_entries = []

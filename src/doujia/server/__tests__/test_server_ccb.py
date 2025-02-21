@@ -1,7 +1,7 @@
 import json
 
-from flask.testing import FlaskClient
 import pytest
+from flask.testing import FlaskClient
 
 
 def test_ccb_importer_empty_hello(client: FlaskClient):

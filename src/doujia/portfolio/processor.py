@@ -1,8 +1,9 @@
-from typing import Callable, TypeVar, Generic
-from beangrow.investments import Cat
+import sys
+from typing import Callable, Generic, TypeVar
+
 from beancount.core import data
 from beancount.parser import printer
-import sys
+from beangrow.investments import Cat
 
 Memo = TypeVar("Memo")
 Ret = TypeVar("Ret")

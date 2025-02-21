@@ -1,12 +1,13 @@
-import os
-from typing import Any, TypeVar
 import datetime
-from typing import Dict, Tuple
-from flask import Blueprint, abort, jsonify, request
+import os
+from typing import Any, Dict, Tuple, TypeVar
+
 import beangrow.config as configlib
 import beangrow.returns as returnslib
-from beangrow import investments
 from beancount.core import data, getters
+from beangrow import investments
+from flask import Blueprint, abort, jsonify, request
+
 from doujia.price.price_map import get_last_and_realtime_price_map
 from doujia.report.investment import (
     calendar_returns,
@@ -18,8 +19,8 @@ from doujia.report.investment import (
 from doujia.report.nav import gen_nav_index_data
 from doujia.report.pnl import gen_pnl_data
 from doujia.report.portfolio.portfolio import create_portfolio_report
-from doujia.server.filter.auth import require_auth
 from doujia.server.app import current_app
+from doujia.server.filter.auth import require_auth
 
 Directive = TypeVar("Directive", bound=data.Directive)  # type: ignore
 

@@ -1,24 +1,25 @@
 from dataclasses import dataclass
-from datetime import datetime, date
+from datetime import date, datetime
 from decimal import Decimal
 from pathlib import Path
 from typing import Dict, List, Tuple
 
 import beangrow.config as configlib
-from matplotlib.dates import relativedelta
+import beangrow.returns as returnslib
 import yaml
 from beancount.core import getters
-from beangrow import investments
-from beangrow.config_pb2 import Config
 from beancount.core.data import Directive, Transaction
 from beancount.core.inventory import Inventory
+from beangrow import investments
+from beangrow.config_pb2 import Config
 from beangrow.investments import CashFlow
-import beangrow.returns as returnslib
+from beangrow.reports import compute_returns_table
+from matplotlib.dates import relativedelta
+
 from doujia.report.nav import gen_nav_index_data
 from doujia.report.portfolio.data import (
     InvestmentHolding,
 )
-from beangrow.reports import compute_returns_table
 
 
 def _extract_beangrow_config(
@@ -29,7 +30,7 @@ def _extract_beangrow_config(
     return configlib.read_config(str(beangrow_config_path), [], accounts)
 
 
-def get_investment_holdings(  # noqa: C901
+def get_investment_holdings(
     entries: list[Directive],  # type: ignore
     beangrow_config_path: Path,
     investment_config_path: Path,

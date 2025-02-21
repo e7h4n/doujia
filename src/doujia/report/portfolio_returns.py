@@ -9,7 +9,7 @@ from doujia.price.price_map import get_last_and_realtime_price_map
 Cashflow = namedtuple("Cashflow", ["date", "amount"])
 
 
-def main():  # noqa: C901
+def main():
     entries, errors, options_map = load_file("./main.bean")
     _, price_map = get_last_and_realtime_price_map(entries)
 

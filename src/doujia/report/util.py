@@ -1,11 +1,13 @@
 from datetime import date
 from decimal import Decimal
 from typing import TypeVar
+
 from beancount.core import data
+from beancount.core.convert import convert_amount
 from beancount.core.inventory import Inventory
 from beancount.core.prices import PriceMap
-from beancount.core.convert import convert_amount
 from beangrow.investments import AccountData, Cat
+
 from doujia.portfolio.processor import TransactionProcessor
 
 Directive = TypeVar("Directive", bound=data.Directive)  # type: ignore

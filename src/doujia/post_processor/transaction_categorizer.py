@@ -2,9 +2,9 @@
 
 import re
 import sys
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
 
-from beancount.core.data import Transaction, Balance, Posting, D
+from beancount.core.data import Balance, D, Posting, Transaction
 from beancount.core.number import MISSING
 from beancount.parser import parser
 from beancount.parser.printer import format_entry

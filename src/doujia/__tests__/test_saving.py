@@ -1,4 +1,5 @@
 from datetime import date
+
 from beancount.core.data import Directive
 from freezegun import freeze_time
 

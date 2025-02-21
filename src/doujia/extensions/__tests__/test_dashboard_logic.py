@@ -7,13 +7,13 @@ from freezegun import freeze_time
 
 from doujia.extensions.dashboard_logic import (
     ExpenseChartConfig,
+    dashboard_summary,
     expense_group,
     expense_summary,
-    transaction_count,
-    outing_expense_summary,
-    interval_balance,
-    dashboard_summary,
     grouped_account_compared_balance,
+    interval_balance,
+    outing_expense_summary,
+    transaction_count,
 )
 
 
@@ -116,7 +116,8 @@ def test_expenses_first_expense_should_include_last_day(doc_ledger: FavaLedger):
 
 
 @freeze_time("2021-01-01")
-def test_expenses_summary_interval(  # 测试计算现金流时的日程应该包含第一天，7 天一个时间节点，且金额应该包括前一个周期的金额
+# 测试计算现金流时的日程应该包含第一天，7 天一个时间节点，且金额应该包括前一个周期的金额
+def test_expenses_summary_interval(
     doc_ledger: FavaLedger,
 ):
     """

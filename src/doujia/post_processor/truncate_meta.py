@@ -1,4 +1,5 @@
 import argparse
+
 from beancount.core.data import Balance, Directive, Transaction
 from beancount.loader import load_file
 

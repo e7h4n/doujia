@@ -1,11 +1,11 @@
 import datetime
 from collections import namedtuple
 from pathlib import Path
-from typing import Any, List, Dict, Tuple
+from typing import Any, Dict, List, Tuple
 
 import beangrow.config as configlib
 import beangrow.returns as returnslib
-from beancount.core import prices, getters
+from beancount.core import getters, prices
 from beancount.core.data import Directive
 from beangrow import investments
 from fava.core import FavaLedger

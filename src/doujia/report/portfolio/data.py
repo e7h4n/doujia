@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from decimal import Decimal
-from beancount.core.inventory import Inventory
+
 from beancount.core.data import Amount
+from beancount.core.inventory import Inventory
 
 
 @dataclass

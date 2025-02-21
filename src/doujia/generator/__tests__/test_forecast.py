@@ -1,5 +1,6 @@
 from textwrap import dedent
 from typing import TypeVar
+
 from beancount.core import data
 from pyfakefs.fake_filesystem import FakeFilesystem
 

@@ -1,8 +1,9 @@
+import threading
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Dict
+
 from beancount.core.data import Amount
-import threading
 
 
 @dataclass

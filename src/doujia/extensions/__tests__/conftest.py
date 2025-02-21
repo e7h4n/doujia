@@ -2,7 +2,7 @@ import os
 import re
 from pathlib import Path
 from pprint import pformat
-from typing import Counter, Any
+from typing import Any, Counter
 
 import pytest
 from fava.core import FavaLedger
@@ -21,7 +21,7 @@ def test_data_dir() -> Path:
 @pytest.fixture(scope="module")
 def module_path(request: pytest.FixtureRequest) -> Path:
     """Path to the tested module."""
-    fspath = getattr(request, "fspath")  # noqa: B009
+    fspath = getattr(request, "fspath")
     return Path(getattr(request, "path", fspath))
 
 

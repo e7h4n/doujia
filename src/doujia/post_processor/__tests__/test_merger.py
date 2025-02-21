@@ -3,13 +3,15 @@
 import io
 from datetime import date
 from textwrap import dedent
+
 from beancount.parser import printer
 from beancount.parser.parser import parse_string
+
 from doujia.post_processor.merger import (
+    _find_balance_insert_position,
     _find_insert_position,
     _merge_beancount_content,
     _merge_beancount_file,
-    _find_balance_insert_position,
 )
 
 

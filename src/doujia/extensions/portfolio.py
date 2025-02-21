@@ -1,14 +1,14 @@
 import datetime
 
-from fava.ext import FavaExtensionBase
+import beangrow.returns as returnslib
+from fava.ext import FavaExtensionBase, extension_endpoint
 from fava.helpers import FavaAPIError
 from fava.util.date import parse_date
-from fava.ext import extension_endpoint
 from flask import jsonify, request
 
 from doujia.extensions.portfolio_logic import (
-    overview_report,
     extract_beangrow_config_from_fava,
+    overview_report,
 )
 from doujia.report.investment import (
     calendar_returns,
@@ -18,7 +18,6 @@ from doujia.report.investment import (
 )
 from doujia.report.nav import gen_nav_index_data
 from doujia.report.pnl import gen_pnl_data
-import beangrow.returns as returnslib
 
 
 class Portfolio(FavaExtensionBase):

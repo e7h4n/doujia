@@ -1,4 +1,4 @@
-from datetime import timedelta, date
+from datetime import date, timedelta
 
 from beancount.core.prices import build_price_map
 from fava.ext import FavaExtensionBase, extension_endpoint
@@ -7,13 +7,13 @@ from flask import jsonify
 
 from doujia.extensions.dashboard_logic import (
     ExpenseChartConfig,
-    expense_group,
-    transaction_count,
-    outing_expense_summary,
-    interval_balance,
     NetWorthChart,
     dashboard_summary,
+    expense_group,
     grouped_account_compared_balance,
+    interval_balance,
+    outing_expense_summary,
+    transaction_count,
 )
 from doujia.report.daily import daily_report
 from doujia.report.saving import calc_saving_summary

@@ -1,12 +1,14 @@
-from typing import TypeVar
 import datetime
-from flask import Blueprint, jsonify, request
+from typing import TypeVar
+
 from beancount.core import data
+from flask import Blueprint, jsonify, request
+
 from doujia.price.price_map import get_last_and_realtime_price_map
 from doujia.report.balance import balance_at
 from doujia.report.cumulative_balance import gen_cumulative_balances
-from doujia.server.filter.auth import require_auth
 from doujia.server.app import current_app
+from doujia.server.filter.auth import require_auth
 
 Directive = TypeVar("Directive", bound=data.Directive)  # type: ignore
 

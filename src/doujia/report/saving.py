@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from decimal import Decimal
+
 from beancount.core.data import Directive, Transaction
 from beancount.parser import printer
 from logzero import logger
@@ -14,7 +15,7 @@ class SavingPeriodStat:
     total_saving: Decimal
 
 
-def calc_saving(  # noqa: C901
+def calc_saving(
     entries: list[Directive],  # type: ignore
     start_date_inclusive: date,
     end_date_exclusive: date,
@@ -35,23 +36,23 @@ def calc_saving(  # noqa: C901
         if entry.date < start_date_inclusive or entry.date >= end_date_exclusive:
             continue
 
-        hasSalaryAccount = False
-        hasSavingAccount = False
-        hasCurrentAccount = False
+        has_salary_account = False
+        has_saving_account = False
+        has_current_account = False
         current_amount = Decimal(0)
         for posting in entry.postings:
             if posting.account in salary_accounts:
-                hasSalaryAccount = True
+                has_salary_account = True
             elif posting.account in current_accounts:
-                hasCurrentAccount = True
+                has_current_account = True
                 current_amount = current_amount + posting.units.number
             elif posting.account in saving_accounts:
-                hasSavingAccount = True
+                has_saving_account = True
 
-        if hasSalaryAccount and hasCurrentAccount:
+        if has_salary_account and has_current_account:
             income_entries.append(entry)
             total_income += current_amount
-        elif hasSavingAccount and hasCurrentAccount:
+        elif has_saving_account and has_current_account:
             saving_entries.append(entry)
             total_saving += current_amount
 

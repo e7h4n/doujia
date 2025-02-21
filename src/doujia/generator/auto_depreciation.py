@@ -22,8 +22,7 @@ from datetime import date
 from typing import Dict, List, Optional, Tuple
 
 from beancount.core import amount, convert, data
-from beancount.core.number import D
-from beancount.core.number import Decimal
+from beancount.core.number import D, Decimal
 from beancount.loader import load_file
 from beancount.parser.printer import print_entries
 from dateutil.relativedelta import relativedelta
