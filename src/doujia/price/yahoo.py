@@ -1,10 +1,10 @@
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 
+import pytz
 import requests
 from beancount.core.data import Amount, Decimal
-from pytz import utc
 
-from doujia.price.cache import symbol_price_cache
+from doujia.price.cache import PriceCache, symbol_price_cache
 
 ACCEPT = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"  # noqa: E501
 USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"  # noqa: E501
@@ -57,18 +57,18 @@ def request_yahoo_finance(symbols: list[str]):
     return resp
 
 
-def get_realtime_prices(symbols: list[str]):
+def get_realtime_prices(symbols: list[str]) -> dict[str, PriceCache]:
     """
     从缓存中获取价格, 如果缓存中没有则返回0
     """
     if not symbols:
         return {}
 
-    prices = {}
+    prices: dict[str, PriceCache] = {}
     for symbol in symbols:
         cached = symbol_price_cache.get(symbol)
         if cached:
-            prices[symbol] = cached.price
+            prices[symbol] = cached
         else:
             print(f"no price for {symbol}")
             raise ValueError(f"no price for {symbol}")
@@ -92,19 +92,19 @@ def update_price_cache(symbols: list[str]):
                 raise e
 
     prices = {}
+    price_dates = {}
     for result in resp["quoteResponse"]["result"]:
         symbol = result["symbol"]
+
+        # Get exchange timezone
+        if "exchangeTimezoneName" not in result:
+            exchange_tz = pytz.utc
+        else:
+            exchange_tz = pytz.timezone(result["exchangeTimezoneName"])
 
         if result["hasPrePostMarketData"] and result["marketState"] == "PRE" and "preMarketPrice" in result:
             price = result["preMarketPrice"]["raw"]
             time = result["preMarketTime"]["raw"]
-        # elif (
-        #     result["hasPrePostMarketData"]
-        #     and result["marketState"] == "POST"
-        #     and "postMarketPrice" in result
-        # ):
-        #     price = result["postMarketPrice"]["raw"]
-        #     time = result["postMarketTime"]["raw"]
         else:
             if "regularMarketPrice" not in result:
                 print(f"no regularMarketPrice in {result}, symbol: {symbol}")
@@ -112,9 +112,11 @@ def update_price_cache(symbols: list[str]):
             price = result["regularMarketPrice"]["raw"]
             time = result["regularMarketTime"]["raw"]
 
-        time = datetime.fromtimestamp(time, tz=utc).astimezone(timezone(timedelta(hours=8)))
+        # Convert timestamp to exchange timezone
+        time = datetime.fromtimestamp(time, tz=pytz.UTC).astimezone(exchange_tz).date()
         price = Amount(Decimal(price), result["currency"])
         prices[symbol] = price
+        price_dates[symbol] = time
 
     # 更新缓存
-    symbol_price_cache.update_batch(prices)
+    symbol_price_cache.update_batch(prices, price_dates)

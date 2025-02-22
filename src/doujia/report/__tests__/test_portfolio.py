@@ -58,11 +58,12 @@ def get_realtime_price_map(entries: list[Directive]):  # type: ignore
             logger.warning(f"no price for {symbol}")
             continue
 
+        cached_price = symbol_to_prices[symbol]
         price = Price(
-            date=date.today(),
+            date=cached_price.price_date,
             meta=None,
             currency=commodity_entry.currency,
-            amount=symbol_to_prices[symbol],
+            amount=cached_price.price,
         )
         price_entries.append(price)
 

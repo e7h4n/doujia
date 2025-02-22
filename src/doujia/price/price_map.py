@@ -1,5 +1,3 @@
-from datetime import date
-
 from beancount.core.data import Directive, Price
 from beancount.core.getters import get_commodity_directives
 from beancount.core.prices import PriceMap, build_price_map, get_price
@@ -63,20 +61,22 @@ def _build_realtime_price_map(entries: list[Directive], symbols: dict):  # type:
     new_entries = entries.copy()
 
     for currency, symbol in symbols.items():
-        symbol_price = symbol_to_price[symbol]
+        cached_price = symbol_to_price[symbol]
+        symbol_price = cached_price.price
+
         existed_price = get_price(
             build_price_map(entries),
             (currency, symbol_price.currency),
-            date=date.today(),
+            date=cached_price.price_date,
         )
-        if existed_price and existed_price[0] == date.today():
+        if existed_price and existed_price[0] == cached_price.price_date:
             continue
 
         price = Price(
-            date=date.today(),
+            date=cached_price.price_date,
             meta=None,
             currency=currency,
-            amount=symbol_to_price[symbol],
+            amount=symbol_price,
         )
         new_entries.append(price)
 
