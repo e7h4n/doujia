@@ -15,12 +15,18 @@ def get_last_and_realtime_price_map(entries: list[Directive]):  # type: ignore
 
     latest_date = None
     for pair in realtime_price_map.forward_pairs:
+        if pair[0] not in symbols:
+            continue
+
         for price_date, _ in realtime_price_map[pair]:
             if not latest_date or price_date > latest_date:
                 latest_date = price_date
 
     if latest_date is not None:
         for pair in last_price_map.forward_pairs:
+            if pair[0] not in symbols:
+                continue
+
             last_price_map[pair] = [
                 (price_date, price) for price_date, price in last_price_map[pair] if price_date < latest_date
             ]
