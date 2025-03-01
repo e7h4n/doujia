@@ -2,6 +2,7 @@ from flask import Flask
 from flask_apscheduler import APScheduler
 from logzero import logger
 
+from doujia.server.task.hsbc import import_hsbc
 from doujia.server.task.ledger import reload_ledger
 from doujia.server.task.price import update_price_cache
 
@@ -18,6 +19,10 @@ def setup_scheduler(app: Flask):
     @scheduler.task("interval", id="reload_price_cache", minutes=1, max_instances=1, coalesce=True)
     def scheduler_reload_price_cache():
         update_price_cache(app)
+
+    @scheduler.task("interval", id="import_hsbc", minutes=1, max_instances=1, coalesce=True)
+    def scheduler_import_hsbc():
+        import_hsbc(app)
 
     if not app.config.get("TESTING"):
         try:

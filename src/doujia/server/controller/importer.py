@@ -1,5 +1,7 @@
 from flask import Blueprint, request
 
+from doujia.hsbc.hsbc_importer import HSBCSession
+from doujia.server.app import current_app
 from doujia.server.logic.ccb import import_ccb_transactions
 from doujia.server.logic.cmb_encrypted import (
     import_cmb_transactions as import_cmb_encrypted_transactions,
@@ -37,3 +39,14 @@ def hsbc_wechat_importer():
     imported_count = import_hsbc_transactions(url)
 
     return {"transactions": imported_count}
+
+
+@bp.post("/hsbc_session")
+def hsbc_session():
+    authorization = request.headers.get("authorization")
+    authorizationguest = request.headers.get("authorizationguest")
+
+    session = HSBCSession(authorizationguest, authorization)
+    current_app.hsbc_session = session
+
+    return {"status": "ok"}
