@@ -98,7 +98,7 @@ def load_missing_transactions(filename: str, items):
         {
             "newTransDate": "20250228",
             "transTime": "21140168",
-            "cardEnd": "7326",
+            "cardEnd": "1234",
             "transNo": "300508",
             "transDescDetail": "WLZF-京东支付-京东商城业务",
             "transAmount": "164.98",
