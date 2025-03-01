@@ -20,7 +20,7 @@ def setup_scheduler(app: Flask):
     def scheduler_reload_price_cache():
         update_price_cache(app)
 
-    @scheduler.task("interval", id="import_hsbc", minutes=1, max_instances=1, coalesce=True)
+    @scheduler.task("interval", id="import_hsbc", minutes=3, max_instances=1, coalesce=True)
     def scheduler_import_hsbc():
         import_hsbc(app)
 
