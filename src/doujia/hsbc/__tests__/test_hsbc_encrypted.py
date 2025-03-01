@@ -60,7 +60,7 @@ def test_convert_hsbc_item_to_transaction():
     item = {
         "newTransDate": "20250228",
         "transTime": "21140168",
-        "cardEnd": "7326",
+        "cardEnd": "1234",
         "transNo": "300508",
         "transDescDetail": "WLZF-京东支付-京东商城业务",
         "transAmount": "164.98",
@@ -76,7 +76,7 @@ def test_convert_hsbc_item_to_transaction():
     txn = _convert_transaction(item)
 
     assert txn.meta["time"] == "21:14:01"
-    assert txn.meta["card"] == "7326"
+    assert txn.meta["card"] == "1234"
     assert txn.meta["uniqueNo"] == "HSBC_20250228_300508"
     assert txn.payee == "WLZF-京东支付-京东商城业务"
     assert len(txn.postings) == 2
