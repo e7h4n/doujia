@@ -1,12 +1,13 @@
+import os
+
 from flask import Blueprint, request
 
-from doujia.hsbc.hsbc_importer import HSBCSession
+from doujia.hsbc.hsbc_importer import HSBCSession, import_unbilled_transactions
 from doujia.server.app import current_app
 from doujia.server.logic.ccb import import_ccb_transactions
 from doujia.server.logic.cmb_encrypted import (
     import_cmb_transactions as import_cmb_encrypted_transactions,
 )
-from doujia.server.logic.hsbc import import_hsbc_transactions
 
 bp = Blueprint("importer", __name__)
 
@@ -32,15 +33,6 @@ def cmb_wechat_encrypted_importer():
     return {"transactions": imported_count}
 
 
-@bp.post("/hsbc_wechat")
-def hsbc_wechat_importer():
-    url = request.data
-
-    imported_count = import_hsbc_transactions(url)
-
-    return {"transactions": imported_count}
-
-
 @bp.post("/hsbc_session")
 def hsbc_session():
     authorization = request.headers.get("authorization")
@@ -49,4 +41,11 @@ def hsbc_session():
     session = HSBCSession(authorizationguest, authorization)
     current_app.hsbc_session = session
 
-    return {"status": "ok"}
+    imported_count = import_unbilled_transactions(
+        os.path.join(current_app.ledger_root, "main.bean"),
+        session,
+        current_app.doujia_config.categorize_config,
+        current_app.doujia_config.import_to,
+    )
+
+    return {"transactions": imported_count}

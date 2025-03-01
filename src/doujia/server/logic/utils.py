@@ -6,7 +6,6 @@ from beancount.core import data
 from beancount.loader import load_file
 from beancount.parser import printer
 from beancount.scripts.format import align_beancount
-from flask import current_app
 
 from doujia.post_processor.merger import _merge_beancount_content
 from doujia.post_processor.transaction_categorizer import _categorize_transactions
@@ -49,7 +48,7 @@ def sort_transactions(transactions: list[Transaction]) -> list[Transaction]:
     return sorted(transactions, key=_compare_transactions)
 
 
-def import_transactions(transactions: list[Transaction]) -> int:
+def import_transactions(transactions: list[Transaction], categorize_config: str, import_to: str) -> int:
     with io.StringIO() as output:
         for txn in sort_transactions(transactions):
             output.write(printer.format_entry(txn)[:-1] + "\n" + "\n")
@@ -57,12 +56,12 @@ def import_transactions(transactions: list[Transaction]) -> int:
         imported_content = output.getvalue()
 
     with io.StringIO() as output:
-        _categorize_transactions(current_app.doujia_config.categorize_config, imported_content, output)
+        _categorize_transactions(categorize_config, imported_content, output)
 
         imported_content = output.getvalue()
 
     with io.StringIO() as output:
-        with open(current_app.doujia_config.import_to, encoding="utf-8") as file:
+        with open(import_to, encoding="utf-8") as file:
             main_content = file.read()
             _merge_beancount_content(main_content, imported_content, output)
 
@@ -70,7 +69,7 @@ def import_transactions(transactions: list[Transaction]) -> int:
 
         result = align_beancount(output.getvalue())
 
-        with open(current_app.doujia_config.import_to, "w", encoding="utf-8") as file:
+        with open(import_to, "w", encoding="utf-8") as file:
             file.write(result)
 
     return len(transactions)

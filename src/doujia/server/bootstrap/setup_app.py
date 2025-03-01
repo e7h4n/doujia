@@ -84,6 +84,10 @@ def setup_controller(app):
     app.register_blueprint(balance_bp)
 
 
+def setup_hsbc(app):
+    app.hsbc_session = None
+
+
 def init_data(app):
     logger.debug("Initializing data")
     reload_ledger(app)

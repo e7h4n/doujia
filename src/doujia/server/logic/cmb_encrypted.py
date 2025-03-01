@@ -96,4 +96,4 @@ def convert_cmb_item_to_transaction(item):
 def import_cmb_transactions(items) -> int:
     txns = load_missing_transactions_from_cmb_items(os.path.join(current_app.ledger_root, "main.bean"), items)
 
-    return import_transactions(txns)
+    return import_transactions(txns, current_app.doujia_config.categorize_config, current_app.doujia_config.import_to)

@@ -9,6 +9,7 @@ from doujia.server.bootstrap.setup_app import (
     setup_controller,
     setup_corbado,
     setup_cors,
+    setup_hsbc,
     setup_logger,
 )
 
@@ -24,9 +25,8 @@ def create_app(test_config=None):
     setup_scheduler(app)
     setup_cors(app)
     setup_controller(app)
+    setup_hsbc(app)
 
     init_data(app)
-
-    app.hsbc_session = None
 
     return app

@@ -1,4 +1,3 @@
-import os
 from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
@@ -6,7 +5,6 @@ from typing import TypeVar
 
 import requests
 from beancount.core import data
-from flask import current_app
 
 from doujia.hsbc.cipher import decrypt_response, encrypt_request, generate_key
 from doujia.server.logic.ccb import DEFAULT_UFO_POSTING
@@ -158,9 +156,9 @@ def _convert_transaction(item) -> Transaction:
     return transaction
 
 
-def import_unbilled_transactions(session: HSBCSession) -> int:
+def import_unbilled_transactions(ledger_file: str, session: HSBCSession, categorize_config: str, import_to: str) -> int:
     trans_list = _query_unbilled_transactions(session)
 
-    txns = load_missing_transactions(os.path.join(current_app.ledger_root, "main.bean"), trans_list)
+    txns = load_missing_transactions(ledger_file, trans_list)
 
-    return import_transactions(txns)
+    return import_transactions(txns, categorize_config, import_to)
