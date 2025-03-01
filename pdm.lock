@@ -5,7 +5,7 @@
 groups = ["default", "dev", "lint", "test"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:b25c9cc6187592f92cb90c00bdaf2fd247a92019ef88c06f85324f8352380630"
+content_hash = "sha256:918be931e1f4c18e47c38e79ce31bfc5273be28b81aa8de6502182977214abd6"
 
 [[metadata.targets]]
 requires_python = "~=3.12.0"
@@ -453,10 +453,10 @@ dependencies = [
     "fava==1.30",
     "flask-cors>=5.0.0",
     "frozendict==2.4.0",
-    "gmssl>=3.2.2",
     "logzero==1.7.0",
     "passkeys>=1.1.3",
     "protobuf==3.20.3",
+    "pycryptodome>=3.21.0",
     "pytest-mock>=3.14.0",
     "requests>=2.32.3",
     "setuptools>=69.2.0",
@@ -640,7 +640,7 @@ files = [
 name = "gmssl"
 version = "3.2.2"
 summary = "Pure-Python SM2/SM3/SM4 implementation"
-groups = ["default", "dev"]
+groups = ["default"]
 dependencies = [
     "pycryptodomex",
 ]
@@ -1067,7 +1067,7 @@ name = "pycryptodome"
 version = "3.21.0"
 requires_python = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,>=2.7"
 summary = "Cryptographic library for Python"
-groups = ["default"]
+groups = ["default", "dev"]
 files = [
     {file = "pycryptodome-3.21.0-cp36-abi3-macosx_10_9_universal2.whl", hash = "sha256:2480ec2c72438430da9f601ebc12c518c093c13111a5c1644c82cdfc2e50b1e4"},
     {file = "pycryptodome-3.21.0-cp36-abi3-macosx_10_9_x86_64.whl", hash = "sha256:de18954104667f565e2fbb4783b56667f30fb49c4d79b346f52a29cb198d5b6b"},
@@ -1087,7 +1087,7 @@ name = "pycryptodomex"
 version = "3.21.0"
 requires_python = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,>=2.7"
 summary = "Cryptographic library for Python"
-groups = ["default", "dev"]
+groups = ["default"]
 files = [
     {file = "pycryptodomex-3.21.0-cp36-abi3-macosx_10_9_universal2.whl", hash = "sha256:34325b84c8b380675fd2320d0649cdcbc9cf1e0d1526edbe8fce43ed858cdc7e"},
     {file = "pycryptodomex-3.21.0-cp36-abi3-macosx_10_9_x86_64.whl", hash = "sha256:103c133d6cd832ae7266feb0a65b69e3a5e4dbbd6f3a3ae3211a557fd653f516"},

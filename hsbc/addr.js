@@ -931,20 +931,20 @@
           (this.cipherMode =
             "undefined" != typeof t ? t : SM2CipherMode.C1C3C2);
       }
-      function sm2Encrypt(t, e, r) {
-        r = 0 == r ? r : 1;
+      function sm2Encrypt(t, e, mode) {
+        mode = 0 == mode ? mode : 1;
         var i =
             _crypto_js__WEBPACK_IMPORTED_MODULE_12___default.a.enc.Utf8.parse(
               t
             ),
           n = e;
         n.length > 128 && (n = n.substr(n.length - 128));
-        var o = n.substr(0, 64),
-          s = n.substr(64),
-          a = new SM2Cipher(r),
-          h = a.CreatePoint(o, s);
-        i = a.GetWords(i.toString());
-        var c = a.Encrypt(h, i);
+        var OT = n.substr(0, 64),
+          ST = n.substr(64),
+          cipher = new SM2Cipher(mode),
+          point = cipher.CreatePoint(OT, ST);
+        i = cipher.GetWords(i.toString());
+        var c = cipher.Encrypt(point, i);
         return "04" + c;
       }
       (function (global) {
