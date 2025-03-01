@@ -27,4 +27,6 @@ def create_app(test_config=None):
 
     init_data(app)
 
+    app.hsbc_session = None
+
     return app
