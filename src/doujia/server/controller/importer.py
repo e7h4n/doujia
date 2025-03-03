@@ -54,5 +54,5 @@ def hsbc_session():
 
 @bp.post("/hsbc_current")
 def hsbc_current():
-    imported_count = import_hsbc_current(request.json())
-    return {"transactions", imported_count}
+    imported_count = import_hsbc_current(request.get_json())
+    return {"transactions": imported_count}
