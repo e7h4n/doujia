@@ -8,6 +8,7 @@ from doujia.server.logic.ccb import import_ccb_transactions
 from doujia.server.logic.cmb_encrypted import (
     import_cmb_transactions as import_cmb_encrypted_transactions,
 )
+from doujia.server.logic.hsbc_current import import_hsbc_current
 
 bp = Blueprint("importer", __name__)
 
@@ -49,3 +50,9 @@ def hsbc_session():
     )
 
     return {"transactions": imported_count}
+
+
+@bp.post("/hsbc_current")
+def hsbc_current():
+    imported_count = import_hsbc_current(request.json())
+    return {"transactions", imported_count}
