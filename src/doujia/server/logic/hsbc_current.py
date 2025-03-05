@@ -8,6 +8,8 @@ from doujia.server.app import current_app
 from doujia.server.logic.utils import DEFAULT_UFO_POSTING, get_existed_unique_no_set, import_transactions
 from doujia.utils.util import get_last_balance_date
 
+ACCOUNT = "Assets:Short:Current:HSBC"
+
 
 def _parse_txn_date(item):
     # Convert date string like "2025年3月3日" to datetime.date
@@ -34,7 +36,7 @@ def _parse_posting(item):
     amount = _parse_amount(item)
 
     out_posting = data.Posting(
-        account="Assets:Short:Current:HSBC",
+        account=ACCOUNT,
         units=amount,
         cost=None,
         price=None,
@@ -72,7 +74,7 @@ def _convert_transaction(item):
 
 
 def load_missing_transactions(filename: str, items):
-    last_balance_date = get_last_balance_date(filename, "Liabilities:Short:CreditCard:HSBC")
+    last_balance_date = get_last_balance_date(filename, ACCOUNT)
     existed_unique_no_set = get_existed_unique_no_set(filename)
 
     txns = []
