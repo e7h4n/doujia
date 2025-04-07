@@ -52,6 +52,36 @@ def _query_unbilled_transactions(session: HSBCSession):
     return decrypted_data["rspData"]["transList"]
 
 
+def _query_billed_transactions(session: HSBCSession):
+    sm4_key = generate_key()
+
+    request_data = {"billOption": "A", "tranYM": "2504"}
+
+    request = encrypt_request(request_data, sm4_key)
+
+    url = "https://creditcards.hsbc.com.cn/nwxhf/bill/getHistoricalBills"
+    headers = {
+        "authorization": session.authorization,
+        "authorizationguest": session.authorizationguest,
+    }
+
+    response = requests.post(url, headers=headers, json=request, verify=False)
+
+    # 处理响应
+    if response.status_code != 200:
+        raise Exception(f"请求失败: {response.status_code}")
+
+    if "authorization" in response.headers:
+        session.authorization = response.headers["authorization"]
+    if "authorizationguest" in response.headers:
+        session.authorizationguest = response.headers["authorizationguest"]
+
+    response_data = response.json()
+    decrypted_data = decrypt_response(response_data["rspData"], sm4_key)
+
+    return decrypted_data["rspData"]["transList"]
+
+
 def _parse_amount(item) -> data.Amount:
     amount_str = item["transAmount"]
     currency = item["currency"]["symbol"]
@@ -156,8 +186,9 @@ def _convert_transaction(item) -> Transaction:
     return transaction
 
 
-def import_unbilled_transactions(ledger_file: str, session: HSBCSession, categorize_config: str, import_to: str) -> int:
+def import_full_transactions(ledger_file: str, session: HSBCSession, categorize_config: str, import_to: str) -> int:
     trans_list = _query_unbilled_transactions(session)
+    trans_list += _query_billed_transactions(session)
 
     txns = load_missing_transactions(ledger_file, trans_list)
 

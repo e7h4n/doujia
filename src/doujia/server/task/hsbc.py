@@ -2,7 +2,7 @@ import os
 
 from logzero import logger
 
-from doujia.hsbc.hsbc_importer import import_unbilled_transactions
+from doujia.hsbc.hsbc_importer import import_full_transactions
 from doujia.server.app import FlaskApp
 
 
@@ -13,8 +13,9 @@ def import_hsbc(app: FlaskApp) -> bool:
         return
 
     ledger_file = os.path.join(app.ledger_root, "main.bean")
-    imported_count = import_unbilled_transactions(
+    imported_count = import_full_transactions(
         ledger_file, session, app.doujia_config.categorize_config, app.doujia_config.import_to
     )
+
     if imported_count > 0:
-        logger.info(f"Imported {imported_count} unbilled transactions from HSBC")
+        logger.info(f"Imported {imported_count} transactions from HSBC")

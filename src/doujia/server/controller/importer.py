@@ -2,7 +2,7 @@ import os
 
 from flask import Blueprint, request
 
-from doujia.hsbc.hsbc_importer import HSBCSession, import_unbilled_transactions
+from doujia.hsbc.hsbc_importer import HSBCSession, import_full_transactions
 from doujia.server.app import current_app
 from doujia.server.logic.ccb import import_ccb_transactions
 from doujia.server.logic.cmb_encrypted import (
@@ -42,7 +42,7 @@ def hsbc_session():
     session = HSBCSession(authorizationguest, authorization)
     current_app.hsbc_session = session
 
-    imported_count = import_unbilled_transactions(
+    imported_count = import_full_transactions(
         os.path.join(current_app.ledger_root, "main.bean"),
         session,
         current_app.doujia_config.categorize_config,
