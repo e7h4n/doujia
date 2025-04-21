@@ -45,7 +45,7 @@ def _compare_transactions(transaction: Transaction):
 
 
 def sort_transactions(transactions: list[Transaction]) -> list[Transaction]:
-    return sorted(transactions, key=_compare_transactions, reverse=True)
+    return sorted(transactions, key=_compare_transactions)
 
 
 def import_transactions(transactions: list[Transaction], categorize_config: str, import_to: str) -> int:
