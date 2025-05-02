@@ -1,12 +1,16 @@
-FROM python:3
+FROM python:3.12
 
 COPY src/ ./src
 COPY pyproject.toml ./
-COPY pdm.lock ./
+COPY uv.lock ./
 
-RUN pip install --no-cache-dir pdm
-RUN pdm install --no-lock --no-editable
+# 安装 uv
+RUN pip install --no-cache-dir uv
+
+# 使用 uv 安装依赖
+RUN uv pip sync --all-extras
+RUN uv pip install .
 
 EXPOSE 5000
-ENTRYPOINT ["pdm", "run", "flask"]
+ENTRYPOINT ["flask"]
 CMD ["-A", "doujia.server", "run", "--host", "0.0.0.0"]
