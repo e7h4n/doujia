@@ -112,8 +112,8 @@ wheels = [
 
 [[package]]
 name = "beanquery"
-version = "0.3.0.dev0"
-source = { git = "https://github.com/beancount/beanquery.git#b30ef6a17ac18f0b2e8528ccee9f6f4951b89912" }
+version = "0.2.0"
+source = { git = "https://github.com/beancount/beanquery.git?rev=v0.2.0#f8079cd6ca6aa2f38dfc5490ad29333cea20309a" }
 dependencies = [
     { name = "beancount" },
     { name = "click" },
@@ -382,7 +382,7 @@ dev = [
 requires-dist = [
     { name = "beancount", specifier = ">=3.0.0" },
     { name = "beangrow", git = "https://github.com/beancount/beangrow.git" },
-    { name = "beanquery", git = "https://github.com/beancount/beanquery.git" },
+    { name = "beanquery", git = "https://github.com/beancount/beanquery.git?rev=v0.2.0" },
     { name = "certifi", specifier = ">=2024.8.30" },
     { name = "coverage", marker = "extra == 'dev'" },
     { name = "fava", specifier = ">=1.30" },
