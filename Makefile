@@ -13,5 +13,13 @@ commit:
 
 rebuild-env:
 	git clean -dfx
-	uv sync --all-extras
+	uv sync --all
 	uv run pre-commit installuv
+
+rebuild-env-dev:
+	git clean -dfx
+	uv sync --all --optional dev
+	uv run pre-commit installuv
+
+dev-install:
+	uv pip install -e .
