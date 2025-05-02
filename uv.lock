@@ -395,7 +395,7 @@ requires-dist = [
     { name = "gitpython", specifier = ">=3.1.44" },
     { name = "gmssl", specifier = ">=3.2.2" },
     { name = "logzero", specifier = ">=1.7.0" },
-    { name = "passkeys", specifier = ">=1.1.3" },
+    { name = "passkeys", specifier = ">=1.1.3,<2.0.0" },
     { name = "pre-commit", marker = "extra == 'dev'" },
     { name = "pycryptodome", specifier = ">=3.21.0" },
     { name = "pyfakefs", marker = "extra == 'dev'" },
@@ -810,7 +810,7 @@ wheels = [
 
 [[package]]
 name = "passkeys"
-version = "2.0.2"
+version = "1.1.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pydantic" },
@@ -820,9 +820,9 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b0/7b/9db9640c7a06cf6331f93514a20e0360dd3aa8bbf8175a477f35fc89b378/passkeys-2.0.2.tar.gz", hash = "sha256:8eac5387c091635cdc3aaf984967240664a8c5f24614a8ffdd80c13d2d408767", size = 77660 }
+sdist = { url = "https://files.pythonhosted.org/packages/8e/a9/7b7e1366b3a37e251fd92f2343635534c2378d341132ad6941276a592832/passkeys-1.1.3.tar.gz", hash = "sha256:ae5b42bcb9e1917fe066866775eda704ddee87857ba4d81e80db3f4a80b064ef", size = 70250 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/54/bf/b1b44bcffba460a4c044703a7463ccfa0f8b70e2f88e2205d95200360843/passkeys-2.0.2-py3-none-any.whl", hash = "sha256:d6c775d2a1829e552bc16acbaf38637495d418a6de86b0d2cb64ed06b28875fc", size = 193560 },
+    { url = "https://files.pythonhosted.org/packages/4f/2f/2aa209fc03221df7ef0da11e5e44a334d1adbfbd5b101cc8329b1e1c4adb/passkeys-1.1.3-py3-none-any.whl", hash = "sha256:d2f9cdf60793b4de72da66708880fafd90e1995fa599590eb2109c347ac4681c", size = 169383 },
 ]
 
 [[package]]
