@@ -1,15 +1,10 @@
 test:
-	@pdm run coverage run -m pytest
-	@pdm run coverage report
-	@pdm run coverage xml
+	@uv run coverage run -m pytest
+	@uv run coverage report
+	@uv run coverage xml
 
 lint:
-	@pdm run ruff check .
-
-format:
-	@pdm run pre-commit run --all accounting-style
-	@pdm run pre-commit run --all bean-format
-	@pdm run pre-commit run --all bean-check
+	@uv run ruff check .
 
 commit:
 	@git add .
@@ -18,5 +13,5 @@ commit:
 
 rebuild-env:
 	git clean -dfx
-	pdm install -d
-	pdm run pre-commit install
+	uv sync
+	uv run pre-commit installuv
