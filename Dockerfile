@@ -12,5 +12,5 @@ RUN uv sync --all-extras
 RUN uv pip install .
 
 EXPOSE 5000
-ENTRYPOINT ["flask"]
+ENTRYPOINT ["uv run flask"]
 CMD ["-A", "doujia.server", "run", "--host", "0.0.0.0"]
