@@ -8,7 +8,7 @@ COPY uv.lock ./
 RUN pip install --no-cache-dir uv
 
 # 使用 uv 安装依赖
-RUN uv pip sync --all-extras
+RUN uv sync --all-extras
 RUN uv pip install .
 
 EXPOSE 5000
