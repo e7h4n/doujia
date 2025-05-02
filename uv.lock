@@ -366,18 +366,16 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
-lint = [
-    { name = "pre-commit" },
-    { name = "ruff" },
-]
-test = [
+dev = [
     { name = "coverage" },
     { name = "freezegun" },
+    { name = "pre-commit" },
     { name = "pyfakefs" },
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "pytest-env" },
     { name = "pytest-timeout" },
+    { name = "ruff" },
 ]
 
 [package.metadata]
@@ -386,30 +384,30 @@ requires-dist = [
     { name = "beangrow", git = "https://github.com/beancount/beangrow.git" },
     { name = "beanquery", git = "https://github.com/beancount/beanquery.git" },
     { name = "certifi", specifier = ">=2024.8.30" },
-    { name = "coverage", marker = "extra == 'test'" },
+    { name = "coverage", marker = "extra == 'dev'" },
     { name = "fava", specifier = ">=1.30" },
     { name = "flask", specifier = ">=3.0.2" },
     { name = "flask-apscheduler", specifier = ">=1.13.1" },
     { name = "flask-cors", specifier = ">=5.0.0" },
-    { name = "freezegun", marker = "extra == 'test'" },
+    { name = "freezegun", marker = "extra == 'dev'" },
     { name = "frozendict", specifier = ">=2.4.0" },
     { name = "gitpython", specifier = ">=3.1.44" },
     { name = "gmssl", specifier = ">=3.2.2" },
     { name = "logzero", specifier = ">=1.7.0" },
     { name = "passkeys", specifier = ">=1.1.3" },
-    { name = "pre-commit", marker = "extra == 'lint'" },
+    { name = "pre-commit", marker = "extra == 'dev'" },
     { name = "pycryptodome", specifier = ">=3.21.0" },
-    { name = "pyfakefs", marker = "extra == 'test'" },
-    { name = "pytest", marker = "extra == 'test'" },
-    { name = "pytest-cov", marker = "extra == 'test'" },
-    { name = "pytest-env", marker = "extra == 'test'" },
+    { name = "pyfakefs", marker = "extra == 'dev'" },
+    { name = "pytest", marker = "extra == 'dev'" },
+    { name = "pytest-cov", marker = "extra == 'dev'" },
+    { name = "pytest-env", marker = "extra == 'dev'" },
     { name = "pytest-mock", specifier = ">=3.14.0" },
-    { name = "pytest-timeout", marker = "extra == 'test'" },
+    { name = "pytest-timeout", marker = "extra == 'dev'" },
     { name = "requests", specifier = ">=2.32.3" },
-    { name = "ruff", marker = "extra == 'lint'" },
+    { name = "ruff", marker = "extra == 'dev'" },
     { name = "setuptools", specifier = ">=69.2.0" },
 ]
-provides-extras = ["lint", "test", "dev"]
+provides-extras = ["dev"]
 
 [[package]]
 name = "fava"
