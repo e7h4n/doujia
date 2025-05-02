@@ -9,7 +9,7 @@ dependencies = [
     "beancount==3.0.0",
     "beangrow@git+https://github.com/beancount/beangrow.git",
     "beanquery@git+https://github.com/beancount/beanquery.git",
-    "fava==1.30",
+    "fava>=1.30",
     "frozendict==2.4.0",
     "logzero==1.7.0",
     "certifi>=2024.8.30",
