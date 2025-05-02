@@ -6,7 +6,8 @@ from beancount.core import data, getters
 from beancount.core.data import Directive
 from beancount.core.inventory import Inventory
 from beancount.core.prices import build_price_map
-from fava.beans.abc import Amount, Posting
+from fava.beans.abc import Posting
+from fava.beans.protocols import Amount
 from fava.core import CounterInventory, FavaLedger
 from fava.core.conversion import conversion_from_str, convert_position
 from fava.util.date import parse_date
