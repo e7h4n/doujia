@@ -385,7 +385,7 @@ requires-dist = [
     { name = "beanquery", git = "https://github.com/beancount/beanquery.git?rev=v0.2.0" },
     { name = "certifi", specifier = ">=2024.8.30" },
     { name = "coverage", marker = "extra == 'dev'" },
-    { name = "fava", specifier = ">=1.30" },
+    { name = "fava", specifier = ">=1.30.2" },
     { name = "flask", specifier = ">=3.0.2" },
     { name = "flask-apscheduler", specifier = ">=1.13.1" },
     { name = "flask-cors", specifier = ">=5.0.0" },
@@ -411,7 +411,7 @@ provides-extras = ["dev"]
 
 [[package]]
 name = "fava"
-version = "1.30.1"
+version = "1.30.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "babel" },
@@ -429,9 +429,9 @@ dependencies = [
     { name = "watchfiles" },
     { name = "werkzeug" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/6e/a0/93e702e3ff56b058539f0ad62b6df6a8d8d00aba1c0b393aeccb277a25d4/fava-1.30.1.tar.gz", hash = "sha256:ebd5b1f7f1fb9cb0cf64ff4b3949c3267818f584c272bfa843413afb178858f1", size = 1575021 }
+sdist = { url = "https://files.pythonhosted.org/packages/3e/12/776037b8eda9122e861055ac64af15b38ca0bbb46c242bf6792f90820a0f/fava-1.30.2.tar.gz", hash = "sha256:aecd71ffbb2e5ec2b17bcde27abfbebe507b34b89f1aaab55c2a5ea57b800a84", size = 1583674 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/50/32/4040cc94440ecd22810571a5e2ab7bf74196ecd9b70a0ec9e66dc158d368/fava-1.30.1-py3-none-any.whl", hash = "sha256:4c8fca3870ec1be7cdf13d14091f6b0a7f41ecd3a4348b9e8a472488813eda1d", size = 1220363 },
+    { url = "https://files.pythonhosted.org/packages/f5/49/0d5176897617a76175760652869c9dec428d094f373b2b3be7063eede4b1/fava-1.30.2-py3-none-any.whl", hash = "sha256:9844e9bc84a70454bc212de144b7c8d0a43c7ccea12d4ac6f350a2ea28df194b", size = 1224759 },
 ]
 
 [[package]]
