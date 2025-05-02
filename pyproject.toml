@@ -27,8 +27,9 @@ readme = "README.md"
 license = { text = "MIT" }
 
 [project.optional-dependencies]
-lint = ["pre-commit", "ruff"]
-test = [
+dev = [
+    "pre-commit",
+    "ruff",
     "coverage",
     "freezegun",
     "pyfakefs",
@@ -37,7 +38,6 @@ test = [
     "pytest-cov",
     "pytest-env",
 ]
-dev = []
 
 [tool.setuptools.package-data]
 "doujia.extensions" = ["templates/*.html", "*.js", "*.css"]

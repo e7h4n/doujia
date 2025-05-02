@@ -13,5 +13,5 @@ commit:
 
 rebuild-env:
 	git clean -dfx
-	uv sync
+	uv sync --all-extras
 	uv run pre-commit installuv
