@@ -61,6 +61,9 @@ def _build_realtime_price_map(entries: list[Directive], symbols: dict):  # type:
     new_entries = entries.copy()
 
     for currency, symbol in symbols.items():
+        if symbol not in symbol_to_price:
+            continue
+
         cached_price = symbol_to_price[symbol]
         symbol_price = cached_price.price
 

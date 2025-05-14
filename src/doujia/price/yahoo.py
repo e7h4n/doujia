@@ -71,7 +71,6 @@ def get_realtime_prices(symbols: list[str]) -> dict[str, PriceCache]:
             prices[symbol] = cached
         else:
             print(f"no price for {symbol}")
-            raise ValueError(f"no price for {symbol}")
 
     return prices
 
