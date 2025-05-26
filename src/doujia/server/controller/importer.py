@@ -1,3 +1,4 @@
+import json
 import os
 
 from flask import Blueprint, request
@@ -8,6 +9,7 @@ from doujia.server.logic.ccb import import_ccb_transactions
 from doujia.server.logic.cmb_encrypted import (
     import_cmb_transactions as import_cmb_encrypted_transactions,
 )
+from doujia.server.logic.hsbc_cn_asset import import_hsbc_cn_asset
 from doujia.server.logic.hsbc_current import import_hsbc_current
 
 bp = Blueprint("importer", __name__)
@@ -56,3 +58,15 @@ def hsbc_session():
 def hsbc_current():
     imported_count = import_hsbc_current(request.get_json())
     return {"transactions": imported_count}
+
+
+@bp.post("/uni_forward")
+def uni_forward():
+    body = request.get_json()
+
+    url = body["request"]["url"]
+    if url == "https://www.services.online-banking.hsbc.com.cn/gpib/channel/proxy/accountDataSvc/rtrvTxnSumm":
+        json_body = body["response"]["body"]
+        return {"transactions": import_hsbc_cn_asset(json.loads(json_body))}
+
+    return {"transactions": 0}
