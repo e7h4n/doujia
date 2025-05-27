@@ -130,18 +130,28 @@ def load_missing_transactions(filename: str, items):
         txns.append(txn)
 
     if len(items) > 0:
-        last_balance_item = items[-1]
-        last_balance_date = _parse_txn_date(last_balance_item)
-        balance_txn = insert_missing_balance(
-            account=ACCOUNT,
-            date=last_balance_date,
-            amount=_parse_balance_amount(last_balance_item),
-            ledger_file=filename,
-            import_to=current_app.doujia_config.import_to,
-        )
+        # 从前往后找到第一条 txn_date < 当天日期的交易
+        today = datetime.now().date()
+        last_balance_item = None
+        for item in items:
+            txn_date = _parse_txn_date(item)
+            if txn_date < today:
+                last_balance_item = item
+                break
 
-        if balance_txn:
-            txns.append(balance_txn)
+        # 如果没有找到合适的项目, 使用第一个项目
+        if last_balance_item is not None:
+            last_balance_date = _parse_txn_date(last_balance_item)
+            balance_txn = insert_missing_balance(
+                account=ACCOUNT,
+                date=last_balance_date,
+                amount=_parse_balance_amount(last_balance_item),
+                ledger_file=filename,
+                import_to=current_app.doujia_config.import_to,
+            )
+
+            if balance_txn:
+                txns.append(balance_txn)
 
     return txns
 
