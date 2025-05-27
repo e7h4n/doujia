@@ -207,7 +207,7 @@ def import_hsbc_hk_credit_card_balance(resp) -> int:
         "currencyCode": "CNY",
     }
     """
-    ledger_balance = resp["ledgerBalance"]
+    ledger_balance = resp["creditCardAccountDetail"]["ledgerBalance"]
     amount = data.Amount(
         Decimal(str(ledger_balance["amount"])).quantize(Decimal("0.01")), ledger_balance["currencyCode"]
     )
