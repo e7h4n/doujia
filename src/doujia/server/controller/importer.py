@@ -11,7 +11,7 @@ from doujia.server.logic.cmb_encrypted import (
 )
 from doujia.server.logic.hsbc_cn_asset import import_hsbc_cn_asset
 from doujia.server.logic.hsbc_current import import_hsbc_current
-from doujia.server.logic.hsbc_hk_credit_card import import_hsbc_hk_credit_card
+from doujia.server.logic.hsbc_hk_credit_card import import_hsbc_hk_credit_card, import_hsbc_hk_credit_card_balance
 
 bp = Blueprint("importer", __name__)
 
@@ -72,5 +72,10 @@ def uni_forward():
     elif url.startswith("https://www.hsbc.com.hk/api/mmf-account-transactions--hk-hbap-prod-proxy/v2/transactions"):
         json_body = body["response"]["body"]
         return {"transactions": import_hsbc_hk_credit_card(json.loads(json_body))}
+    elif url.startswith(
+        "https://www.hsbc.com.hk/api/mmf-cust-accounts-details--hk-hbap-banking-prod-proxy/v1/accounts/credit-cards/CRDTR-"
+    ):
+        json_body = body["response"]["body"]
+        return {"transactions": import_hsbc_hk_credit_card_balance(json.loads(json_body))}
 
     return {"transactions": 0}

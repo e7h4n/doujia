@@ -6,8 +6,13 @@ from decimal import Decimal
 from beancount.core import data
 
 from doujia.server.app import current_app
-from doujia.server.logic.utils import DEFAULT_UFO_POSTING, get_existed_unique_no_set, import_transactions
-from doujia.utils.util import get_last_balance_date
+from doujia.server.logic.utils import (
+    DEFAULT_UFO_POSTING,
+    get_existed_unique_no_set,
+    import_transactions,
+    insert_missing_balance,
+)
+from doujia.utils.util import get_last_balance_date, get_last_transaction_date
 
 ACCOUNT = "Liabilities:Short:CreditCard:HK:HSBC"
 
@@ -188,3 +193,32 @@ def import_hsbc_hk_credit_card(items) -> int:
     txns = load_missing_transactions(os.path.join(current_app.ledger_root, "main.bean"), items["transactions"])
 
     return import_transactions(txns, current_app.doujia_config.categorize_config, current_app.doujia_config.import_to)
+
+
+def import_hsbc_hk_credit_card_balance(resp) -> int:
+    ledger_file = os.path.join(current_app.ledger_root, "main.bean")
+    last_date = get_last_transaction_date(ledger_file, ACCOUNT)
+    if last_date is None:
+        return 0
+
+    """
+    ledgerBalance: {
+        "amount": -123.45
+        "currencyCode": "CNY",
+    }
+    """
+    ledger_balance = resp["ledgerBalance"]
+    amount = data.Amount(
+        Decimal(str(ledger_balance["amount"])).quantize(Decimal("0.01")), ledger_balance["currencyCode"]
+    )
+    balance_txn = insert_missing_balance(
+        account=ACCOUNT,
+        date=last_date,
+        amount=amount,
+        ledger_file=ledger_file,
+        import_to=current_app.doujia_config.import_to,
+    )
+    if balance_txn is None:
+        return 0
+
+    return 1

@@ -6,6 +6,7 @@ from beancount.core import data
 from freezegun import freeze_time
 
 from doujia.server.logic.utils import insert_missing_balance, sort_transactions
+from doujia.utils.util import get_last_transaction_date
 
 Directive = TypeVar("Directive", bound=data.Directive)
 
@@ -147,3 +148,20 @@ def test_try_insert_missing_balance_3(entries: list[Directive]):
 2024-01-10 balance Assets:Short:Current:CCB  100 CNY
 """.strip()
         ) == content
+
+
+def test_get_last_transaction_date(entries: list[Directive]):
+    """
+    @@@/main.bean
+    2024-01-01 open Assets:Short:Current:CCB
+    2024-01-01 open Expenses:Food
+    2024-01-01 *
+        Assets:Short:Current:CCB  -100 CNY
+        Expenses:Food
+    """
+
+    last_date = get_last_transaction_date(main_file_path="/main.bean", account_name="Assets:Short:Current:CCB")
+    assert last_date is not None
+    assert last_date.year == 2024
+    assert last_date.month == 1
+    assert last_date.day == 1
