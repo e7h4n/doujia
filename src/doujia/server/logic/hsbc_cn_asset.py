@@ -1,5 +1,6 @@
 import hashlib
 import os
+import re
 from datetime import datetime
 from decimal import Decimal
 
@@ -19,15 +20,75 @@ ACCOUNT = "Assets:Short:Current:HSBC"
 
 def _parse_txn_date(item):
     # txnDate: "2025-05-26 00:00:00"
-    date_str = item["txnDate"]
+    # txnDetail: ["...", "2025052796400392", "..."]
+    # or
+    # txnDetail: ["...", "Submitted on: 23MAY25", "10:32:07", "..."]
 
-    # Extract year, month, and day from the string
+    # 尝试从 txnDetail 中解析日期
+    txn_detail = item.get("txnDetail", [])
+
+    for detail in txn_detail:
+        # 尝试解析 "2025052796400392" 格式 (前8位是日期)
+        if re.match(r"^\d{14}$", detail):
+            date_part = detail[:8]  # 前8位
+            try:
+                year = int(date_part[:4])
+                month = int(date_part[4:6])
+                day = int(date_part[6:8])
+                return datetime(year, month, day).date()
+            except ValueError:
+                continue
+
+        # 尝试解析 "Submitted on: 23MAY25" 格式
+        submitted_match = re.search(r"Submitted on:\s*(\d{2})([A-Z]{3})(\d{2})", detail)
+        if submitted_match:
+            day = int(submitted_match.group(1))
+            month_str = submitted_match.group(2)
+            year = int("20" + submitted_match.group(3))  # 假设是21世纪
+
+            # 月份缩写映射
+            month_map = {
+                "JAN": 1,
+                "FEB": 2,
+                "MAR": 3,
+                "APR": 4,
+                "MAY": 5,
+                "JUN": 6,
+                "JUL": 7,
+                "AUG": 8,
+                "SEP": 9,
+                "OCT": 10,
+                "NOV": 11,
+                "DEC": 12,
+            }
+
+            if month_str in month_map:
+                try:
+                    month = month_map[month_str]
+                    return datetime(year, month, day).date()
+                except ValueError:
+                    continue
+
+    # 如果从 txnDetail 中找不到日期, 使用 txnDate
+    date_str = item["txnDate"]
     year = int(date_str.split("-")[0])
     month = int(date_str.split("-")[1])
     day = int(date_str.split("-")[2].split(" ")[0])
 
-    txn_date = datetime(year, month, day).date()
-    return txn_date
+    return datetime(year, month, day).date()
+
+
+def _parse_time(item):
+    # 尝试从 txnDetail 中解析时间
+    txn_detail = item.get("txnDetail", [])
+
+    for detail in txn_detail:
+        # 尝试解析 "10:32:07" 格式
+        time_match = re.match(r"^(\d{2}):(\d{2}):(\d{2})$", detail)
+        if time_match:
+            return detail
+
+    return None
 
 
 def _parse_unique_no(item):
@@ -73,6 +134,8 @@ def _convert_transaction(item):
             None,
             {
                 "uniqueNo": unique_no,
+                "time": _parse_time(item) or "",
+                "card": "",
             },
         ),
         txn_date,
