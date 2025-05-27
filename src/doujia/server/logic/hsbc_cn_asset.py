@@ -6,7 +6,12 @@ from decimal import Decimal
 from beancount.core import data
 
 from doujia.server.app import current_app
-from doujia.server.logic.utils import DEFAULT_UFO_POSTING, get_existed_unique_no_set, import_transactions
+from doujia.server.logic.utils import (
+    DEFAULT_UFO_POSTING,
+    get_existed_unique_no_set,
+    import_transactions,
+    insert_missing_balance,
+)
 from doujia.utils.util import get_last_balance_date
 
 ACCOUNT = "Assets:Short:Current:HSBC"
@@ -82,6 +87,12 @@ def _convert_transaction(item):
     return transaction
 
 
+def _parse_balance_amount(item):
+    # 解析最后一条交易的余额金额
+    bal_run_amt = item["balRunAmt"]["amt"]
+    return data.Amount(Decimal(str(bal_run_amt)).quantize(Decimal("0.01")), item["balRunAmt"]["ccy"])
+
+
 def load_missing_transactions(filename: str, items):
     last_balance_date = get_last_balance_date(filename, ACCOUNT)
     existed_unique_no_set = get_existed_unique_no_set(filename)
@@ -117,6 +128,20 @@ def load_missing_transactions(filename: str, items):
 
         txn = _convert_transaction(item)
         txns.append(txn)
+
+    if len(items) > 0:
+        last_balance_item = items[-1]
+        last_balance_date = _parse_txn_date(last_balance_item)
+        balance_txn = insert_missing_balance(
+            account=ACCOUNT,
+            date=last_balance_date,
+            amount=_parse_balance_amount(last_balance_item),
+            ledger_file=filename,
+            import_to=current_app.doujia_config.import_to,
+        )
+
+        if balance_txn:
+            txns.append(balance_txn)
 
     return txns
 

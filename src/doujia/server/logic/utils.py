@@ -1,5 +1,5 @@
 import io
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import TypeVar
 
 from beancount.core import data
@@ -9,6 +9,7 @@ from beancount.scripts.format import align_beancount
 
 from doujia.post_processor.merger import _merge_beancount_content
 from doujia.post_processor.transaction_categorizer import _categorize_transactions
+from doujia.utils.util import get_last_balance_date
 
 Transaction = TypeVar("Transaction", bound=data.Transaction)
 
@@ -73,3 +74,37 @@ def import_transactions(transactions: list[Transaction], categorize_config: str,
             file.write(result)
 
     return len(transactions)
+
+
+def insert_missing_balance(
+    account: str, date: datetime, amount: data.Amount, ledger_file: str, import_to: str | None = None
+) -> data.Transaction | None:
+    if import_to is None:
+        import_to = ledger_file
+
+    last_balance_date = get_last_balance_date(ledger_file, account)
+    if last_balance_date is not None and last_balance_date >= date:
+        return None
+
+    if datetime.now().date() <= date:
+        return None
+
+    txn = data.Balance(
+        date=date + timedelta(days=1), account=account, amount=amount, meta=None, tolerance=None, diff_amount=None
+    )
+
+    imported_content = printer.format_entry(txn)[:-1] + "\n" + "\n"
+
+    with io.StringIO() as output:
+        with open(import_to, encoding="utf-8") as file:
+            main_content = file.read()
+            _merge_beancount_content(main_content, imported_content, output)
+
+        output.write("\n")
+
+        result = align_beancount(output.getvalue())
+
+        with open(import_to, "w", encoding="utf-8") as file:
+            file.write(result)
+
+    return txn
