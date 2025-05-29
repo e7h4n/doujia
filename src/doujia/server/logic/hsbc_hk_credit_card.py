@@ -41,7 +41,10 @@ def _parse_amount(item):
     amt_number = item["transactionAmount"]["amount"]
 
     # 转换为 Decimal 并保留两位小数
-    decimal_amount = 0 - Decimal(str(amt_number)).quantize(Decimal("0.01"))
+    decimal_amount = Decimal(str(amt_number)).quantize(Decimal("0.01"))
+
+    if item["transactionCreditDebitCode"] == "DEBIT_TRANSACTION":
+        decimal_amount = -decimal_amount
 
     return data.Amount(decimal_amount, item["transactionAmount"]["currencyCode"])
 
