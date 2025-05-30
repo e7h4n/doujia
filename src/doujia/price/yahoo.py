@@ -11,50 +11,46 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36
 FIELDS = "regularMarketPrice,postMarketPrice,preMarketPrice,marketCap,regularMarketTime,postMarketTime,preMarketTime"
 
 
-def _get_crumbs_and_cookies():
-    with requests.session():
-        # 发一个请求到 https://query1.finance.yahoo.com/v1/test/getcrumb?lang=en-US&region=US 获取 crumb
-        header = {
-            "accept": ACCEPT,
-            "accept-encoding": "gzip, deflate, br, zstd",
-            "accept-language": "zh-CN,zh;q=0.9",
-            "dnt": "1",
-            "priority": "u=0, i",
-            "sec-ch-ua": '"Chromium";v="128", "Not;A=Brand";v="24", "Google Chrome";v="128"',
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": '"macOS"',
-            "sec-fetch-dest": "document",
-            "sec-fetch-mode": "navigate",
-            "sec-fetch-site": "none",
-            "sec-fetch-user": "?1",
-            "upgrade-insecure-requests": "1",
-            "user-agent": USER_AGENT,
-        }
-        url = "https://query1.finance.yahoo.com/v1/test/getcrumb?lang=en-US&region=US"
+YAHOO_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",  # noqa: E501
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.5",
+}
 
-        website = requests.get(url, headers=header)
 
-        return (header, website.text, website.cookies)
+def _get_crumb():
+    session = requests.Session()
+    session.get("https://finance.yahoo.com", headers=YAHOO_HEADERS)
+
+    crumb_response = session.get("https://query2.finance.yahoo.com/v1/test/getcrumb", headers=YAHOO_HEADERS)
+    if crumb_response.status_code == 200 and crumb_response.text:
+        return (crumb_response.text, session)
+
+    return None
 
 
 def request_yahoo_finance(symbols: list[str]):
-    header, crumb, cookies = _get_crumbs_and_cookies()
+    (crumb, session) = _get_crumb()
+
     params = {
+        "lang": "en-US",
+        "region": "US",
+        "corsDomain": "finance.yahoo.com",
         "fields": FIELDS,
         "formatted": "true",
         "symbols": ",".join(symbols),
-        "lang": "en-US",
-        "region": "US",
         "crumb": crumb,
     }
 
     url = "https://query1.finance.yahoo.com/v7/finance/quote"
-    resp = requests.get(url, headers=header, cookies=cookies, params=params).json()
+    resp = session.get(url, params=params, headers=YAHOO_HEADERS)
 
-    if "quoteResponse" not in resp:
-        raise ValueError(f"no quoteResponse in {resp}")
+    data = resp.json()
 
-    return resp
+    if "quoteResponse" not in data:
+        raise ValueError(f"no quoteResponse in {data}")
+
+    return data
 
 
 def get_realtime_prices(symbols: list[str]) -> dict[str, PriceCache]:

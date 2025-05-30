@@ -13,7 +13,7 @@ from frozendict import frozendict
 from logzero import logger, logging
 
 from doujia.price.price_map import build_realtime_price_cache
-from doujia.price.yahoo import get_realtime_prices, request_yahoo_finance
+from doujia.price.yahoo import _get_crumb, get_realtime_prices, request_yahoo_finance
 from doujia.report.investment import (
     InvestmentHolding,
     get_investment_holdings,
@@ -71,8 +71,15 @@ def get_realtime_price_map(entries: list[Directive]):  # type: ignore
 
 
 @pytest.mark.skip
+def test_fetch_yahoo_crumb():
+    (crumb, _) = _get_crumb()
+
+    assert crumb is not None
+
+
+@pytest.mark.skip
 def test_fetch_yahoo_finance():
-    resp = request_yahoo_finance(["CNY=X"])
+    resp = request_yahoo_finance(["AAPL"])
     print(resp)
     assert False
 
