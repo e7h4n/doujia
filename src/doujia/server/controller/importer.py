@@ -2,6 +2,7 @@ import json
 import os
 
 from flask import Blueprint, request
+from logzero import logger
 
 from doujia.hsbc.hsbc_importer import HSBCSession, import_full_transactions
 from doujia.server.app import current_app
@@ -41,6 +42,7 @@ def cmb_wechat_encrypted_importer():
 def hsbc_session():
     authorization = request.headers.get("authorization")
     authorizationguest = request.headers.get("authorizationguest")
+    logger.info(f"HSBC session request with authorization: {authorization}, authorizationguest: {authorizationguest}")
 
     session = HSBCSession(authorizationguest, authorization)
     current_app.hsbc_session = session

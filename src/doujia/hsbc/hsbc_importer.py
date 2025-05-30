@@ -1,10 +1,12 @@
 from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
+from json import dump
 from typing import TypeVar
 
 import requests
 from beancount.core import data
+from logzero import logger
 
 from doujia.hsbc.cipher import decrypt_response, encrypt_request, generate_key
 from doujia.server.logic.ccb import DEFAULT_UFO_POSTING
@@ -47,6 +49,10 @@ def _query_unbilled_transactions(session: HSBCSession):
         session.authorizationguest = response.headers["authorizationguest"]
 
     response_data = response.json()
+    if "rspData" not in response_data:
+        logger.error("Response data does not contain 'rspData', response: %s", dump(response_data))
+        return []
+
     decrypted_data = decrypt_response(response_data["rspData"], sm4_key)
 
     return decrypted_data["rspData"]["transList"]
@@ -77,6 +83,11 @@ def _query_billed_transactions(session: HSBCSession):
         session.authorizationguest = response.headers["authorizationguest"]
 
     response_data = response.json()
+
+    if "rspData" not in response_data:
+        logger.error("Response data does not contain 'rspData', response: %s", dump(response_data))
+        return []
+
     decrypted_data = decrypt_response(response_data["rspData"], sm4_key)
 
     return decrypted_data["rspData"]["transList"]
