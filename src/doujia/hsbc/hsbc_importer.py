@@ -50,7 +50,7 @@ def _query_unbilled_transactions(session: HSBCSession):
 
     response_data = response.json()
     if "rspData" not in response_data:
-        logger.error("Response data does not contain 'rspData', response: %s", dump(response_data))
+        logger.error("Response data does not contain 'rspData', response: %s", response.text)
         return []
 
     decrypted_data = decrypt_response(response_data["rspData"], sm4_key)
