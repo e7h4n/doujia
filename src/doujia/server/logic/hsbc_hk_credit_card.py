@@ -1,6 +1,6 @@
 import hashlib
 import os
-from datetime import date, datetime
+from datetime import datetime
 from decimal import Decimal
 
 from beancount.core import data
@@ -216,7 +216,7 @@ def import_hsbc_hk_credit_card_balance(resp) -> int:
     )
     balance_txn = insert_missing_balance(
         account=ACCOUNT,
-        date=last_date + date.timedelta(days=1),
+        date=last_date + datetime.timedelta(days=1),
         amount=amount,
         ledger_file=ledger_file,
         import_to=current_app.doujia_config.import_to,
