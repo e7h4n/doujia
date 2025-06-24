@@ -36,7 +36,12 @@ def get_existed_unique_no_set(main_file_path):
 
 
 def _compare_transactions(transaction: Transaction):
-    if "time" in transaction.meta and transaction.meta["time"] is not None and len(transaction.meta["time"]) > 0:
+    if (
+        transaction.meta is not None
+        and "time" in transaction.meta
+        and transaction.meta["time"] is not None
+        and len(transaction.meta["time"]) > 0
+    ):
         return datetime.combine(
             transaction.date,
             datetime.strptime(transaction.meta["time"], "%H:%M:%S").time(),
