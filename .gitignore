@@ -163,3 +163,4 @@ pip-selfcheck.json
 .vscode/
 
 .pdm-python
+.claude/settings.local.json
